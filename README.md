@@ -1,54 +1,22 @@
-# React + TypeScript + Vite
+# 💸 MoneyBook-v2 — 가계부 시스템 (Reboot Edition)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**MoneyBook-v2**는 기존 개인 프로젝트인 [`MoneyBook v1`](https://github.com/yourname/moneybook-v1)의 경험을 바탕으로  
+**UI/UX, 데이터 구조, 사용자 편의성 측면에서 전면 개선한 리부트(Reboot) 버전**입니다.<br><br>
 
-Currently, two official plugins are available:
+## ✨ 주요 기능
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🧾 지출 입력 & 업로드
+- 카드사/은행에서 다운로드한 Excel(.xlsx) 파일 업로드
+- 날짜, 금액, 상호명, 결제수단 자동 파싱
+- 키워드 기반 자동 카테고리 분류
+- 미분류 항목은 수동 분류 가능 (수정 내용은 이후 자동 반영)<br>
 
-## Expanding the ESLint configuration
+### 📂 카테고리 관리
+- 기본 카테고리 제공 + 사용자 정의 가능
+- 카테고리별 **월 목표 금액 설정**
+- 목표 대비 80% 초과 시 **경고 알림 표시**<br>
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### 📊 지출 분석
+- **연도 / 월 / 카테고리 / 결제수단별** 통계 제공
+- **ApexCharts** 기반 시각화 (막대/도넛 차트 등)
+- 목표 대비 지출 현황 테이블 제공<br>
