@@ -1,6 +1,6 @@
-import { BrandLogo } from "../ui-elements/BrandLogo"
-import { LoginForm } from "../auth/LoginForm"
-import { TermsNotice } from "../ui-elements/TermsNotice"
+import { BrandLogo } from "@/components/ui-elements/BrandLogo";
+import { LoginForm } from "@/components/auth/LoginForm";
+import { TermsNotice } from "@/components/ui-elements/TermsNotice";
 
 export function AuthSection() {
   return (
@@ -8,10 +8,12 @@ export function AuthSection() {
       <div className="mb-8 text-center">
         <BrandLogo />
         <h2 className="text-2xl font-bold text-gray-900">서비스 이름</h2>
-        <p className="text-gray-500 mt-1">간편하게 로그인하고 서비스를 이용해보세요</p>
+        <p className="text-gray-500 mt-1">
+          간편하게 로그인하고 서비스를 이용해보세요
+        </p>
       </div>
       <LoginForm />
       <TermsNotice />
     </>
-  )
+  );
 }
