@@ -11,14 +11,14 @@ import Login from "./pages/Login";
 import { AuthCallback } from "./pages/AuthCallback";
 
 function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route
         path="/"
         element={
-          <RequireAuth isAuthenticated={isAuthenticated}>
+          <RequireAuth isAuthenticated={isAuthenticated} isLoading={isLoading}>
             <MainLayout />
           </RequireAuth>
         }
@@ -38,11 +38,17 @@ function App() {
 // 인증 필요한 라우트를 위한 컴포넌트
 function RequireAuth({
   isAuthenticated,
+  isLoading,
   children,
 }: {
   isAuthenticated: boolean;
+  isLoading: boolean;
   children: JSX.Element;
 }) {
+  if (isLoading) {
+    return <p>세션 확인 중입니다...</p>; // 또는 로딩 컴포넌트
+  }
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }

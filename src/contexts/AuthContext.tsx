@@ -17,6 +17,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   loginWithKakao: () => void;
   loginWithGoogle: () => void;
   logout: () => void;
@@ -27,12 +28,17 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loginWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
       },
     });
     if (error) console.error("Google login error: ", error.message);
@@ -76,6 +82,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(null);
           setIsAuthenticated(false);
         }
+
+        setIsLoading(false);
       }
     );
     return () => listener.subscription.unsubscribe();
@@ -83,7 +91,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, loginWithGoogle, loginWithKakao, logout }}
+      value={{
+        user,
+        isAuthenticated,
+        isLoading,
+        loginWithGoogle,
+        loginWithKakao,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

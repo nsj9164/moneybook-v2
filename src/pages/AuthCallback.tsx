@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export const AuthCallback = () => {
   const navigate = useNavigate();
+  console.log("??????????????????");
 
   useEffect(() => {
     const checkUser = async () => {
