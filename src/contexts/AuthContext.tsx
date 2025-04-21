@@ -1,5 +1,3 @@
-// context/AuthContext.tsx
-
 import {
   createContext,
   useContext,
@@ -7,7 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { supabase } from "@/utils/supabaseClient";
+import { supabase } from "@/utils/supabase";
 
 interface User {
   id: string;
@@ -33,13 +31,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loginWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
-    if (error) console.error("Google login error:", error.message);
+    if (error) console.error("Google login error: ", error.message);
   };
 
   const loginWithKakao = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
     if (error) console.error("Kakao login error:", error.message);
   };
@@ -50,10 +54,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsAuthenticated(false);
   };
 
+  // 로그인 상태 추적
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         const userData = session?.user;
+
         if (userData) {
           setUser({
             id: userData.id,
@@ -72,19 +78,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
     );
-
     return () => listener.subscription.unsubscribe();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated,
-        loginWithKakao,
-        loginWithGoogle,
-        logout,
-      }}
+      value={{ user, isAuthenticated, loginWithGoogle, loginWithKakao, logout }}
     >
       {children}
     </AuthContext.Provider>

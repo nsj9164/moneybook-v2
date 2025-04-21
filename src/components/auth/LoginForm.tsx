@@ -3,20 +3,22 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { SocialButton } from "./SocialButton";
 import { Divider } from "@/components/ui-elements/Divider";
 import { ActionButtons } from "./ActionButtons";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { loginWithGoogle, loginWithKakao } = useAuth();
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
-    // 실제 구현에서는 Google OAuth 로직 추가
-    setTimeout(() => setIsLoading(false), 1000);
+    await loginWithGoogle();
+    setIsLoading(false);
   };
 
   const handleKakaoLogin = async () => {
     setIsLoading(true);
-    // 실제 구현에서는 Kakao OAuth 로직 추가
-    setTimeout(() => setIsLoading(false), 1000);
+    await loginWithKakao();
+    setIsLoading(false);
   };
 
   return (
