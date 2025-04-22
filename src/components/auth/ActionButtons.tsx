@@ -1,7 +1,7 @@
-import { Button } from "../ui/Button"
+import { Button } from "@/components/ui/Button";
 
 interface ActionButtonsProps {
-  isLoading?: boolean
+  isLoading?: boolean;
 }
 
 export function ActionButtons({ isLoading }: ActionButtonsProps) {
@@ -21,5 +21,5 @@ export function ActionButtons({ isLoading }: ActionButtonsProps) {
         회원가입
       </Button>
     </div>
-  )
+  );
 }

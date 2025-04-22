@@ -1,13 +1,4 @@
-"use client";
-
-import { useState } from "react";
-import {
-  Calendar,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Download,
-} from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Download } from "lucide-react";
 
 // 샘플 데이터
 const monthlyData = [
@@ -46,10 +37,6 @@ const timeData = [
 ];
 
 const Statistics = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState("6개월");
-  const [selectedYear, setSelectedYear] = useState(2023);
-  const [selectedMonth, setSelectedMonth] = useState(6);
-
   // 금액 포맷팅
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("ko-KR", {
@@ -63,11 +50,7 @@ const Statistics = () => {
   const maxBarValue = Math.max(
     ...monthlyData.map((item) => Math.max(item.income, item.expense))
   );
-
-  // 요일별 최대값
   const maxWeekdayValue = Math.max(...weekdayData.map((item) => item.expense));
-
-  // 시간대별 최대값
   const maxTimeValue = Math.max(...timeData.map((item) => item.expense));
 
   return (
@@ -78,8 +61,7 @@ const Statistics = () => {
           <div className="relative">
             <select
               className="appearance-none rounded-md border border-gray-300 pl-3 pr-10 py-2 text-sm font-medium text-gray-700 focus:border-emerald-500 focus:outline-none focus:ring-emerald-500"
-              value={selectedPeriod}
-              onChange={(e) => setSelectedPeriod(e.target.value)}
+              defaultValue="6개월"
             >
               <option>1개월</option>
               <option>3개월</option>
@@ -103,20 +85,16 @@ const Statistics = () => {
         <button
           type="button"
           className="p-1 rounded-full text-gray-400 hover:text-gray-500"
-          onClick={() => setSelectedYear(selectedYear - 1)}
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
         <div className="mx-4 flex items-center">
-          <span className="text-lg font-medium text-gray-900">
-            {selectedYear}년
-          </span>
+          <span className="text-lg font-medium text-gray-900">2023년</span>
           <span className="mx-2">|</span>
           <div className="relative">
             <select
               className="appearance-none rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm font-medium text-gray-700 focus:border-emerald-500 focus:outline-none focus:ring-emerald-500"
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+              defaultValue="6"
             >
               {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
                 <option key={month} value={month}>
@@ -130,7 +108,6 @@ const Statistics = () => {
         <button
           type="button"
           className="p-1 rounded-full text-gray-400 hover:text-gray-500"
-          onClick={() => setSelectedYear(selectedYear + 1)}
         >
           <ChevronRight className="h-5 w-5" />
         </button>
@@ -281,26 +258,19 @@ const Statistics = () => {
           <div className="bg-white p-4 rounded-lg shadow-sm">
             <div className="text-sm text-gray-500">총 수입</div>
             <div className="text-2xl font-bold text-blue-600 mt-1">
-              {formatCurrency(
-                monthlyData[selectedMonth - 1]?.income || 3200000
-              )}
+              {formatCurrency(3200000)}
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-sm">
             <div className="text-sm text-gray-500">총 지출</div>
             <div className="text-2xl font-bold text-red-600 mt-1">
-              {formatCurrency(
-                monthlyData[selectedMonth - 1]?.expense || 2750000
-              )}
+              {formatCurrency(2750000)}
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-sm">
             <div className="text-sm text-gray-500">잔액</div>
             <div className="text-2xl font-bold text-emerald-600 mt-1">
-              {formatCurrency(
-                (monthlyData[selectedMonth - 1]?.income || 3200000) -
-                  (monthlyData[selectedMonth - 1]?.expense || 2750000)
-              )}
+              {formatCurrency(3200000 - 2750000)}
             </div>
           </div>
         </div>

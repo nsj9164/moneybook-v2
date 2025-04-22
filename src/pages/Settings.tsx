@@ -1,27 +1,6 @@
-import { useState } from "react";
 import { Bell, CreditCard, Globe, Lock, Moon, Save, User } from "lucide-react";
 
 const Settings = () => {
-  const [darkMode, setDarkMode] = useState(false);
-  const [language, setLanguage] = useState("ko");
-  const [currency, setCurrency] = useState("KRW");
-  const [notifications, setNotifications] = useState({
-    email: true,
-    push: true,
-    monthlyReport: true,
-    budgetAlert: true,
-    weeklyTips: false,
-  });
-  const [defaultCategory, setDefaultCategory] = useState("식비");
-  const [defaultPaymentMethod, setDefaultPaymentMethod] = useState("신용카드");
-
-  const handleNotificationChange = (key: keyof typeof notifications) => {
-    setNotifications({
-      ...notifications,
-      [key]: !notifications[key],
-    });
-  };
-
   return (
     <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-sm mt-6 mb-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
@@ -55,17 +34,12 @@ const Settings = () => {
               <div className="flex items-center">
                 <button
                   type="button"
-                  onClick={() => setDarkMode(!darkMode)}
-                  className={`${
-                    darkMode ? "bg-emerald-600" : "bg-gray-200"
-                  } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
+                  className="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">다크 모드 사용</span>
                   <span
                     aria-hidden="true"
-                    className={`${
-                      darkMode ? "translate-x-5" : "translate-x-0"
-                    } pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}
+                    className="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                   ></span>
                 </button>
               </div>
@@ -83,8 +57,7 @@ const Settings = () => {
                 id="language"
                 name="language"
                 className="mt-1 block w-full sm:w-auto rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm"
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
+                defaultValue="ko"
               >
                 <option value="ko">한국어</option>
                 <option value="en">English</option>
@@ -107,8 +80,7 @@ const Settings = () => {
                 id="currency"
                 name="currency"
                 className="mt-1 block w-full sm:w-auto rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm"
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
+                defaultValue="KRW"
               >
                 <option value="KRW">원화 (₩)</option>
                 <option value="USD">US Dollar ($)</option>
@@ -138,17 +110,12 @@ const Settings = () => {
               <div className="flex items-center">
                 <button
                   type="button"
-                  onClick={() => handleNotificationChange("email")}
-                  className={`${
-                    notifications.email ? "bg-emerald-600" : "bg-gray-200"
-                  } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
+                  className="bg-emerald-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">이메일 알림 사용</span>
                   <span
                     aria-hidden="true"
-                    className={`${
-                      notifications.email ? "translate-x-5" : "translate-x-0"
-                    } pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}
+                    className="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                   ></span>
                 </button>
               </div>
@@ -169,17 +136,12 @@ const Settings = () => {
               <div className="flex items-center">
                 <button
                   type="button"
-                  onClick={() => handleNotificationChange("push")}
-                  className={`${
-                    notifications.push ? "bg-emerald-600" : "bg-gray-200"
-                  } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
+                  className="bg-emerald-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">푸시 알림 사용</span>
                   <span
                     aria-hidden="true"
-                    className={`${
-                      notifications.push ? "translate-x-5" : "translate-x-0"
-                    } pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}
+                    className="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                   ></span>
                 </button>
               </div>
@@ -200,21 +162,12 @@ const Settings = () => {
               <div className="flex items-center">
                 <button
                   type="button"
-                  onClick={() => handleNotificationChange("monthlyReport")}
-                  className={`${
-                    notifications.monthlyReport
-                      ? "bg-emerald-600"
-                      : "bg-gray-200"
-                  } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
+                  className="bg-emerald-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">월간 리포트 사용</span>
                   <span
                     aria-hidden="true"
-                    className={`${
-                      notifications.monthlyReport
-                        ? "translate-x-5"
-                        : "translate-x-0"
-                    } pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}
+                    className="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                   ></span>
                 </button>
               </div>
@@ -235,19 +188,12 @@ const Settings = () => {
               <div className="flex items-center">
                 <button
                   type="button"
-                  onClick={() => handleNotificationChange("budgetAlert")}
-                  className={`${
-                    notifications.budgetAlert ? "bg-emerald-600" : "bg-gray-200"
-                  } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
+                  className="bg-emerald-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">예산 알림 사용</span>
                   <span
                     aria-hidden="true"
-                    className={`${
-                      notifications.budgetAlert
-                        ? "translate-x-5"
-                        : "translate-x-0"
-                    } pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}
+                    className="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                   ></span>
                 </button>
               </div>
@@ -266,19 +212,12 @@ const Settings = () => {
               <div className="flex items-center">
                 <button
                   type="button"
-                  onClick={() => handleNotificationChange("weeklyTips")}
-                  className={`${
-                    notifications.weeklyTips ? "bg-emerald-600" : "bg-gray-200"
-                  } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`}
+                  className="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">주간 팁 사용</span>
                   <span
                     aria-hidden="true"
-                    className={`${
-                      notifications.weeklyTips
-                        ? "translate-x-5"
-                        : "translate-x-0"
-                    } pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}
+                    className="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                   ></span>
                 </button>
               </div>
@@ -306,8 +245,7 @@ const Settings = () => {
                 id="default-category"
                 name="default-category"
                 className="mt-1 block w-full sm:w-auto rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm"
-                value={defaultCategory}
-                onChange={(e) => setDefaultCategory(e.target.value)}
+                defaultValue="식비"
               >
                 <option value="식비">식비</option>
                 <option value="교통비">교통비</option>
@@ -337,8 +275,7 @@ const Settings = () => {
                 id="default-payment-method"
                 name="default-payment-method"
                 className="mt-1 block w-full sm:w-auto rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm"
-                value={defaultPaymentMethod}
-                onChange={(e) => setDefaultPaymentMethod(e.target.value)}
+                defaultValue="신용카드"
               >
                 <option value="신용카드">신용카드</option>
                 <option value="체크카드">체크카드</option>

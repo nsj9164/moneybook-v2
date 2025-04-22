@@ -9,6 +9,7 @@ import { Settings } from "lucide-react";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import { AuthCallback } from "./pages/AuthCallback";
+import AddExpense from "./pages/AddExpense";
 
 function App() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -26,6 +27,7 @@ function App() {
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route index element={<Dashboard />} />
         <Route path="expenses" element={<Expenses />} />
+        <Route path="expenses/add" element={<AddExpense />} />
         <Route path="statistics" element={<Statistics />} />
         <Route path="budget" element={<Budget />} />
         <Route path="settings" element={<Settings />} />

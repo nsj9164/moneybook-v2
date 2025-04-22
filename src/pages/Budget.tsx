@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import { Calendar, ChevronDown, Edit2, Plus, Trash2 } from "lucide-react";
 
 // 샘플 데이터
@@ -17,9 +14,6 @@ const budgetCategories = [
 ];
 
 const Budget = () => {
-  const [selectedYear, setSelectedYear] = useState(2023);
-  const [selectedMonth, setSelectedMonth] = useState(6);
-
   // 금액 포맷팅
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("ko-KR", {
@@ -53,8 +47,7 @@ const Budget = () => {
             <div className="flex items-center">
               <select
                 className="appearance-none rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm font-medium text-gray-700 focus:border-emerald-500 focus:outline-none focus:ring-emerald-500"
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                defaultValue="2023"
               >
                 {[2021, 2022, 2023, 2024].map((year) => (
                   <option key={year} value={year}>
@@ -67,8 +60,7 @@ const Budget = () => {
             <div className="flex items-center">
               <select
                 className="appearance-none rounded-md border border-gray-300 pl-3 pr-10 py-1 text-sm font-medium text-gray-700 focus:border-emerald-500 focus:outline-none focus:ring-emerald-500"
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                defaultValue="6"
               >
                 {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
                   <option key={month} value={month}>

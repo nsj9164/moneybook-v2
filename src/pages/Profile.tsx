@@ -1,30 +1,14 @@
-import { useState } from "react";
-import { Camera, Edit2, Mail, Phone, Save, User } from "lucide-react";
+import { Camera, Edit2, Mail, Phone, User } from "lucide-react";
 
 const Profile = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState({
+  // 샘플 데이터
+  const profileData = {
     name: "홍길동",
     email: "user@example.com",
     phone: "010-1234-5678",
     bio: "안녕하세요! MoneyBook을 사용하여 재정 관리를 하고 있습니다.",
     profileImage:
       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  });
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setProfileData({
-      ...profileData,
-      [name]: value,
-    });
-  };
-
-  const handleSave = () => {
-    // 실제로는 API 호출을 통해 저장
-    setIsEditing(false);
   };
 
   return (
@@ -33,25 +17,13 @@ const Profile = () => {
         <h1 className="text-2xl font-bold text-gray-900 mb-4 sm:mb-0">
           프로필
         </h1>
-        {isEditing ? (
-          <button
-            type="button"
-            onClick={handleSave}
-            className="inline-flex items-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-          >
-            <Save className="mr-2 -ml-1 h-4 w-4" />
-            저장
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setIsEditing(true)}
-            className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-          >
-            <Edit2 className="mr-2 -ml-1 h-4 w-4" />
-            편집
-          </button>
-        )}
+        <button
+          type="button"
+          className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+        >
+          <Edit2 className="mr-2 -ml-1 h-4 w-4" />
+          편집
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -64,18 +36,16 @@ const Profile = () => {
                 alt="프로필 이미지"
                 className="h-32 w-32 rounded-full object-cover"
               />
-              {isEditing && (
-                <div className="absolute bottom-0 right-0">
-                  <label
-                    htmlFor="profile-image"
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 text-white cursor-pointer"
-                  >
-                    <Camera className="h-4 w-4" />
-                    <span className="sr-only">프로필 이미지 변경</span>
-                    <input id="profile-image" type="file" className="hidden" />
-                  </label>
-                </div>
-              )}
+              <div className="absolute bottom-0 right-0">
+                <label
+                  htmlFor="profile-image"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 text-white cursor-pointer"
+                >
+                  <Camera className="h-4 w-4" />
+                  <span className="sr-only">프로필 이미지 변경</span>
+                  <input id="profile-image" type="file" className="hidden" />
+                </label>
+              </div>
             </div>
             <h2 className="mt-4 text-xl font-semibold text-gray-900">
               {profileData.name}
@@ -128,20 +98,7 @@ const Profile = () => {
                 >
                   이름
                 </label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    value={profileData.name}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
-                  />
-                ) : (
-                  <p className="mt-1 text-sm text-gray-900">
-                    {profileData.name}
-                  </p>
-                )}
+                <p className="mt-1 text-sm text-gray-900">{profileData.name}</p>
               </div>
               <div>
                 <label
@@ -150,20 +107,9 @@ const Profile = () => {
                 >
                   이메일
                 </label>
-                {isEditing ? (
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={profileData.email}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
-                  />
-                ) : (
-                  <p className="mt-1 text-sm text-gray-900">
-                    {profileData.email}
-                  </p>
-                )}
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData.email}
+                </p>
               </div>
               <div>
                 <label
@@ -172,20 +118,9 @@ const Profile = () => {
                 >
                   전화번호
                 </label>
-                {isEditing ? (
-                  <input
-                    type="tel"
-                    name="phone"
-                    id="phone"
-                    value={profileData.phone}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
-                  />
-                ) : (
-                  <p className="mt-1 text-sm text-gray-900">
-                    {profileData.phone}
-                  </p>
-                )}
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData.phone}
+                </p>
               </div>
               <div>
                 <label
@@ -194,20 +129,7 @@ const Profile = () => {
                 >
                   자기소개
                 </label>
-                {isEditing ? (
-                  <textarea
-                    id="bio"
-                    name="bio"
-                    rows={4}
-                    value={profileData.bio}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
-                  />
-                ) : (
-                  <p className="mt-1 text-sm text-gray-900">
-                    {profileData.bio}
-                  </p>
-                )}
+                <p className="mt-1 text-sm text-gray-900">{profileData.bio}</p>
               </div>
             </div>
           </div>
