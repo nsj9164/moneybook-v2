@@ -1,6 +1,6 @@
+import { IExpenses } from "@/pages/AddExpense";
 import { formatCurrency } from "@/utils/format";
 import { Trash2 } from "lucide-react";
-import { IExpenses } from ".";
 
 const categories = [
   "식비",
@@ -22,12 +22,14 @@ const paymentMethods = [
   "기타",
 ];
 
-interface Props {
-  newExpenses: IExpenses[];
+interface ExpenseTableFormProps {
+  expenses: IExpenses[];
   handleDelNewExpense: (id: number) => void;
 }
-
-const AddExpenseDesktop = ({ newExpenses, handleDelNewExpense }: Props) => {
+export const ExpenseTableForm = ({
+  expenses,
+  handleDelNewExpense,
+}: ExpenseTableFormProps) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-300">
@@ -60,7 +62,7 @@ const AddExpenseDesktop = ({ newExpenses, handleDelNewExpense }: Props) => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white">
-          {newExpenses.map((expense) => (
+          {expenses.map((expense) => (
             <>
               <tr key={expense.id}>
                 <td className="px-4 py-4 text-sm text-gray-700">
@@ -168,5 +170,3 @@ const AddExpenseDesktop = ({ newExpenses, handleDelNewExpense }: Props) => {
     </div>
   );
 };
-
-export default AddExpenseDesktop;

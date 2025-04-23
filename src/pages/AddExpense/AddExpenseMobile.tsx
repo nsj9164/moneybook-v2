@@ -1,60 +1,10 @@
 import { formatCurrency } from "@/utils/format";
 import { Plus, X } from "lucide-react";
 
-// 카테고리 및 결제 수단 데이터 (정적 데이터)
-const categories = [
-  "식비",
-  "교통비",
-  "주거비",
-  "통신비",
-  "의료/건강",
-  "교육",
-  "쇼핑",
-  "여가",
-  "기타",
-];
-const paymentMethods = [
-  "신용카드",
-  "체크카드",
-  "현금",
-  "계좌이체",
-  "자동이체",
-  "기타",
-];
-
-// 샘플 데이터 (정적 데이터)
-const sampleExpenses = [
-  {
-    id: "1",
-    date: "2023-06-15",
-    category: "식비",
-    title: "점심 식사",
-    paymentAmount: "15000",
-    actualAmount: "15000",
-    paymentMethod: "신용카드",
-    memo: "회사 근처 식당",
-    isDifferentAmount: false,
-    numberOfPeople: "1",
-  },
-  {
-    id: "2",
-    date: "2023-06-15",
-    category: "교통비",
-    title: "택시비",
-    paymentAmount: "12000",
-    actualAmount: "6000",
-    paymentMethod: "신용카드",
-    memo: "회식 후 귀가",
-    isDifferentAmount: true,
-    numberOfPeople: "2",
-  },
-];
-
 const AddExpenseMobile = () => {
-  const expenses = sampleExpenses;
   return (
     <div className="space-y-4">
-      {expenses.map((expense, index) => (
+      {/* {newExpenses.map((expense, index) => (
         <div key={expense.id} className="bg-gray-50 p-4 rounded-lg relative">
           <div className="absolute top-2 right-2">
             <button type="button" className="text-gray-400 hover:text-red-600">
@@ -237,7 +187,7 @@ const AddExpenseMobile = () => {
             </div>
           </div>
         </div>
-      ))}
+      ))} */}
       <button
         type="button"
         className="w-full flex items-center justify-center py-3 border-2 border-dashed border-gray-300 rounded-lg text-sm font-medium text-gray-600 hover:text-emerald-600 hover:border-emerald-300 transition-colors"
