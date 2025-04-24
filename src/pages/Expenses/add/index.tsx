@@ -1,21 +1,10 @@
+import { ExpenseForm } from "@/components/expense-form";
 import { ArrowLeft, Plus, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddExpenseDesktop from "./AddExpenseDesktop";
 import { AddExpenseHeader } from "./AddExpenseHeader";
 import AddExpenseMobile from "./AddExpenseMobile";
 import { AddExpenseSummary } from "./AddExpenseSummary";
-
-export interface IExpenses {
-  id: number;
-  date: string;
-  itemName: string;
-  amount: number;
-  actualAmount: number;
-  note: string;
-  paymentMethodId: number;
-  categoryId: number;
-  isDifferentAmount: false;
-}
 
 const AddExpense = () => {
   // 퍼블리싱 목적으로 정적 데이터 사용
@@ -51,14 +40,7 @@ const AddExpense = () => {
       <AddExpenseHeader handleAddExpense={handleAddExpense} />
 
       {/* 데스크톱 뷰 - 테이블 형식 / 모바일 뷰 - 카드 형식*/}
-      {isMobile ? (
-        <AddExpenseMobile />
-      ) : (
-        <AddExpenseDesktop
-          newExpenses={newExpenses}
-          handleDelNewExpense={handleDelNewExpense}
-        />
-      )}
+      <ExpenseForm />
 
       {/* 요약 정보 */}
       <AddExpenseSummary newExpenseCount={newExpenses.length} />

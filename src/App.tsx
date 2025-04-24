@@ -9,7 +9,7 @@ import { Settings } from "lucide-react";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import { AuthCallback } from "./pages/AuthCallback";
-import AddExpense from "./pages/AddExpense";
+import AddExpense from "./pages/Expenses/add";
 
 function App() {
   const { isAuthenticated, isLoading } = useAuth();

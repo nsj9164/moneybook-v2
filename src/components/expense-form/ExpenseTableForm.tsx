@@ -1,4 +1,4 @@
-import { IExpenses } from "@/pages/AddExpense";
+import { IExpenses } from "@/pages/Expenses/add";
 import { formatCurrency } from "@/utils/format";
 import { Trash2 } from "lucide-react";
 

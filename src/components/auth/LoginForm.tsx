@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/Card";
 import { SocialButton } from "./SocialButton";
-import { Divider } from "@/components/ui-elements/Divider";
-import { ActionButtons } from "./ActionButtons";
 import { useAuth } from "@/contexts/AuthContext";
 
 export function LoginForm() {
@@ -34,8 +32,6 @@ export function LoginForm() {
           onClick={handleKakaoLogin}
           disabled={isLoading}
         />
-        <Divider text="또는" />
-        <ActionButtons isLoading={isLoading} />
       </CardContent>
     </Card>
   );
