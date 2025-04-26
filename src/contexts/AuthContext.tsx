@@ -33,13 +33,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
-  const providerRef = useRef<string | null>(null);
   const hasInsertedRef = useRef(false);
 
   const loginWithGoogle = async () => {
-    sessionStorage.setItem("provider", "google");
-    console.log("sessionStorage:::", sessionStorage.getItem("provider"));
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -54,8 +50,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const loginWithKakao = async () => {
-    sessionStorage.setItem("provider", "kakao");
-    console.log("sessionStorage:::", sessionStorage.getItem("provider"));
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {
@@ -71,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsAuthenticated(false);
   };
 
-  const parseSupabaseUser = (user: SupabaseUser, provider: string): User => ({
+  const parseSupabaseUser = (user: SupabaseUser): User => ({
     id: user.id,
     email: user.email ?? "",
     name: user.user_metadata?.name ?? user.user_metadata?.full_name,
@@ -79,28 +73,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user.user_metadata?.avatar_url ??
       user.user_metadata?.picture ??
       undefined,
-    provider,
+    provider: user.app_metadata.proverder,
   });
-
-  const checkProviderConflict = async (
-    email: string,
-    currentProvider: string
-  ) => {
-    const { data } = await supabase
-      .from("users")
-      .select("provider")
-      .eq("email", email)
-      .maybeSingle();
-
-    if (data && data.provider !== currentProvider) {
-      alert(`이미 ${data.provider} 계정으로 가입되어 있습니다.`);
-      await supabase.auth.signOut();
-      navigate("/login", { replace: true });
-      return true;
-    }
-
-    return false;
-  };
 
   const insertDB = async ({
     id,
@@ -118,15 +92,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const handleAuthenticatedUser = async (
     userData: SupabaseUser,
-    provider: string,
     isFirstLogin: boolean
   ) => {
-    const newUser = parseSupabaseUser(userData, provider);
+    const newUser = parseSupabaseUser(userData);
     setUser(newUser);
     setIsAuthenticated(true);
-
-    const conflict = await checkProviderConflict(newUser.email, provider);
-    if (conflict) return;
 
     if (isFirstLogin && !hasInsertedRef.current) {
       hasInsertedRef.current = true;
@@ -150,37 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      const { data, error } = await supabase
-        .from("users")
-        .select("provider")
-        .eq("email", userData.email)
-        .maybeSingle();
-
-      if (error) {
-        console.error("User fetch error:", error.message);
-        setIsAuthenticated(false);
-        setIsLoading(false);
-        return;
-      }
-
-      const sessionProvider = sessionStorage.getItem("provider");
-      const dbProvider = data?.provider ?? "unknown";
-
-      console.log("Session Provider:", sessionProvider);
-      console.log("DB Provider:", dbProvider);
-      console.log(
-        "sessionProvider !== dbProvider",
-        sessionProvider !== dbProvider
-      );
-
-      if (sessionProvider && sessionProvider !== dbProvider) {
-        alert(`이미 ${dbProvider} 계정으로 가입되어 있습니다.`);
-        await supabase.auth.signOut();
-        navigate("/login");
-        return;
-      }
-
-      await handleAuthenticatedUser(userData, dbProvider, false);
+      await handleAuthenticatedUser(userData, false);
       setIsLoading(false);
     };
 
@@ -197,13 +137,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return;
         }
 
-        console.log("sessionStorage:::", sessionStorage.getItem("provider"));
-        const provider = sessionStorage.getItem("provider") ?? "unknown";
-        sessionStorage.removeItem("provider");
-
         const isFirstLogin = session?.user?.identities?.length === 1;
 
-        await handleAuthenticatedUser(userData, provider, isFirstLogin);
+        await handleAuthenticatedUser(userData, isFirstLogin);
         setIsLoading(false);
       }
     );
