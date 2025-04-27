@@ -1,8 +1,6 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { AuthCallback } from "@/pages/AuthCallback";
-import Login from "@/pages/Login"; // 너의 로그인 페이지
-import Dashboard from "@/pages/Dashboard"; // 메인 페이지 예시
+import Dashboard from "@/pages/Dashboard";
 import Expenses from "./pages/Expenses";
 import AddExpense from "./pages/Expenses/add";
 import Statistics from "./pages/Statistics";
@@ -10,6 +8,7 @@ import Budget from "./pages/Budget";
 import { Settings } from "lucide-react";
 import Profile from "./pages/Profile";
 import MainLayout from "./layouts/MainLayout";
+import RequireAuth from "./contexts/RequireAuth";
 
 function App() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -34,20 +33,6 @@ function App() {
       </Route>
     </Routes>
   );
-}
-
-function RequireAuth({
-  isAuthenticated,
-  isLoading,
-  children,
-}: {
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  children: JSX.Element;
-}) {
-  if (isLoading) return <div>세션 복구 중입니다...</div>;
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  return children;
 }
 
 export default App;

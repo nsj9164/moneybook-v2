@@ -2,28 +2,25 @@ import {
   createContext,
   useContext,
   useEffect,
-  useRef,
   useState,
   type ReactNode,
 } from "react";
 import { supabase } from "@/utils/supabase";
-import { useNavigate } from "react-router-dom";
-import { Session, User as SupabaseUser } from "@supabase/supabase-js";
+import { User as SupabaseUser } from "@supabase/supabase-js";
 
 interface User {
-  id: string;
   email: string;
   name?: string;
   profileImage?: string;
-  provider: string;
+  provider?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  loginWithKakao: () => void;
   loginWithGoogle: () => void;
+  loginWithKakao: () => void;
   logout: () => void;
 }
 
@@ -33,27 +30,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const hasInsertedRef = useRef(false);
 
   const loginWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?provider=google`,
-        queryParams: {
-          access_type: "offline",
-          prompt: "consent",
-        },
+        redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
-    if (error) console.error("Google login error: ", error.message);
+    if (error) console.error("Google login error:", error.message);
   };
 
   const loginWithKakao = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?provider=kakao`,
+        redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
     if (error) console.error("Kakao login error:", error.message);
@@ -65,84 +57,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsAuthenticated(false);
   };
 
-  const parseSupabaseUser = (user: SupabaseUser): User => ({
-    id: user.id,
-    email: user.email ?? "",
-    name: user.user_metadata?.name ?? user.user_metadata?.full_name,
-    profileImage:
-      user.user_metadata?.avatar_url ??
-      user.user_metadata?.picture ??
-      undefined,
-    provider: user.app_metadata.proverder,
-  });
-
-  const insertDB = async ({
-    id,
-    email,
-    name,
-    profileImage,
-    provider,
-  }: User) => {
-    const { error } = await supabase
-      .from("users")
-      .insert({ email, name, profile_image: profileImage, provider });
-
-    if (error) console.error("User Insert error: ", error.message);
-  };
-
-  const handleAuthenticatedUser = async (
-    userData: SupabaseUser,
-    isFirstLogin: boolean
-  ) => {
-    const newUser = parseSupabaseUser(userData);
-    setUser(newUser);
-    setIsAuthenticated(true);
-
-    if (isFirstLogin && !hasInsertedRef.current) {
-      hasInsertedRef.current = true;
-      await insertDB(newUser);
+  const handleAuthChange = (userData: SupabaseUser | null) => {
+    if (userData) {
+      setUser({
+        email: userData.email ?? "",
+        name: userData.user_metadata?.name ?? userData.user_metadata?.full_name,
+        profileImage:
+          userData.user_metadata?.avatar_url ||
+          userData.user_metadata?.picture ||
+          undefined,
+        provider: userData.app_metadata?.provider ?? "unknown",
+      });
+      setIsAuthenticated(true);
+    } else {
+      setUser(null);
+      setIsAuthenticated(false);
     }
+    setIsLoading(false);
   };
 
-  // 로그인 상태 추적
   useEffect(() => {
-    const checkSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      const userData = session?.user;
-
-      if (!userData) {
-        setUser(null);
-        setIsAuthenticated(false);
-        setIsLoading(false);
-        return;
-      }
-
-      await handleAuthenticatedUser(userData, false);
-      setIsLoading(false);
-    };
-
-    checkSession();
-
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
-        const userData = session?.user;
-
-        if (!userData) {
-          setUser(null);
-          setIsAuthenticated(false);
-          setIsLoading(false);
-          return;
-        }
-
-        const isFirstLogin = session?.user?.identities?.length === 1;
-
-        await handleAuthenticatedUser(userData, isFirstLogin);
-        setIsLoading(false);
+        handleAuthChange(session?.user ?? null);
       }
     );
+
     return () => listener.subscription.unsubscribe();
   }, []);
 
