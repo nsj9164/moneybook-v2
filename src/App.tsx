@@ -1,31 +1,30 @@
-import Dashboard from "./pages/Dashboard";
-import MainLayout from "./layouts/MainLayout";
-import { useAuth } from "./contexts/AuthContext";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { AuthCallback } from "@/pages/AuthCallback";
+import Login from "@/pages/Login"; // 너의 로그인 페이지
+import Dashboard from "@/pages/Dashboard"; // 메인 페이지 예시
 import Expenses from "./pages/Expenses";
+import AddExpense from "./pages/Expenses/add";
 import Statistics from "./pages/Statistics";
 import Budget from "./pages/Budget";
 import { Settings } from "lucide-react";
 import Profile from "./pages/Profile";
-import Login from "./pages/Login";
-import { AuthCallback } from "./pages/AuthCallback";
-import AddExpense from "./pages/Expenses/add";
+import MainLayout from "./layouts/MainLayout";
 
 function App() {
   const { isAuthenticated, isLoading } = useAuth();
+
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
       <Route
         path="/"
         element={
           <RequireAuth isAuthenticated={isAuthenticated} isLoading={isLoading}>
-            <MainLayout />
+            <MainLayout /> {/* ✅ MainLayout이 여기서! */}
           </RequireAuth>
         }
       >
-        <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route index element={<Dashboard />} />
+        <Route index element={<Dashboard />} /> {/* ✅ '/'는 Dashboard */}
         <Route path="expenses" element={<Expenses />} />
         <Route path="expenses/add" element={<AddExpense />} />
         <Route path="statistics" element={<Statistics />} />
@@ -37,7 +36,6 @@ function App() {
   );
 }
 
-// 인증 필요한 라우트를 위한 컴포넌트
 function RequireAuth({
   isAuthenticated,
   isLoading,
@@ -47,14 +45,8 @@ function RequireAuth({
   isLoading: boolean;
   children: JSX.Element;
 }) {
-  if (isLoading) {
-    return <p>세션 확인 중입니다...</p>; // 또는 로딩 컴포넌트
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
+  if (isLoading) return <div>세션 복구 중입니다...</div>;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
   return children;
 }
 
