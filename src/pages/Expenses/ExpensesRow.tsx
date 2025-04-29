@@ -1,26 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { formatCurrency } from "@/utils/format";
-import { supabase } from "@/utils/supabase";
 
 export const ExpensesRow = () => {
   const [expenses, setExpenses] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await supabase.from("expenses").select(`
-        id, date, item_name, amount, actual_amount, note, categories(name), payment_methods(method_name)
-        `);
-
-      if (error) {
-        console.error("Error fetching data:", error);
-      } else {
-        console.log("Data fetched!!", data);
-        setExpenses(data);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div className="overflow-x-auto">

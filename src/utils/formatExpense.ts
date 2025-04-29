@@ -1,4 +1,4 @@
-import { IExpense } from "@/types/expenses";
+import { IExpense } from "@/types/expense-types";
 
 export const formatExpense = (item: any): IExpense => ({
   id: item.id,

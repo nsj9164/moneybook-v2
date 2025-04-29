@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { expensesState } from "@/recoil/atoms";
-import { formatExpense } from "@/utils/formatExpense";
+import { keysToCamelCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
@@ -20,9 +20,10 @@ export const useFetchExpenses = () => {
         )
         .eq("user_id", user?.id);
 
-      const mappedData = data?.map(formatExpense);
-
-      if (!error && data) setExpenses(mappedData ?? []);
+      if (data && !error) {
+        const mappedData = keysToCamelCase(data);
+        setExpenses(mappedData ?? []);
+      }
     };
 
     fetchData();

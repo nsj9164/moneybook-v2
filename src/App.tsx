@@ -9,12 +9,16 @@ import { Settings } from "lucide-react";
 import Profile from "./pages/Profile";
 import MainLayout from "./layouts/MainLayout";
 import RequireAuth from "./contexts/RequireAuth";
+import Login from "./pages/Login";
+import { AuthCallback } from "./pages/AuthCallback";
 
 function App() {
   const { isAuthenticated, isLoading } = useAuth();
 
   return (
     <Routes>
+      <Route path="login" element={<Login />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
       <Route
         path="/"
         element={
