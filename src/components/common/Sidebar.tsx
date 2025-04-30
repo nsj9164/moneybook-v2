@@ -6,9 +6,10 @@ import {
   Settings,
   User,
   Wallet,
+  LogOut,
+  Plus,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -16,30 +17,22 @@ interface SidebarProps {
 
 const Sidebar = ({ onClose }: SidebarProps) => {
   const location = useLocation();
-  const { logout } = useAuth();
-
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
-
-  const handleLogout = () => {
-    logout();
-  };
+  const currentPath = location.pathname;
 
   return (
-    <div className="flex h-full flex-col bg-white shadow-sm">
-      <div className="flex h-14 items-center border-b px-4">
-        <Wallet className="mr-2 h-6 w-6 text-emerald-600" />
+    <div className="flex h-full flex-col bg-white">
+      <div className="flex h-16 items-center border-b px-4">
+        <Wallet className="mr-2 h-7 w-7 text-emerald-600" />
         <h1 className="text-lg font-bold text-emerald-600">MoneyBook</h1>
         {onClose && (
           <button
             type="button"
-            className="ml-auto rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="ml-auto rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none"
             onClick={onClose}
           >
             <span className="sr-only">Close sidebar</span>
             <svg
-              className="h-6 w-6"
+              className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -54,13 +47,25 @@ const Sidebar = ({ onClose }: SidebarProps) => {
           </button>
         )}
       </div>
-      <nav className="flex-1 space-y-1 p-2">
+
+      {/* 빠른 추가 버튼 */}
+      <div className="px-4 py-4">
+        <button
+          type="button"
+          className="flex w-full items-center justify-center rounded-full bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 transition-colors"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          빠른 지출 추가
+        </button>
+      </div>
+
+      <nav className="flex-1 space-y-1 p-4">
         <Link
           to="/"
-          className={`flex items-center rounded-md px-2 py-2 text-sm font-medium ${
-            isActive("/")
+          className={`flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+            currentPath === "/"
               ? "bg-emerald-50 text-emerald-600"
-              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
           }`}
         >
           <Home className="mr-3 h-5 w-5 flex-shrink-0" />
@@ -68,10 +73,10 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         </Link>
         <Link
           to="/expenses"
-          className={`flex items-center rounded-md px-2 py-2 text-sm font-medium ${
-            isActive("/expenses")
+          className={`flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+            currentPath.includes("/expenses")
               ? "bg-emerald-50 text-emerald-600"
-              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
           }`}
         >
           <CreditCard className="mr-3 h-5 w-5 flex-shrink-0" />
@@ -79,10 +84,10 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         </Link>
         <Link
           to="/statistics"
-          className={`flex items-center rounded-md px-2 py-2 text-sm font-medium ${
-            isActive("/statistics")
+          className={`flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+            currentPath === "/statistics"
               ? "bg-emerald-50 text-emerald-600"
-              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
           }`}
         >
           <BarChart3 className="mr-3 h-5 w-5 flex-shrink-0" />
@@ -90,10 +95,10 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         </Link>
         <Link
           to="/budget"
-          className={`flex items-center rounded-md px-2 py-2 text-sm font-medium ${
-            isActive("/budget")
+          className={`flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+            currentPath === "/budget"
               ? "bg-emerald-50 text-emerald-600"
-              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
           }`}
         >
           <PieChart className="mr-3 h-5 w-5 flex-shrink-0" />
@@ -103,10 +108,10 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         <div className="border-t border-gray-200 pt-4 mt-4">
           <Link
             to="/settings"
-            className={`flex items-center rounded-md px-2 py-2 text-sm font-medium ${
-              isActive("/settings")
+            className={`flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+              currentPath === "/settings"
                 ? "bg-emerald-50 text-emerald-600"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
             }`}
           >
             <Settings className="mr-3 h-5 w-5 flex-shrink-0" />
@@ -114,36 +119,35 @@ const Sidebar = ({ onClose }: SidebarProps) => {
           </Link>
           <Link
             to="/profile"
-            className={`flex items-center rounded-md px-2 py-2 text-sm font-medium ${
-              isActive("/profile")
+            className={`flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+              currentPath === "/profile"
                 ? "bg-emerald-50 text-emerald-600"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
             }`}
           >
             <User className="mr-3 h-5 w-5 flex-shrink-0" />
             프로필
           </Link>
-          <button
-            onClick={handleLogout}
-            className="flex w-full items-center rounded-md px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-          >
-            <svg
-              className="mr-3 h-5 w-5 flex-shrink-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-              />
-            </svg>
-            로그아웃
-          </button>
         </div>
       </nav>
+
+      <div className="border-t border-gray-200 p-4">
+        <div className="flex items-center">
+          <img
+            className="h-8 w-8 rounded-full object-cover"
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            alt="사용자 프로필"
+          />
+          <div className="ml-3">
+            <p className="text-sm font-medium text-gray-900">홍길동</p>
+            <p className="text-xs text-gray-500">user@example.com</p>
+          </div>
+        </div>
+        <button className="mt-3 flex w-full items-center rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+          <LogOut className="mr-3 h-5 w-5 flex-shrink-0" />
+          로그아웃
+        </button>
+      </div>
     </div>
   );
 };
