@@ -1,4 +1,4 @@
-import { ICategory, IExpense, IPaymentMethod } from "@/types/expense-types";
+import { ICategory, IExpense, IPayMethod } from "@/types/expense-types";
 import { atom } from "recoil";
 
 export const expensesState = atom<IExpense[]>({
@@ -11,7 +11,7 @@ export const categoriesState = atom<ICategory[]>({
   default: [],
 });
 
-export const paymentMethodsState = atom<IPaymentMethod[]>({
-  key: "paymentMethodsState",
+export const payMethodsState = atom<IPayMethod[]>({
+  key: "payMethodsState",
   default: [],
 });

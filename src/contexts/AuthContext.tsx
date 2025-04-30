@@ -78,7 +78,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     let userId: string | undefined;
 
-    const existingUser = checkIfUserExists(newUser.email, newUser.provider);
+    const existingUser = await checkIfUserExists(
+      newUser.email,
+      newUser.provider
+    );
+
     if (!existingUser) {
       const { data, error } = await supabase
         .from("users")
@@ -131,7 +135,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error("Error checking user existence:", error.message);
       return false;
     }
-
     return data && data.length > 0;
   };
 

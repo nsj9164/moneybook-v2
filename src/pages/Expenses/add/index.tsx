@@ -1,12 +1,15 @@
 import { ExpenseForm } from "@/components/expense-form";
+import { useFetchCategories } from "@/hooks/useFetchCategories";
+import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { IExpense } from "@/types/expense-types";
 import { useEffect, useState } from "react";
 import { AddExpenseHeader } from "./AddExpenseHeader";
-import { AddExpenseMobileFooter } from "./AddExpenseMobileFooter";
 import { AddExpenseSummary } from "./AddExpenseSummary";
 
 const AddExpense = () => {
   const [newExpenses, setNewExpenses] = useState<IExpense[]>([]);
+  const categories = useFetchCategories();
+  const payMethods = useFetchPayMethods();
 
   const handleAddExpense = () => {
     const newItem: IExpense = {
@@ -33,13 +36,18 @@ const AddExpense = () => {
       <AddExpenseHeader handleAddExpense={handleAddExpense} />
 
       {/* 데스크톱 뷰 - 테이블 형식 / 모바일 뷰 - 카드 형식*/}
-      <ExpenseForm newExpenses={newExpenses} setNewExpenses={setNewExpenses} />
+      <ExpenseForm
+        newExpenses={newExpenses}
+        setNewExpenses={setNewExpenses}
+        categories={categories}
+        payMethods={payMethods}
+      />
 
       {/* 요약 정보 */}
       <AddExpenseSummary newExpenseCount={newExpenses.length} />
 
       {/* 하단 고정 저장 버튼 (모바일) */}
-      {isMobile && <AddExpenseMobileFooter />}
+      {/* {isMobile && <AddExpenseMobileFooter />} */}
     </div>
   );
 };

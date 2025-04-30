@@ -9,7 +9,7 @@ export const keysToCamelCase = (input: any): any => {
   if (input !== null && typeof input == "object") {
     return Object.entries(input).reduce((acc, [key, value]) => {
       const camelKey = toCamelCase(key);
-      acc[camelKey] = keysToCamelCase(value);
+      acc[camelKey] = value;
       return acc;
     }, {} as Record<string, any>);
   }

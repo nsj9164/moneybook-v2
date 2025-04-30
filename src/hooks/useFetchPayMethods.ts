@@ -1,12 +1,12 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { paymentMethodsState } from "@/recoil/atoms";
+import { payMethodsState } from "@/recoil/atoms";
 import { keysToCamelCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 
-export const useFetchPaymentMethod = () => {
-  const setPaymentMethods = useSetRecoilState(paymentMethodsState);
+export const useFetchPayMethods = () => {
+  const [payMethods, setPayMethods] = useRecoilState(payMethodsState);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -20,10 +20,12 @@ export const useFetchPaymentMethod = () => {
 
       if (data && !error) {
         const mappedData = keysToCamelCase(data);
-        setPaymentMethods(mappedData ?? []);
+        setPayMethods(mappedData ?? []);
       }
     };
 
     fetchData();
   }, []);
+
+  return payMethods;
 };
