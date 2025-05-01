@@ -18,9 +18,7 @@ export const useFetchCategories = () => {
         .eq("user_id", user?.id);
 
       if (data && !error) {
-        console.log("data!!!!!!::::", data);
         const mappedData = keysToCamelCase(data);
-        console.log("mappedData!!!!!!::::", mappedData);
         setCategories(mappedData ?? []);
       }
     };

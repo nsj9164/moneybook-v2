@@ -1,7 +1,7 @@
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("ko-KR", {
-    style: "currency",
+    style: "decimal",
     currency: "KRW",
     maximumFractionDigits: 0,
-  }).format(amount)
-}
+  }).format(amount);
+};

@@ -2,12 +2,14 @@ export interface IExpense {
   id: number;
   date: string;
   itemName: string;
-  amount: number;
-  actualAmount: number;
+  amount: string;
+  actualAmount: string;
   note: string;
   paymentMethodId: number;
   categoryId: number;
-  isDifferentAmount: false;
+  isDifferentAmount: boolean;
+  numberOfPeople?: number;
+  isModified?: boolean;
 }
 
 export interface ICategory {

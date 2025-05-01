@@ -2,9 +2,11 @@ import { ArrowLeft, Plus, Save } from "lucide-react";
 
 interface AddExpenseHeaderProps {
   handleAddExpense: () => void;
+  handleSaveExpense: () => void;
 }
 export const AddExpenseHeader = ({
   handleAddExpense,
+  handleSaveExpense,
 }: AddExpenseHeaderProps) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
@@ -27,6 +29,7 @@ export const AddExpenseHeader = ({
           <Plus className="mr-2 -ml-1 h-4 w-4" />새 항목 추가
         </button>
         <button
+          onClick={handleSaveExpense}
           type="button"
           className="inline-flex items-center justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors"
         >
