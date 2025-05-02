@@ -1,7 +1,13 @@
-export const formatCurrency = (amount: number): string => {
+export const formatCurrency = (amount: string | number): string => {
+  const numbericAmount =
+    typeof amount === "string" ? parseCurrency(amount) : amount;
+
   return new Intl.NumberFormat("ko-KR", {
     style: "decimal",
-    currency: "KRW",
     maximumFractionDigits: 0,
-  }).format(amount);
+  }).format(numbericAmount);
+};
+
+export const parseCurrency = (formatted: string): number => {
+  return Number(formatted.replace(/[^\d.-]+/g, ""));
 };

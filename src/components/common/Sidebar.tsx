@@ -50,13 +50,13 @@ const Sidebar = ({ onClose }: SidebarProps) => {
 
       {/* 빠른 추가 버튼 */}
       <div className="px-4 py-4">
-        <button
-          type="button"
+        <Link
+          to={"/expenses/add"}
           className="flex w-full items-center justify-center rounded-full bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 transition-colors"
         >
           <Plus className="mr-2 h-4 w-4" />
           빠른 지출 추가
-        </button>
+        </Link>
       </div>
 
       <nav className="flex-1 space-y-1 p-4">

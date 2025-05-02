@@ -19,5 +19,5 @@ export interface expensesFormProps {
     key: keyof IExpense
   ) => void;
   handleDelExpense: (id: number) => void;
-  getSplitAmount: (peopleCnt: number, id: number) => void;
+  getSplitAmount: (peopleCnt: string, id: number) => void;
 }

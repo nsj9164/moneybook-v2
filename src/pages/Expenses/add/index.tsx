@@ -1,7 +1,10 @@
 import { ExpenseForm } from "@/components/expense-form";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
+import { expenseKeys } from "@/hooks/useFetchExpenses";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { IExpense } from "@/types/expense-types";
+import { formatKeyCase } from "@/utils/caseConverter";
+import { parseCurrency } from "@/utils/format";
 import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
 import { AddExpenseHeader } from "./AddExpenseHeader";
@@ -34,13 +37,27 @@ const AddExpense = () => {
 
   // 지출 저장
   const handleSaveExpense = async () => {
-    const saveData = newExpenses.filter((item) => item.isModified);
-
-    if (saveData.length > 0) {
-      const { error } = await supabase.from("expenses").insert({ ...saveData });
-
-      if (error) console.error("Insert error:", error.message);
+    if (newExpenses.length < 1) {
+      return;
     }
+    console.log("newExpenses:::", newExpenses);
+    const pick = (obj: Record<string, any>, keys: string[]) =>
+      Object.fromEntries(keys.map((key) => [key, obj[key]]));
+
+    const saveData = newExpenses
+      .filter((expense) => expense.isModified)
+      .map((item) => ({
+        ...item,
+        amount: parseCurrency(item.amount),
+        actualAmount: parseCurrency(item.actualAmount),
+      }))
+      .map((item) => formatKeyCase(pick(item, expenseKeys), "snake"));
+
+    console.log("saveData::::", saveData);
+
+    const { error } = await supabase.from("expenses").insert(saveData);
+
+    if (error) console.error("Insert error:", error.message);
   };
 
   return (

@@ -83,16 +83,16 @@ const Header = ({ onMenuClick, scrolled = false }: HeaderProps) => {
             </button>
 
             {/* 지출 추가 버튼 */}
-            <button
+            {/* <button
               type="button"
               className="inline-flex items-center rounded-full border border-transparent bg-emerald-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors"
             >
               <Plus className="mr-1 -ml-0.5 h-4 w-4" />
               <span className="hidden sm:inline">지출 추가</span>
-            </button>
+            </button> */}
 
             {/* 프로필 버튼 */}
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <button
                 type="button"
                 className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
@@ -104,7 +104,7 @@ const Header = ({ onMenuClick, scrolled = false }: HeaderProps) => {
                   alt="사용자 프로필"
                 />
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

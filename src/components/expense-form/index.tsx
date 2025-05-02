@@ -1,5 +1,6 @@
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { IExpense } from "@/types/expense-types";
+import { formatCurrency, parseCurrency } from "@/utils/format";
 import { ExpenseCardForm } from "./ExpenseCardForm";
 import { ExpenseTableForm } from "./ExpenseTableForm";
 import { expensesProps } from "./types";
@@ -8,6 +9,7 @@ export const ExpenseForm = (props: expensesProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const FormComponent = isMobile ? ExpenseCardForm : ExpenseTableForm;
 
+  // newExpenses update
   const handleUpdExpense = (
     value: IExpense[keyof IExpense],
     id: number,
@@ -20,18 +22,23 @@ export const ExpenseForm = (props: expensesProps) => {
     );
   };
 
+  // newExpenses delete
   const handleDelExpense = (id: number) => {
     props.setNewExpenses((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const getSplitAmount = (peopleCnt: number, id: number) => {
-    props.newExpenses.map((item) => {
-      if (item.id === id) {
-        const totalAmount = Number(item.amount);
-        const splitAmount = Math.floor(totalAmount / peopleCnt);
-        return splitAmount;
-      }
-    });
+  // calculate_1인당 금액
+  const getSplitAmount = (peopleCnt: string, id: number) => {
+    props.setNewExpenses((prev) =>
+      prev.map((item) => {
+        if (item.id === id) {
+          const totalAmount = parseCurrency(item.amount);
+          const splitAmount = Math.floor(totalAmount / Number(peopleCnt));
+          return { ...item, actualAmount: String(splitAmount) };
+        }
+        return item;
+      })
+    );
   };
 
   const FormComponentProps = {

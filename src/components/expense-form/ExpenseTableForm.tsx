@@ -1,5 +1,6 @@
 import { formatCurrency } from "@/utils/format";
 import { Trash2 } from "lucide-react";
+import React from "react";
 import { expensesFormProps } from "./types";
 
 export const ExpenseTableForm = ({
@@ -45,12 +46,15 @@ export const ExpenseTableForm = ({
         <tbody className="divide-y divide-gray-200 bg-white">
           {newExpenses?.length > 0 &&
             newExpenses.map((expense) => (
-              <>
-                <tr key={expense.id}>
+              <React.Fragment key={expense.id}>
+                <tr>
                   <td className="px-4 py-4 text-sm text-gray-700">
                     <input
                       type="date"
                       value={expense.date}
+                      onChange={(e) =>
+                        handleUpdExpense(e.target.value, expense.id, "date")
+                      }
                       className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
                     />
                   </td>
@@ -92,7 +96,7 @@ export const ExpenseTableForm = ({
                       </div>
                       <input
                         type="text"
-                        value={formatCurrency(Number(expense.amount))}
+                        value={formatCurrency(expense.amount)}
                         onChange={(e) =>
                           handleUpdExpense(e.target.value, expense.id, "amount")
                         }
@@ -108,7 +112,7 @@ export const ExpenseTableForm = ({
                         </div>
                         <input
                           type="text"
-                          value={formatCurrency(Number(expense.actualAmount))}
+                          value={formatCurrency(expense.actualAmount)}
                           disabled={!expense.isDifferentAmount}
                           onChange={(e) =>
                             handleUpdExpense(
@@ -149,7 +153,7 @@ export const ExpenseTableForm = ({
                         handleUpdExpense(
                           e.target.value,
                           expense.id,
-                          "categoryId"
+                          "paymentMethodId"
                         )
                       }
                       className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
@@ -197,7 +201,7 @@ export const ExpenseTableForm = ({
                             min="1"
                             value={expense.numberOfPeople}
                             onChange={(e) =>
-                              getSplitAmount(Number(e.target.value), expense.id)
+                              getSplitAmount(e.target.value, expense.id)
                             }
                             className="w-16 rounded-md border-emerald-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm"
                           />
@@ -208,7 +212,7 @@ export const ExpenseTableForm = ({
                             1인당 금액:
                           </span>
                           <span className="font-medium text-emerald-600">
-                            {formatCurrency(Number(expense.actualAmount))}
+                            {formatCurrency(expense.actualAmount)}
                           </span>
                         </div>
                         <div className="text-xs text-emerald-600 ml-auto">
@@ -219,7 +223,7 @@ export const ExpenseTableForm = ({
                     </td>
                   </tr>
                 )}
-              </>
+              </React.Fragment>
             ))}
         </tbody>
       </table>
