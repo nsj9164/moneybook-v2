@@ -1,54 +1,13 @@
-import { useState } from "react";
 import { formatCurrency } from "@/utils/format";
+import { ExpensesTableHead } from "./ExpensesTableHead";
 
 export const ExpensesRow = () => {
-  const [expenses, setExpenses] = useState<any[]>([]);
-
   return (
     <div className="overflow-x-auto">
       <div className="inline-block min-w-full align-middle">
         <div className="overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5 rounded-lg">
           <table className="min-w-full divide-y divide-gray-300">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
-                  <input
-                    type="checkbox"
-                    className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                  />
-                </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  날짜
-                </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  카테고리
-                </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  설명
-                </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  결제 수단
-                </th>
-                <th
-                  scope="col"
-                  className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
-                >
-                  금액
-                </th>
-              </tr>
-            </thead>
+            <ExpensesTableHead />
             <tbody className="divide-y divide-gray-200 bg-white">
               {expenses.map((expense) => (
                 <tr key={expense.id} className="hover:bg-gray-50">

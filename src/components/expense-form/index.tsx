@@ -1,11 +1,11 @@
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { IExpense } from "@/types/expense-types";
-import { formatCurrency, parseCurrency } from "@/utils/format";
+import { parseCurrency } from "@/utils/format";
 import { ExpenseCardForm } from "./ExpenseCardForm";
 import { ExpenseTableForm } from "./ExpenseTableForm";
-import { expensesProps } from "./types";
+import { ExpensesProps } from "./types/types";
 
-export const ExpenseForm = (props: expensesProps) => {
+export const ExpenseForm = (props: ExpensesProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const FormComponent = isMobile ? ExpenseCardForm : ExpenseTableForm;
 

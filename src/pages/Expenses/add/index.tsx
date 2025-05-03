@@ -1,4 +1,5 @@
 import { ExpenseForm } from "@/components/expense-form";
+import { useAuth } from "@/contexts/AuthContext";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { expenseKeys } from "@/hooks/useFetchExpenses";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
@@ -14,8 +15,9 @@ const AddExpense = () => {
   const [newExpenses, setNewExpenses] = useState<IExpense[]>([]);
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
+  const { user } = useAuth();
 
-  // 지출 추가
+  // newExpenses add
   const handleAddExpense = () => {
     const newItem: IExpense = {
       id: Date.now(),
@@ -35,23 +37,34 @@ const AddExpense = () => {
     if (newExpenses.length === 0) handleAddExpense();
   }, [newExpenses]);
 
-  // 지출 저장
+  // newExpenses_지정한 key만 반환
+  const pickOnly = (obj: Record<string, any>, keys: string[]) =>
+    Object.fromEntries(keys.map((key) => [key, obj[key]]));
+
+  // newExpenses_저장 형식에 맞게 가공
+  const formatExpenseForInsert = (item: IExpense) => {
+    const parsed = {
+      ...item,
+      amount: parseCurrency(item.amount),
+      actualAmount: parseCurrency(item.actualAmount),
+    };
+
+    const snakeCase = formatKeyCase(parsed, "snake");
+    const filtered = pickOnly(snakeCase, expenseKeys);
+
+    return { ...filtered, user_id: user?.id };
+  };
+
+  // newExpenses save
   const handleSaveExpense = async () => {
     if (newExpenses.length < 1) {
       return;
     }
     console.log("newExpenses:::", newExpenses);
-    const pick = (obj: Record<string, any>, keys: string[]) =>
-      Object.fromEntries(keys.map((key) => [key, obj[key]]));
 
     const saveData = newExpenses
       .filter((expense) => expense.isModified)
-      .map((item) => ({
-        ...item,
-        amount: parseCurrency(item.amount),
-        actualAmount: parseCurrency(item.actualAmount),
-      }))
-      .map((item) => formatKeyCase(pick(item, expenseKeys), "snake"));
+      .map((item) => formatExpenseForInsert(item));
 
     console.log("saveData::::", saveData);
 

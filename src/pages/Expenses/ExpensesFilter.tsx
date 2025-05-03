@@ -1,37 +1,8 @@
-import { useEffect, useState } from "react";
 import { Filter, Search } from "lucide-react";
-import { supabase } from "@/utils/supabase";
+import { useFetchCategories } from "@/hooks/useFetchCategories";
+import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 
 export const ExpensesFilter = () => {
-  const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [paymentTypesRes, categoriesRes] = await Promise.all([
-          supabase.from("payment_method_types").select(`id, code, type_name`),
-          supabase
-            .from("categories")
-            .select(`id, name, parent_id, target_amount, transaction_type`),
-        ]);
-
-        if (paymentTypesRes.error || categoriesRes.error) {
-          console.error(
-            "Error fetching:",
-            paymentTypesRes.error || categoriesRes.error
-          );
-          return;
-        }
-        setPaymentMethods(paymentTypesRes.data);
-        setCategories(categoriesRes.data);
-      } catch (err) {
-        console.error("error:", err);
-      }
-    };
-
-    fetchData();
-  }, []);
   return (
     <div className="bg-gray-50 p-4 rounded-lg mb-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -87,9 +58,9 @@ export const ExpensesFilter = () => {
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             defaultValue="전체"
           >
-            {paymentMethods.map((method) => (
+            {payMethods.map((method) => (
               <option key={method.id} value={method.id}>
-                {method.type_name}
+                {method.name}
               </option>
             ))}
           </select>

@@ -11,7 +11,6 @@ export const formatKeyCase = (input: any, type: "camel" | "snake"): any => {
 
   if (input !== null && typeof input == "object") {
     return Object.entries(input).reduce((acc, [key, value]) => {
-      console.log("[key, value]", input, key, value);
       const formatKey = type === "camel" ? toCamelCase(key) : toSnakeCase(key);
       acc[formatKey] = formatKeyCase(value, type);
       return acc;
