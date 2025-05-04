@@ -1,8 +1,14 @@
+import { ICategory, IPayMethod } from "@/types/expense-types";
 import { Filter, Search } from "lucide-react";
-import { useFetchCategories } from "@/hooks/useFetchCategories";
-import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 
-export const ExpensesFilter = () => {
+interface ExpensesFilterProps {
+  categories: ICategory[];
+  payMethods: IPayMethod[];
+}
+export const ExpensesFilter = ({
+  categories,
+  payMethods,
+}: ExpensesFilterProps) => {
   return (
     <div className="bg-gray-50 p-4 rounded-lg mb-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -7,7 +7,7 @@ interface ExpenseTableSplitRowInterface {
   getSplitAmount: SplitAmountHandler;
 }
 
-export const ExpenseTableSplitRow = ({
+export const ExpenseFormTableSplitRow = ({
   expense,
   getSplitAmount,
 }: ExpenseTableSplitRowInterface) => {

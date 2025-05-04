@@ -1,6 +1,10 @@
 import { formatCurrency } from "@/utils/format";
 
-export const ExpensesRowTfoot = () => {
+export const ExpensesListFooter = ({
+  sumExpenses,
+}: {
+  sumExpenses: number;
+}) => {
   return (
     <tfoot>
       <tr className="border-t-2 border-gray-300">
@@ -18,9 +22,7 @@ export const ExpensesRowTfoot = () => {
           합계
         </th>
         <td className="pl-3 pr-6 pt-4 text-right text-sm font-semibold text-gray-900">
-          {formatCurrency(
-            expenses.reduce((sum, expense) => sum + Number(expense.amount), 0)
-          )}
+          {formatCurrency(sumExpenses)}
         </td>
       </tr>
     </tfoot>

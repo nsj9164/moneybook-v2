@@ -12,6 +12,8 @@ export interface IExpense {
   isDifferentAmount: boolean;
   numberOfPeople?: number;
   isModified?: boolean;
+  paymentMethods?: { name: string };
+  categories?: { name: string };
 }
 
 export interface ICategory {

@@ -6,7 +6,7 @@ import {
   UpdTableExpenseHandler,
 } from "../types/handlers";
 
-interface ExpenseTableRow {
+interface ExpenseFormTableRow {
   expense: IExpense;
   categories: ICategory[];
   payMethods: IPayMethod[];
@@ -14,13 +14,13 @@ interface ExpenseTableRow {
   handleDelExpense: DelTableExpenseHandler;
 }
 
-export const ExpenseTableRow = ({
+export const ExpenseFormTableRow = ({
   expense,
   categories,
   payMethods,
   handleUpdExpense,
   handleDelExpense,
-}: ExpenseTableRow) => {
+}: ExpenseFormTableRow) => {
   return (
     <tr>
       <td className="px-4 py-4 text-sm text-gray-700">
