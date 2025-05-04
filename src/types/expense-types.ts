@@ -1,5 +1,7 @@
+export type UUID = string;
+
 export interface IExpense {
-  id: number;
+  id: UUID;
   date: string;
   itemName: string;
   amount: string;
@@ -13,14 +15,14 @@ export interface IExpense {
 }
 
 export interface ICategory {
-  id: number;
+  id: string;
   name: string;
   targetAmount: number;
   transactionType: number;
 }
 
 export interface IPayMethod {
-  id: number;
+  id: string;
   name: string;
   billingStartDay: number;
   billingEndDay: number;
