@@ -1,4 +1,4 @@
-export const ExpensesTableHead = () => {
+export const ExpensesRowHead = () => {
   return (
     <thead className="bg-gray-50">
       <tr>

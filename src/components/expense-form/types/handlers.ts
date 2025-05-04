@@ -1,11 +1,11 @@
-import { IExpense } from "@/types/expense-types";
+import { IExpense, UUID } from "@/types/expense-types";
 
 export type UpdTableExpenseHandler = (
   value: IExpense[keyof IExpense],
-  id: number,
+  id: UUID,
   key: keyof IExpense
 ) => void;
 
-export type DelTableExpenseHandler = (id: number) => void;
+export type DelTableExpenseHandler = (id: UUID) => void;
 
-export type SplitAmountHandler = (peoplcCnt: string, id: number) => void;
+export type SplitAmountHandler = (peoplcCnt: string, id: UUID) => void;

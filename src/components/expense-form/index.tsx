@@ -1,5 +1,5 @@
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { IExpense } from "@/types/expense-types";
+import { IExpense, UUID } from "@/types/expense-types";
 import { parseCurrency } from "@/utils/format";
 import { ExpenseCardForm } from "./ExpenseCardForm";
 import { ExpenseTableForm } from "./ExpenseTableForm";
@@ -12,7 +12,7 @@ export const ExpenseForm = (props: ExpensesProps) => {
   // newExpenses update
   const handleUpdExpense = (
     value: IExpense[keyof IExpense],
-    id: number,
+    id: UUID,
     key: keyof IExpense
   ) => {
     props.setNewExpenses((prev) =>
@@ -23,12 +23,12 @@ export const ExpenseForm = (props: ExpensesProps) => {
   };
 
   // newExpenses delete
-  const handleDelExpense = (id: number) => {
+  const handleDelExpense = (id: UUID) => {
     props.setNewExpenses((prev) => prev.filter((item) => item.id !== id));
   };
 
   // calculate_1인당 금액
-  const getSplitAmount = (peopleCnt: string, id: number) => {
+  const getSplitAmount = (peopleCnt: string, id: UUID) => {
     props.setNewExpenses((prev) =>
       prev.map((item) => {
         if (item.id === id) {

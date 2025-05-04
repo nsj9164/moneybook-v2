@@ -10,6 +10,7 @@ import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
 import { AddExpenseHeader } from "./AddExpenseHeader";
 import { AddExpenseSummary } from "./AddExpenseSummary";
+import { v4 as uuidv4 } from "uuid";
 
 const AddExpense = () => {
   const [newExpenses, setNewExpenses] = useState<IExpense[]>([]);
@@ -20,7 +21,7 @@ const AddExpense = () => {
   // newExpenses add
   const handleAddExpense = () => {
     const newItem: IExpense = {
-      id: Date.now(),
+      id: uuidv4(),
       date: new Date().toISOString().slice(0, 10),
       itemName: "",
       amount: "0",
@@ -68,7 +69,7 @@ const AddExpense = () => {
 
     console.log("saveData::::", saveData);
 
-    const { error } = await supabase.from("expenses").insert(saveData);
+    const { error } = await supabase.from("expenses").upsert(saveData).select();
 
     if (error) console.error("Insert error:", error.message);
   };

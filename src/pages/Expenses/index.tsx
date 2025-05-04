@@ -15,7 +15,7 @@ const Expenses = () => {
     <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-sm mt-6 mb-6">
       <ExpensesHeader />
       <ExpensesFilter />
-      <ExpensesRow />
+      <ExpensesRow expenses={expenses} />
       <ExpensesFooter />
     </div>
   );
