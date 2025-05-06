@@ -1,10 +1,10 @@
+import { ExpensesFilter } from "@/components/expenses/list/ExpensesFilter";
+import { ExpensesFooter } from "@/components/expenses/list/ExpensesFooter";
+import { ExpensesHeader } from "@/components/expenses/list/ExpensesHeader";
+import { ExpensesListTable } from "@/components/expenses/list/ExpensesListTable";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { useFetchExpenses } from "@/hooks/useFetchExpenses";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
-import { ExpensesFilter } from "./ExpensesFilter";
-import { ExpensesFooter } from "./ExpensesFooter";
-import { ExpensesHeader } from "./ExpensesHeader";
-import { ExpensesListTable } from "./ExpensesListTable";
 
 const Expenses = () => {
   const expenses = useFetchExpenses();

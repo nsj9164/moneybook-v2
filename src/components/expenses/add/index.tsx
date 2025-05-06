@@ -1,4 +1,4 @@
-import { ExpenseForm } from "@/components/expense-form";
+import { ExpenseForm } from "@/components/expenses/add/expense-form";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { expenseKeys } from "@/hooks/useFetchExpenses";
@@ -8,11 +8,11 @@ import { formatKeyCase } from "@/utils/caseConverter";
 import { parseCurrency } from "@/utils/format";
 import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
-import { AddExpenseHeader } from "./AddExpenseHeader";
-import { AddExpenseSummary } from "./AddExpenseSummary";
+import { AddExpenseHeader } from "./ExpenseFormHeader";
+import { AddExpenseSummary } from "./ExpenseFormSummary";
 import { v4 as uuidv4 } from "uuid";
 
-const AddExpense = () => {
+const ExpenseFormPage = () => {
   const [newExpenses, setNewExpenses] = useState<IExpense[]>([]);
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
@@ -99,4 +99,4 @@ const AddExpense = () => {
   );
 };
 
-export default AddExpense;
+export default ExpenseFormPage;
