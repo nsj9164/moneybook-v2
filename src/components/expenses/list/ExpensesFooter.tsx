@@ -1,11 +1,11 @@
 import { Download } from "lucide-react";
 
-export const ExpensesFooter = () => {
+export const ExpensesFooter = ({ expenseCount }: { expenseCount: number }) => {
   return (
     <div className="mt-6 flex flex-col sm:flex-row items-center justify-between">
       <div className="flex items-center">
         <p className="text-sm text-gray-700">
-          {/* 총 <span className="font-medium">{expenses.length}</span> 항목 */}
+          총 <span className="font-medium">{expenseCount}</span> 항목
         </p>
       </div>
       <div className="mt-4 sm:mt-0">

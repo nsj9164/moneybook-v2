@@ -1,9 +1,18 @@
-import { IExpense } from "@/types/expense-types";
+import { IExpense, UUID } from "@/types/expense-types";
+import { Dispatch, SetStateAction } from "react";
 import { ExpensesListFooter } from "./ExpensesListFooter";
 import { ExpensesListHead } from "./ExpensesListHead";
 import { ExpensesListRow } from "./ExpensesListRow";
 
-export const ExpensesListTable = ({ expenses }: { expenses: IExpense[] }) => {
+interface ExpensesListProps {
+  expenses: IExpense[];
+  setChkList: Dispatch<SetStateAction<UUID[]>>;
+}
+
+export const ExpensesListTable = ({
+  expenses,
+  setChkList,
+}: ExpensesListProps) => {
   const sumExpenses = expenses.reduce(
     (sum, expense) => sum + Number(expense.amount),
     0
@@ -16,7 +25,11 @@ export const ExpensesListTable = ({ expenses }: { expenses: IExpense[] }) => {
             <ExpensesListHead />
             <tbody className="divide-y divide-gray-200 bg-white">
               {expenses.map((expense) => (
-                <ExpensesListRow key={expense.id} expense={expense} />
+                <ExpensesListRow
+                  key={expense.id}
+                  expense={expense}
+                  setChkList={setChkList}
+                />
               ))}
             </tbody>
 
