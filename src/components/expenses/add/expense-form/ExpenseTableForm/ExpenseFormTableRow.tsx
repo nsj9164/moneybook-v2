@@ -3,6 +3,7 @@ import { formatCurrency } from "@/utils/format";
 import { Trash2 } from "lucide-react";
 import {
   DelTableExpenseHandler,
+  UpdActualAmountHandler,
   UpdTableExpenseHandler,
 } from "../types/handlers";
 
@@ -12,6 +13,7 @@ interface ExpenseFormTableRow {
   payMethods: IPayMethod[];
   handleUpdExpense: UpdTableExpenseHandler;
   handleDelExpense: DelTableExpenseHandler;
+  updateActualAmount: UpdActualAmountHandler;
 }
 
 export const ExpenseFormTableRow = ({
@@ -20,6 +22,7 @@ export const ExpenseFormTableRow = ({
   payMethods,
   handleUpdExpense,
   handleDelExpense,
+  updateActualAmount,
 }: ExpenseFormTableRow) => {
   return (
     <tr>
@@ -68,6 +71,13 @@ export const ExpenseFormTableRow = ({
             value={formatCurrency(expense.amount)}
             onChange={(e) =>
               handleUpdExpense(e.target.value, expense.id, "amount")
+            }
+            onBlur={(e) =>
+              updateActualAmount(
+                e.target.value,
+                expense.id,
+                expense.numberOfPeople ?? 0
+              )
             }
             className="w-full pl-7 pr-3 rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
           />

@@ -20,8 +20,10 @@ export const ExpenseFormTableSplitRow = ({
             <input
               type="number"
               min="1"
-              value={expense.numberOfPeople}
-              onChange={(e) => getSplitAmount(e.target.value, expense.id)}
+              value={expense.numberOfPeople ?? 0}
+              onChange={(e) =>
+                getSplitAmount(Number(e.target.value), expense.id)
+              }
               className="w-16 rounded-md border-emerald-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm"
             />
             <span className="text-emerald-700 ml-1">명</span>

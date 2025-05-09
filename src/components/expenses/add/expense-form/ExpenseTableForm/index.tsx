@@ -11,6 +11,7 @@ export const ExpenseTableForm = ({
   handleUpdExpense,
   handleDelExpense,
   getSplitAmount,
+  updateActualAmount,
 }: ExpensesFormProps) => {
   return (
     <div className="overflow-x-auto">
@@ -27,6 +28,7 @@ export const ExpenseTableForm = ({
                   payMethods={payMethods}
                   handleUpdExpense={handleUpdExpense}
                   handleDelExpense={handleDelExpense}
+                  updateActualAmount={updateActualAmount}
                 />
                 {expense.isDifferentAmount && (
                   <ExpenseFormTableSplitRow

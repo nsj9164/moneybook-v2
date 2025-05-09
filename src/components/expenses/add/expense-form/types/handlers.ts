@@ -8,4 +8,10 @@ export type UpdTableExpenseHandler = (
 
 export type DelTableExpenseHandler = (id: UUID) => void;
 
-export type SplitAmountHandler = (peoplcCnt: string, id: UUID) => void;
+export type SplitAmountHandler = (peoplcCnt: number, id: UUID) => void;
+
+export type UpdActualAmountHandler = (
+  amount: string,
+  id: UUID,
+  peopleCnt: number
+) => void;
