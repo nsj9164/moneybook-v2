@@ -6,12 +6,18 @@ import { ExpensesListRow } from "./ExpensesListRow";
 
 interface ExpensesListProps {
   expenses: IExpense[];
-  setChkList: Dispatch<SetStateAction<UUID[]>>;
+  chkList: UUID[];
+  chkListAll: boolean;
+  handleCheck: (id: UUID) => void;
+  handleCheckedAll: () => void;
 }
 
 export const ExpensesListTable = ({
   expenses,
-  setChkList,
+  chkList,
+  chkListAll,
+  handleCheck,
+  handleCheckedAll,
 }: ExpensesListProps) => {
   const sumExpenses = expenses.reduce(
     (sum, expense) => sum + Number(expense.amount),
@@ -22,13 +28,17 @@ export const ExpensesListTable = ({
       <div className="inline-block min-w-full align-middle">
         <div className="overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5 rounded-lg">
           <table className="min-w-full divide-y divide-gray-300">
-            <ExpensesListHead />
+            <ExpensesListHead
+              chkListAll={chkListAll}
+              handleCheckedAll={handleCheckedAll}
+            />
             <tbody className="divide-y divide-gray-200 bg-white">
               {expenses.map((expense) => (
                 <ExpensesListRow
                   key={expense.id}
                   expense={expense}
-                  setChkList={setChkList}
+                  chkList={chkList}
+                  handleCheck={handleCheck}
                 />
               ))}
             </tbody>

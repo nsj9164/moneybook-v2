@@ -1,4 +1,4 @@
-import { ExpenseForm } from "@/components/expenses/add/expense-form";
+import { ExpenseForm } from "@/components/expenses/edit/expense-form";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { expenseKeys } from "@/hooks/useFetchExpenses";
@@ -13,10 +13,11 @@ import { AddExpenseSummary } from "./ExpenseFormSummary";
 import { v4 as uuidv4 } from "uuid";
 
 const ExpenseFormPage = () => {
-  const [newExpenses, setNewExpenses] = useState<IExpense[]>([]);
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
   const { user } = useAuth();
+  const [newExpenses, setNewExpenses] = useState<IExpense[]>([]);
+  const [checkAll, setCheckAll] = useState<boolean>(false);
 
   // newExpenses add
   const handleAddExpense = () => {
