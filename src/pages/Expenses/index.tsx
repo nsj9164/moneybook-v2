@@ -5,9 +5,12 @@ import { ExpensesListTable } from "@/components/expenses/list/ExpensesListTable"
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { useFetchExpenses } from "@/hooks/useFetchExpenses";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
+import { newExpensesState } from "@/recoil/atoms";
 import { UUID } from "@/types/expense-types";
 import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 
 const Expenses = () => {
   const expenses = useFetchExpenses();
@@ -16,15 +19,12 @@ const Expenses = () => {
 
   const [chkList, setChkList] = useState<UUID[]>([]);
   const [chkListAll, setChkListAll] = useState<boolean>(false);
-
-  useEffect(() => {
-    console.log("chkList::::", chkList);
-  }, [chkList]);
+  const setNewExpenses = useSetRecoilState(newExpensesState);
+  const navigate = useNavigate();
 
   // delete Expenses
   const handleDelExpenses = async () => {
     if (chkList.length < 1) return;
-    console.log("chkList::::", chkList);
     const { error } = await supabase
       .from("expenses")
       .delete()
@@ -57,11 +57,20 @@ const Expenses = () => {
     else chkListAll && setChkListAll(false);
   }, [chkList, expenses]);
 
+  // 수정할 data 세팅 + 수정페이지 이동
+  const setEditData = () => {
+    const filteredData = expenses.filter((item) => chkList.includes(item.id));
+    if (filteredData.length === 0) return;
+    setNewExpenses(filteredData);
+    navigate("/expenses/edit");
+  };
+
   return (
     <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-sm mt-6 mb-6">
       <ExpensesHeader
         chkListCnt={chkList.length}
         handleDelExpenses={handleDelExpenses}
+        setEditData={setEditData}
       />
       <ExpensesFilter categories={categories} payMethods={payMethods} />
       <ExpensesListTable

@@ -7,17 +7,18 @@ import { IExpense } from "@/types/expense-types";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { parseCurrency } from "@/utils/format";
 import { supabase } from "@/utils/supabase";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AddExpenseHeader } from "./ExpenseFormHeader";
 import { AddExpenseSummary } from "./ExpenseFormSummary";
 import { v4 as uuidv4 } from "uuid";
+import { useRecoilState } from "recoil";
+import { newExpensesState } from "@/recoil/atoms";
 
 const ExpenseFormPage = () => {
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
   const { user } = useAuth();
-  const [newExpenses, setNewExpenses] = useState<IExpense[]>([]);
-  const [checkAll, setCheckAll] = useState<boolean>(false);
+  const [newExpenses, setNewExpenses] = useRecoilState(newExpensesState);
 
   // newExpenses add
   const handleAddExpense = () => {

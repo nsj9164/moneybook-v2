@@ -15,3 +15,8 @@ export const payMethodsState = atom<IPayMethod[]>({
   key: "payMethodsState",
   default: [],
 });
+
+export const newExpensesState = atom<IExpense[]>({
+  key: "newExpensesState",
+  default: [],
+});

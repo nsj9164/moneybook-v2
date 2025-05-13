@@ -1,5 +1,6 @@
 import { ICategory, IExpense, IPayMethod } from "@/types/expense-types";
 import { formatCurrency } from "@/utils/format";
+import { format } from "date-fns";
 import { Trash2 } from "lucide-react";
 import {
   DelTableExpenseHandler,
@@ -29,7 +30,7 @@ export const ExpenseFormTableRow = ({
       <td className="px-4 py-4 text-sm text-gray-700">
         <input
           type="date"
-          value={expense.date}
+          value={format(expense.date, "yyyy-MM-dd")}
           onChange={(e) => handleUpdExpense(e.target.value, expense.id, "date")}
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         />
