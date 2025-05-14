@@ -21,6 +21,12 @@ const Expenses = () => {
   const [chkListAll, setChkListAll] = useState<boolean>(false);
   const setNewExpenses = useSetRecoilState(newExpensesState);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useState({
+    content: "",
+    categoryId: "전체",
+    payMethodId: "전체",
+    dateRange: { start: "", end: "" },
+  });
 
   // delete Expenses
   const handleDelExpenses = async () => {

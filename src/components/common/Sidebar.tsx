@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/AuthContext";
 import {
   BarChart3,
   CreditCard,
@@ -18,6 +19,8 @@ interface SidebarProps {
 const Sidebar = ({ onClose }: SidebarProps) => {
   const location = useLocation();
   const currentPath = location.pathname;
+
+  const { logout } = useAuth();
 
   return (
     <div className="flex h-full flex-col bg-white">
@@ -143,7 +146,10 @@ const Sidebar = ({ onClose }: SidebarProps) => {
             <p className="text-xs text-gray-500">user@example.com</p>
           </div>
         </div>
-        <button className="mt-3 flex w-full items-center rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+        <button
+          onClick={logout}
+          className="mt-3 flex w-full items-center rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+        >
           <LogOut className="mr-3 h-5 w-5 flex-shrink-0" />
           로그아웃
         </button>

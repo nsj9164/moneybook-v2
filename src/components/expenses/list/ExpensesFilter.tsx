@@ -1,3 +1,4 @@
+import { FormSelect } from "@/components/ui/FormSelect";
 import { ICategory, IPayMethod } from "@/types/expense-types";
 import { Filter, Search } from "lucide-react";
 
@@ -32,45 +33,13 @@ export const ExpensesFilter = ({
           </div>
         </div>
 
-        <div>
-          <label
-            htmlFor="category"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            카테고리
-          </label>
-          <select
-            id="category"
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
-            defaultValue="전체"
-          >
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <FormSelect id="category" label="카테고리" dataList={categories} />
 
-        <div>
-          <label
-            htmlFor="payment-method"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            결제 수단
-          </label>
-          <select
-            id="payment-method"
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
-            defaultValue="전체"
-          >
-            {payMethods.map((method) => (
-              <option key={method.id} value={method.id}>
-                {method.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <FormSelect
+          id="payment-method"
+          label="결제 수단"
+          dataList={payMethods}
+        />
 
         <div>
           <label
