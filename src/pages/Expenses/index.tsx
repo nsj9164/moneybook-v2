@@ -12,6 +12,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 
+export type IFilters = {
+  content: string;
+  categoryId: string;
+  payMethodId: string;
+  dateRange: { start: string; end: string };
+};
+
 const Expenses = () => {
   const expenses = useFetchExpenses();
   const categories = useFetchCategories();
@@ -21,12 +28,14 @@ const Expenses = () => {
   const [chkListAll, setChkListAll] = useState<boolean>(false);
   const setNewExpenses = useSetRecoilState(newExpensesState);
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useState({
+
+  const initialFilters: IFilters = {
     content: "",
     categoryId: "전체",
     payMethodId: "전체",
     dateRange: { start: "", end: "" },
-  });
+  };
+  const [filters, setFilters] = useState(initialFilters);
 
   // delete Expenses
   const handleDelExpenses = async () => {
@@ -71,6 +80,16 @@ const Expenses = () => {
     navigate("/expenses/edit");
   };
 
+  // 검색 초기화
+  const resetFilters = () => {
+    setFilters(initialFilters);
+  };
+
+  // 검색
+  const handleFiltersChange = (field: keyof typeof filters, value: string) => {
+    setFilters((prev) => ({ ...prev, [field]: value }));
+  };
+
   return (
     <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-sm mt-6 mb-6">
       <ExpensesHeader
@@ -78,7 +97,12 @@ const Expenses = () => {
         handleDelExpenses={handleDelExpenses}
         setEditData={setEditData}
       />
-      <ExpensesFilter categories={categories} payMethods={payMethods} />
+      <ExpensesFilter
+        categories={categories}
+        payMethods={payMethods}
+        resetFilters={resetFilters}
+        handleFiltersChange={handleFiltersChange}
+      />
       <ExpensesListTable
         expenses={expenses}
         chkList={chkList}
