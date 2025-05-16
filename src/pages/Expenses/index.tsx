@@ -13,10 +13,11 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 
 export type IFilters = {
-  content: string;
-  categoryId: string;
-  payMethodId: string;
-  dateRange: { start: string; end: string };
+  itemName: string;
+  categoryId: number;
+  payMethodId: number;
+  startDate: string;
+  endDate: string;
 };
 
 const Expenses = () => {
@@ -30,12 +31,26 @@ const Expenses = () => {
   const navigate = useNavigate();
 
   const initialFilters: IFilters = {
-    content: "",
-    categoryId: "전체",
-    payMethodId: "전체",
-    dateRange: { start: "", end: "" },
+    itemName: "",
+    categoryId: 0,
+    payMethodId: 0,
+    startDate: "",
+    endDate: "",
   };
   const [filters, setFilters] = useState(initialFilters);
+
+  const matchWithOptional = (filterValue: number, itemValue: number) =>
+    filterValue !== 0 && filterValue === itemValue;
+
+  const filteredExpenses = expenses.filter((item) => {
+    return (
+      item.date >= filters.startDate &&
+      item.date <= filters.endDate &&
+      matchWithOptional(filters.categoryId, item.categoryId) &&
+      matchWithOptional(filters.payMethodId, item.paymentMethodId) &&
+      (filters.itemName === "" || item.itemName.includes(filters.itemName))
+    );
+  });
 
   // delete Expenses
   const handleDelExpenses = async () => {
@@ -58,7 +73,7 @@ const Expenses = () => {
     const newState = !chkListAll;
     setChkListAll(newState);
     if (newState) {
-      const all = expenses.map((i) => i.id);
+      const all = filteredExpenses.map((i) => i.id);
       setChkList(all);
     } else {
       setChkList([]);
@@ -67,16 +82,21 @@ const Expenses = () => {
 
   // chkList에 따른 setChkListAll
   useEffect(() => {
-    if (expenses.length > 0 && chkList.length === expenses.length)
+    if (
+      filteredExpenses.length > 0 &&
+      chkList.length === filteredExpenses.length
+    )
       !chkListAll && setChkListAll(true);
     else chkListAll && setChkListAll(false);
-  }, [chkList, expenses]);
+  }, [chkList, filteredExpenses]);
 
   // 수정할 data 세팅 + 수정페이지 이동
   const setEditData = () => {
-    const filteredData = expenses.filter((item) => chkList.includes(item.id));
-    if (filteredData.length === 0) return;
-    setNewExpenses(filteredData);
+    const editData = filteredExpenses.filter((item) =>
+      chkList.includes(item.id)
+    );
+    if (editData.length === 0) return;
+    setNewExpenses(editData);
     navigate("/expenses/edit");
   };
 
@@ -104,13 +124,13 @@ const Expenses = () => {
         handleFiltersChange={handleFiltersChange}
       />
       <ExpensesListTable
-        expenses={expenses}
+        expenses={filteredExpenses}
         chkList={chkList}
         chkListAll={chkListAll}
         handleCheck={handleCheck}
         handleCheckedAll={handleCheckedAll}
       />
-      <ExpensesFooter expenseCount={expenses.length} />
+      <ExpensesFooter expenseCount={filteredExpenses.length} />
     </div>
   );
 };

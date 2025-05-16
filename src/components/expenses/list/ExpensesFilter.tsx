@@ -44,6 +44,7 @@ export const ExpensesFilter = ({
           id="category"
           label="카테고리"
           dataList={categories}
+          field="categoryId"
           onChange={handleFiltersChange}
         />
 
@@ -51,6 +52,7 @@ export const ExpensesFilter = ({
           id="payment-method"
           label="결제 수단"
           dataList={payMethods}
+          field="payMethodId"
           onChange={handleFiltersChange}
         />
 
@@ -65,18 +67,14 @@ export const ExpensesFilter = ({
             <input
               type="date"
               id="start-date"
-              onChange={(e) =>
-                handleFiltersChange("dateRange.start", e.target.value)
-              }
+              onChange={(e) => handleFiltersChange("startDate", e.target.value)}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             />
             <span className="text-gray-500">~</span>
             <input
               type="date"
               id="end-date"
-              onChange={(e) =>
-                handleFiltersChange("dateRange.end", e.target.value)
-              }
+              onChange={(e) => handleFiltersChange("endDate", e.target.value)}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             />
           </div>
