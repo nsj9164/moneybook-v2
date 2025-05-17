@@ -7,12 +7,14 @@ import { Dispatch, SetStateAction } from "react";
 interface ExpensesFilterProps {
   categories: ICategory[];
   payMethods: IPayMethod[];
+  filters: IFilters;
   resetFilters: () => void;
-  handleFiltersChange: (field: keyof IFilters, value: string) => void;
+  handleFiltersChange: (field: keyof IFilters, value: string | number) => void;
 }
 export const ExpensesFilter = ({
   categories,
   payMethods,
+  filters,
   resetFilters,
   handleFiltersChange,
 }: ExpensesFilterProps) => {
@@ -31,7 +33,8 @@ export const ExpensesFilter = ({
               type="text"
               id="search"
               placeholder="설명 검색..."
-              onChange={(e) => handleFiltersChange("content", e.target.value)}
+              value={filters.itemName}
+              onChange={(e) => handleFiltersChange("itemName", e.target.value)}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm pl-10"
             />
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -44,6 +47,7 @@ export const ExpensesFilter = ({
           id="category"
           label="카테고리"
           dataList={categories}
+          filtersValue={filters.categoryId}
           field="categoryId"
           onChange={handleFiltersChange}
         />
@@ -52,6 +56,7 @@ export const ExpensesFilter = ({
           id="payment-method"
           label="결제 수단"
           dataList={payMethods}
+          filtersValue={filters.payMethodId}
           field="payMethodId"
           onChange={handleFiltersChange}
         />
@@ -67,6 +72,7 @@ export const ExpensesFilter = ({
             <input
               type="date"
               id="start-date"
+              value={filters.startDate}
               onChange={(e) => handleFiltersChange("startDate", e.target.value)}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             />
@@ -74,6 +80,7 @@ export const ExpensesFilter = ({
             <input
               type="date"
               id="end-date"
+              value={filters.endDate}
               onChange={(e) => handleFiltersChange("endDate", e.target.value)}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             />

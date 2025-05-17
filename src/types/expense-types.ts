@@ -17,14 +17,14 @@ export interface IExpense {
 }
 
 export interface ICategory {
-  id: string;
+  id: number;
   name: string;
   targetAmount: number;
   transactionType: number;
 }
 
 export interface IPayMethod {
-  id: string;
+  id: number;
   name: string;
   billingStartDay: number;
   billingEndDay: number;

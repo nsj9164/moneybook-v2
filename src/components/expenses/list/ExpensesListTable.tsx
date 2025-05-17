@@ -1,7 +1,10 @@
+import { IFilters } from "@/pages/Expenses";
 import { IExpense, UUID } from "@/types/expense-types";
 import { Dispatch, SetStateAction } from "react";
 import { ExpensesListFooter } from "./ExpensesListFooter";
 import { ExpensesListHead } from "./ExpensesListHead";
+import { ExpensesListNoData } from "./ExpensesListNoData";
+import { ExpensesListNoFilteredData } from "./ExpensesListNoFilteredData";
 import { ExpensesListRow } from "./ExpensesListRow";
 
 interface ExpensesListProps {
@@ -10,6 +13,8 @@ interface ExpensesListProps {
   chkListAll: boolean;
   handleCheck: (id: UUID) => void;
   handleCheckedAll: () => void;
+  filters: IFilters;
+  resetFilters: () => void;
 }
 
 export const ExpensesListTable = ({
@@ -18,6 +23,8 @@ export const ExpensesListTable = ({
   chkListAll,
   handleCheck,
   handleCheckedAll,
+  filters,
+  resetFilters,
 }: ExpensesListProps) => {
   const sumExpenses = expenses.reduce(
     (sum, expense) => sum + Number(expense.amount),
@@ -33,14 +40,21 @@ export const ExpensesListTable = ({
               handleCheckedAll={handleCheckedAll}
             />
             <tbody className="divide-y divide-gray-200 bg-white">
-              {expenses.map((expense) => (
-                <ExpensesListRow
-                  key={expense.id}
-                  expense={expense}
-                  chkList={chkList}
-                  handleCheck={handleCheck}
+              {expenses.length === 0 ? (
+                <ExpensesListNoFilteredData
+                  filters={filters}
+                  resetFilters={resetFilters}
                 />
-              ))}
+              ) : (
+                expenses.map((expense) => (
+                  <ExpensesListRow
+                    key={expense.id}
+                    expense={expense}
+                    chkList={chkList}
+                    handleCheck={handleCheck}
+                  />
+                ))
+              )}
             </tbody>
 
             <ExpensesListFooter sumExpenses={sumExpenses} />

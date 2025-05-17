@@ -37,6 +37,7 @@ const ExpenseFormPage = () => {
   };
 
   useEffect(() => {
+    console.log("😀newExpenses:::", newExpenses);
     if (newExpenses.length === 0) handleAddExpense();
   }, [newExpenses]);
 
@@ -73,7 +74,12 @@ const ExpenseFormPage = () => {
 
     const { error } = await supabase.from("expenses").upsert(saveData).select();
 
-    if (error) console.error("Insert error:", error.message);
+    if (error) {
+      console.error("Insert error:", error.message);
+      return;
+    }
+
+    setNewExpenses([]);
   };
 
   return (

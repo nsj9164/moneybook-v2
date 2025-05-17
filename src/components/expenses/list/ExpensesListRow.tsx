@@ -1,3 +1,4 @@
+import { IFilters } from "@/pages/Expenses";
 import { IExpense, UUID } from "@/types/expense-types";
 import { formatCurrency } from "@/utils/format";
 import { format } from "date-fns";
