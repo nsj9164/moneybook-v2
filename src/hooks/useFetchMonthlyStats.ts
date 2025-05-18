@@ -2,8 +2,8 @@ import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
 
 interface MonthlyExpenseSummary {
-  total_current_month: number;
-  total_previous_month: number;
+  monthlyExpense: number;
+  lastMonthExpense: number;
 }
 
 export const useFetchMonthlyStats = () => {
@@ -14,20 +14,30 @@ export const useFetchMonthlyStats = () => {
     const fetchStas = async () => {
       setLoading(true);
       const { data, error } = await supabase
-        .rpc<MonthlyExpenseSummary, void>("get_monthly_expense_summary")
-        .single();
+        .rpc("get_monthly_expense_summary")
+        .single<{
+          total_current_month: number;
+          total_previous_month: number;
+        }>();
 
-      if (error) {
+      if (error || !data) {
         console.error("Fetch Monthly Stats Error:", error);
+        setStats({ monthlyExpense: 0, lastMonthExpense: 0 });
+        setLoading(false);
         return;
       }
 
-      setStats(data);
+      const mappedStats: MonthlyExpenseSummary = {
+        monthlyExpense: data.total_current_month ?? 0,
+        lastMonthExpense: data.total_previous_month ?? 0,
+      };
+
+      setStats(mappedStats);
       setLoading(false);
     };
 
     fetchStas();
   }, []);
 
-  return { data, loading };
+  return { stats, loading };
 };
