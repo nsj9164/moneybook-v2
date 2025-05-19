@@ -9,6 +9,7 @@ export interface IExpense {
   note: string;
   paymentMethodId: number;
   categoryId: number;
+  recurringExpenseId?: number;
   isDifferentAmount: boolean;
   numberOfPeople?: number;
   isModified?: boolean;

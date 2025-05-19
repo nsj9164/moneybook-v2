@@ -13,6 +13,9 @@ import {
   ExternalLink,
   AlertCircle,
   ArrowRight,
+  Search,
+  Bell,
+  MoreHorizontal,
 } from "lucide-react";
 import { formatCurrency } from "@/utils/format";
 import { motion } from "framer-motion";
@@ -130,14 +133,14 @@ const Dashboard = () => {
   const savingsRate = (savingsAmount / monthlyIncome) * 100;
 
   return (
-    <div>
-      {/* 상단 헤더 영역 */}
-      <div className="flex items-center justify-between p-4 border-b">
-        <div className="flex items-center">
-          <h1 className="text-xl font-bold text-gray-900">재정 현황</h1>
-          <div className="ml-4 relative">
+    <div className="h-full">
+      {/* 페이지 헤더 */}
+      <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200">
+        <div className="flex items-center space-x-4">
+          <h1 className="text-2xl font-bold text-gray-900">재정 대시보드</h1>
+          <div className="relative">
             <button
-              className="flex items-center bg-gray-100 rounded-md px-3 py-1.5 text-sm font-medium text-gray-700"
+              className="flex items-center bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               onClick={() => setShowMonthSelector(!showMonthSelector)}
             >
               <Calendar className="h-4 w-4 text-gray-500 mr-2" />
@@ -146,15 +149,15 @@ const Dashboard = () => {
             </button>
 
             {showMonthSelector && (
-              <div className="absolute top-full left-0 mt-1 bg-white rounded-md shadow-lg border border-gray-200 p-2 z-10">
-                <div className="grid grid-cols-3 gap-1">
+              <div className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 p-3 z-10 w-64">
+                <div className="grid grid-cols-3 gap-2">
                   {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
                     <button
                       key={month}
-                      className={`px-3 py-1.5 text-sm rounded-md ${
+                      className={`px-3 py-2 text-sm rounded-md ${
                         selectedMonth === month.toString()
                           ? "bg-emerald-100 text-emerald-700 font-medium"
-                          : "hover:bg-gray-100"
+                          : "hover:bg-gray-50"
                       }`}
                       onClick={() => {
                         setSelectedMonth(month.toString());
@@ -169,20 +172,41 @@ const Dashboard = () => {
             )}
           </div>
         </div>
+        <div className="flex items-center space-x-3">
+          <button className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors">
+            <Search className="h-5 w-5" />
+          </button>
+          <button className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors">
+            <Bell className="h-5 w-5" />
+          </button>
+          <button className="flex items-center space-x-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-4 py-2 rounded-lg transition-colors">
+            <Plus className="h-4 w-4" />
+            <span className="font-medium">지출 추가</span>
+          </button>
+        </div>
       </div>
 
       {/* 메인 콘텐츠 영역 */}
-      <div className="p-4 md:p-6">
+      <div className="p-6 space-y-8">
+        {/* 섹션 제목 */}
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-gray-800">재정 개요</h2>
+          <button className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center">
+            <span>상세 보기</span>
+            <ArrowRight className="ml-1 h-4 w-4" />
+          </button>
+        </div>
+
         {/* 주요 재정 지표 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* 이번 달 총 지출 */}
-          <div className="bg-white rounded-xl border shadow-sm p-4 hover:shadow-md transition-shadow">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-gray-500">
                   이번 달 총 지출
                 </p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-1">
+                <h3 className="text-2xl font-bold text-gray-900 mt-2">
                   {formatCurrency(monthlyExpense)}
                 </h3>
               </div>
@@ -205,8 +229,8 @@ const Dashboard = () => {
               전월 대비 {isIncrease ? "증가" : "감소"}
             </p>
 
-            <div className="mt-3">
-              <div className="flex justify-between items-center mb-1">
+            <div className="mt-4">
+              <div className="flex justify-between items-center mb-1.5">
                 <span className="text-xs font-medium text-gray-500">
                   목표 대비
                 </span>
@@ -214,9 +238,9 @@ const Dashboard = () => {
                   {Math.round(budgetAchievementRate)}%
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-1.5">
+              <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  className={`h-1.5 rounded-full ${
+                  className={`h-2 rounded-full ${
                     budgetAchievementRate > 100
                       ? "bg-red-500"
                       : "bg-emerald-500"
@@ -224,28 +248,28 @@ const Dashboard = () => {
                   style={{ width: `${Math.min(budgetAchievementRate, 100)}%` }}
                 ></div>
               </div>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 mt-1.5">
                 목표: {formatCurrency(monthlyGoal)}
               </p>
             </div>
           </div>
 
           {/* 이번 달 총 수입 */}
-          <div className="bg-white rounded-xl border shadow-sm p-4 hover:shadow-md transition-shadow">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-gray-500">
                   이번 달 총 수입
                 </p>
-                <h3 className="text-2xl font-bold text-blue-600 mt-1">
+                <h3 className="text-2xl font-bold text-blue-600 mt-2">
                   {formatCurrency(monthlyIncome)}
                 </h3>
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-1">급여, 부수입 포함</p>
 
-            <div className="mt-3">
-              <div className="flex justify-between items-center mb-1">
+            <div className="mt-4">
+              <div className="flex justify-between items-center mb-1.5">
                 <span className="text-xs font-medium text-gray-500">
                   지출 비율
                 </span>
@@ -253,9 +277,9 @@ const Dashboard = () => {
                   {Math.round((monthlyExpense / monthlyIncome) * 100)}%
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-1.5">
+              <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  className="h-1.5 rounded-full bg-blue-500"
+                  className="h-2 rounded-full bg-blue-500"
                   style={{
                     width: `${Math.min(
                       (monthlyExpense / monthlyIncome) * 100,
@@ -268,13 +292,13 @@ const Dashboard = () => {
           </div>
 
           {/* 이번 달 저축 */}
-          <div className="bg-white rounded-xl border shadow-sm p-4 hover:shadow-md transition-shadow">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-gray-500">
                   이번 달 저축
                 </p>
-                <h3 className="text-2xl font-bold text-emerald-600 mt-1">
+                <h3 className="text-2xl font-bold text-emerald-600 mt-2">
                   {formatCurrency(savingsAmount)}
                 </h3>
               </div>
@@ -284,17 +308,17 @@ const Dashboard = () => {
             </div>
             <p className="text-xs text-gray-500 mt-1">수입 대비 저축률</p>
 
-            <div className="mt-3 flex items-center">
+            <div className="mt-4 flex items-center">
               <div className="flex-1">
-                <div className="flex justify-between items-center mb-1">
+                <div className="flex justify-between items-center mb-1.5">
                   <span className="text-xs font-medium text-gray-500">
                     목표 달성률
                   </span>
                   <span className="text-xs font-medium text-gray-700">75%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className="h-1.5 rounded-full bg-emerald-500"
+                    className="h-2 rounded-full bg-emerald-500"
                     style={{ width: "75%" }}
                   ></div>
                 </div>
@@ -303,11 +327,11 @@ const Dashboard = () => {
           </div>
 
           {/* 고정 지출 */}
-          <div className="bg-white rounded-xl border shadow-sm p-4 hover:shadow-md transition-shadow">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-gray-500">고정 지출</p>
-                <h3 className="text-2xl font-bold text-purple-600 mt-1">
+                <h3 className="text-2xl font-bold text-purple-600 mt-2">
                   {formatCurrency(555000)}
                 </h3>
               </div>
@@ -317,12 +341,12 @@ const Dashboard = () => {
             </div>
             <p className="text-xs text-gray-500 mt-1">총 지출 대비 비율</p>
 
-            <div className="mt-3">
+            <div className="mt-4">
               <div className="flex justify-between text-xs text-gray-600">
                 <span>월세: {formatCurrency(500000)}</span>
                 <span>통신비: {formatCurrency(55000)}</span>
               </div>
-              <div className="mt-2">
+              <div className="mt-3">
                 <button className="text-xs text-purple-600 font-medium hover:text-purple-700 flex items-center">
                   고정 지출 관리
                   <ArrowRight className="ml-1 h-3 w-3" />
@@ -332,30 +356,35 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* 섹션 제목 */}
+        <div className="flex items-center justify-between pt-4">
+          <h2 className="text-lg font-semibold text-gray-800">지출 분석</h2>
+          <button className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center">
+            <span>상세 보기</span>
+            <ArrowRight className="ml-1 h-4 w-4" />
+          </button>
+        </div>
+
         {/* 지출 분석 및 차트 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 카테고리별 지출 */}
-          <div className="bg-white rounded-xl border shadow-sm lg:col-span-1">
-            <div className="p-4 border-b">
-              <div className="flex justify-between items-center">
-                <h2 className="text-base font-semibold text-gray-900">
-                  카테고리별 지출
-                </h2>
-                <button className="text-xs text-emerald-600 font-medium hover:text-emerald-700 flex items-center">
-                  자세히 보기
-                  <ExternalLink className="ml-1 h-3 w-3" />
-                </button>
-              </div>
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-1">
+            <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="font-semibold text-gray-800">카테고리별 지출</h3>
+              <button className="text-xs text-emerald-600 font-medium hover:text-emerald-700 flex items-center">
+                자세히 보기
+                <ExternalLink className="ml-1 h-3 w-3" />
+              </button>
             </div>
 
-            <div className="p-4">
-              <div className="flex flex-col items-center mb-4">
+            <div className="p-5">
+              <div className="flex flex-col items-center mb-6">
                 <div className="relative h-48 w-48">
                   <DonutChart data={categoryData} />
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-3.5">
                 {categoryData.map((category) => (
                   <div key={category.name} className="flex items-center">
                     <div
@@ -374,7 +403,7 @@ const Dashboard = () => {
                 ))}
               </div>
 
-              <div className="mt-4 pt-3 border-t border-gray-100">
+              <div className="mt-5 pt-4 border-t border-gray-100">
                 <button className="w-full text-center text-sm text-emerald-600 font-medium hover:text-emerald-700 flex items-center justify-center">
                   <PieChart className="mr-1.5 h-4 w-4" />
                   예산 설정하기
@@ -384,24 +413,20 @@ const Dashboard = () => {
           </div>
 
           {/* 지출 추이 */}
-          <div className="bg-white rounded-xl border shadow-sm lg:col-span-2">
-            <div className="p-4 border-b">
-              <div className="flex justify-between items-center">
-                <h2 className="text-base font-semibold text-gray-900">
-                  지출 추이
-                </h2>
-                <div className="flex items-center space-x-2">
-                  <button className="text-xs bg-emerald-50 text-emerald-700 px-2 py-1 rounded-md font-medium">
-                    월간
-                  </button>
-                  <button className="text-xs text-gray-500 px-2 py-1 rounded-md hover:bg-gray-50">
-                    주간
-                  </button>
-                </div>
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-2">
+            <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="font-semibold text-gray-800">지출 추이</h3>
+              <div className="flex items-center space-x-2">
+                <button className="text-xs bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-md font-medium">
+                  월간
+                </button>
+                <button className="text-xs text-gray-500 px-3 py-1.5 rounded-md hover:bg-gray-50">
+                  주간
+                </button>
               </div>
             </div>
 
-            <div className="p-4">
+            <div className="p-5">
               <div className="h-64">
                 {/* 월간 지출 추이 차트 */}
                 <div className="h-full flex items-end space-x-2">
@@ -435,7 +460,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-gray-100">
+              <div className="mt-5 pt-4 border-t border-gray-100">
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-sm font-medium text-gray-900">
@@ -457,23 +482,33 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* 섹션 제목 */}
+        <div className="flex items-center justify-between pt-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            거래 내역 및 인사이트
+          </h2>
+          <button className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center">
+            <span>모든 거래 보기</span>
+            <ArrowRight className="ml-1 h-4 w-4" />
+          </button>
+        </div>
+
         {/* 최근 거래 및 인사이트 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 최근 거래 내역 */}
-          <div className="bg-white rounded-xl border shadow-sm lg:col-span-2">
-            <div className="p-4 border-b">
-              <div className="flex justify-between items-center">
-                <h2 className="text-base font-semibold text-gray-900">
-                  최근 거래 내역
-                </h2>
-                <div className="flex items-center space-x-2">
-                  <button className="text-xs text-gray-500 hover:text-gray-700">
-                    <Filter className="h-4 w-4" />
-                  </button>
-                  <button className="text-xs text-gray-500 hover:text-gray-700">
-                    <Download className="h-4 w-4" />
-                  </button>
-                </div>
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-2">
+            <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="font-semibold text-gray-800">최근 거래 내역</h3>
+              <div className="flex items-center space-x-3">
+                <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
+                  <Filter className="h-4 w-4" />
+                </button>
+                <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
+                  <Download className="h-4 w-4" />
+                </button>
+                <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
+                  <MoreHorizontal className="h-4 w-4" />
+                </button>
               </div>
             </div>
 
@@ -481,7 +516,7 @@ const Dashboard = () => {
               {recentTransactions.map((transaction) => (
                 <div
                   key={transaction.id}
-                  className="p-4 hover:bg-gray-50 transition-colors"
+                  className="p-5 hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
@@ -531,7 +566,7 @@ const Dashboard = () => {
               ))}
             </div>
 
-            <div className="p-4 border-t">
+            <div className="px-5 py-4 border-t border-gray-200">
               <button className="w-full text-center text-sm text-emerald-600 font-medium hover:text-emerald-700">
                 모든 거래 보기
               </button>
@@ -539,15 +574,13 @@ const Dashboard = () => {
           </div>
 
           {/* 인사이트 및 팁 */}
-          <div className="bg-white rounded-xl border shadow-sm lg:col-span-1">
-            <div className="p-4 border-b">
-              <h2 className="text-base font-semibold text-gray-900">
-                인사이트
-              </h2>
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-1">
+            <div className="px-5 py-4 border-b border-gray-200">
+              <h3 className="font-semibold text-gray-800">인사이트</h3>
             </div>
 
-            <div className="p-4 space-y-4">
-              <div className="bg-blue-50 rounded-lg p-3">
+            <div className="p-5 space-y-4">
+              <div className="bg-blue-50 rounded-lg p-4">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <TrendingUp className="h-5 w-5 text-blue-600" />
@@ -564,7 +597,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="bg-amber-50 rounded-lg p-3">
+              <div className="bg-amber-50 rounded-lg p-4">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <AlertCircle className="h-5 w-5 text-amber-600" />
@@ -581,7 +614,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="bg-emerald-50 rounded-lg p-3">
+              <div className="bg-emerald-50 rounded-lg p-4">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <CreditCard className="h-5 w-5 text-emerald-600" />
@@ -598,7 +631,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-gray-100">
+              <div className="mt-5 pt-4 border-t border-gray-100">
                 <button className="w-full text-center text-sm text-emerald-600 font-medium hover:text-emerald-700 flex items-center justify-center">
                   <Plus className="mr-1.5 h-4 w-4" />
                   맞춤 인사이트 더 보기

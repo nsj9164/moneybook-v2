@@ -14,6 +14,7 @@ export const expenseKeys = [
   "note",
   "category_id",
   "payment_method_id",
+  "recurring_expense_id",
 ];
 
 export const useFetchExpenses = () => {
