@@ -4,8 +4,8 @@ export interface IExpense {
   id: UUID;
   date: string;
   itemName: string;
-  amount: string;
-  actualAmount: string;
+  amount: number;
+  actualAmount: number;
   note: string;
   paymentMethodId: number;
   categoryId: number;

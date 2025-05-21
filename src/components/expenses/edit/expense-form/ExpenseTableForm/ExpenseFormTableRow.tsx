@@ -1,5 +1,5 @@
 import { ICategory, IExpense, IPayMethod } from "@/types/expense-types";
-import { formatCurrency } from "@/utils/format";
+import { formatCurrency, parseCurrency } from "@/utils/format";
 import { format } from "date-fns";
 import { Trash2 } from "lucide-react";
 import {
@@ -71,7 +71,11 @@ export const ExpenseFormTableRow = ({
             type="text"
             value={formatCurrency(expense.amount)}
             onChange={(e) =>
-              handleUpdExpense(e.target.value, expense.id, "amount")
+              handleUpdExpense(
+                parseCurrency(e.target.value),
+                expense.id,
+                "amount"
+              )
             }
             onBlur={(e) =>
               updateActualAmount(
@@ -95,7 +99,11 @@ export const ExpenseFormTableRow = ({
               value={formatCurrency(expense.actualAmount)}
               disabled={!expense.isDifferentAmount}
               onChange={(e) =>
-                handleUpdExpense(e.target.value, expense.id, "actualAmount")
+                handleUpdExpense(
+                  parseCurrency(e.target.value),
+                  expense.id,
+                  "actualAmount"
+                )
               }
               className={`w-full pl-7 pr-3 rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm ${
                 !expense.isDifferentAmount ? "bg-gray-100" : ""

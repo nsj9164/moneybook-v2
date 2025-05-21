@@ -90,6 +90,12 @@ export const useExpenseFilters = (expenses: IExpense[]) => {
     setFilters(initialFilters);
   };
 
+  const isAcitveFilters = Object.keys(filters).some(
+    (key) =>
+      filters[key as keyof typeof filters] !==
+      initialFilters[key as keyof typeof filters]
+  );
+
   return {
     filters,
     setFilters,
@@ -97,5 +103,6 @@ export const useExpenseFilters = (expenses: IExpense[]) => {
     handleFiltersChange,
     resetField,
     resetFilters,
+    isAcitveFilters,
   };
 };

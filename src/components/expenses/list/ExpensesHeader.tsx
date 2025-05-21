@@ -5,14 +5,18 @@ import { useSetRecoilState } from "recoil";
 
 interface ExpensesHeaderProps {
   chkListCnt: number;
-  handleDelExpenses: () => void;
-  setEditData: () => void;
+  filterQuery: string;
+  handleFiltersChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
+  isActiveFilters: boolean;
 }
 
 export const ExpensesHeader = ({
   chkListCnt,
-  handleDelExpenses,
-  setEditData,
+  filterQuery,
+  handleFiltersChange,
+  isActiveFilters,
 }: ExpensesHeaderProps) => {
   return (
     <div className="mb-6">
@@ -28,9 +32,10 @@ export const ExpensesHeader = ({
           <div className="relative">
             <input
               type="text"
+              name="filterQuery"
               placeholder="지출 내역 검색..."
-              value={}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={filterQuery}
+              onChange={(e) => handleFiltersChange(e)}
               className="block w-64 rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm pl-10"
             />
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -39,14 +44,15 @@ export const ExpensesHeader = ({
           </div>
           <button
             type="button"
-            onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
+            // onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
             className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
           >
             <Filter className="mr-1.5 -ml-0.5 h-4 w-4" />
             필터
-            {activeFilterCount > 0 && (
+            {isActiveFilters && (
               <span className="ml-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-xs font-medium text-emerald-700">
-                {activeFilterCount}
+                {/* {activeFilterCount} */}
+                1121111
               </span>
             )}
           </button>

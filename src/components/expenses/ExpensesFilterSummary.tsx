@@ -1,4 +1,17 @@
-export const ExpensesFilterSummary = () => {
+import { ExpenseFiltersState } from "@/pages/Expenses/types/filters";
+import { X } from "lucide-react";
+
+interface ExpensesFilterSummaryProps {
+  filters: ExpenseFiltersState;
+  resetFilters: () => void;
+  resetField: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export const ExpensesFilterSummary = ({
+  filters,
+  resetFilters,
+  resetField,
+}: ExpensesFilterSummaryProps) => {
   return (
     <div className="mb-6 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between mb-2">
@@ -12,78 +25,79 @@ export const ExpensesFilterSummary = () => {
         </button>
       </div>
       <div className="flex flex-wrap gap-2">
-        {searchQuery && (
+        {filters.filterQuery && (
           <div className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1.5 text-sm">
             <span className="font-medium text-gray-800 mr-1">검색:</span>
-            <span className="text-gray-600">{searchQuery}</span>
+            <span className="text-gray-600">{filters.filterQuery}</span>
             <button
               type="button"
-              onClick={() => removeFilter("search")}
+              //   onClick={() => resetField("search")}
               className="ml-2 text-gray-400 hover:text-gray-600"
             >
               <X className="h-3 w-3" />
             </button>
           </div>
         )}
-        {selectedCategory !== "전체" && (
+        {filters.filterCategory !== 0 && (
           <div className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1.5 text-sm">
             <span className="font-medium text-blue-700 mr-1">카테고리:</span>
-            <span className="text-blue-600">{selectedCategory}</span>
+            <span className="text-blue-600">{filters.filterCategory}</span>
             <button
               type="button"
-              onClick={() => removeFilter("category")}
+              //   onClick={() => resetField("category")}
               className="ml-2 text-blue-400 hover:text-blue-600"
             >
               <X className="h-3 w-3" />
             </button>
           </div>
         )}
-        {selectedPaymentMethod !== "전체" && (
+        {filters.filterPayMethod !== 0 && (
           <div className="inline-flex items-center rounded-full bg-purple-50 px-3 py-1.5 text-sm">
             <span className="font-medium text-purple-700 mr-1">결제수단:</span>
-            <span className="text-purple-600">{selectedPaymentMethod}</span>
+            <span className="text-purple-600">{filters.filterPayMethod}</span>
             <button
               type="button"
-              onClick={() => removeFilter("paymentMethod")}
+              //   onClick={() => resetField("paymentMethod")}
               className="ml-2 text-purple-400 hover:text-purple-600"
             >
               <X className="h-3 w-3" />
             </button>
           </div>
         )}
-        {showDifferentAmountOnly && (
+        {filters.filterDifferentAmountOnly && (
           <div className="inline-flex items-center rounded-full bg-amber-50 px-3 py-1.5 text-sm">
             <span className="text-amber-700">결제/실제금액 상이</span>
             <button
               type="button"
-              onClick={() => removeFilter("differentAmount")}
+              //   onClick={() => resetField("differentAmount")}
               className="ml-2 text-amber-400 hover:text-amber-600"
             >
               <X className="h-3 w-3" />
             </button>
           </div>
         )}
-        {showRecurringOnly && (
+        {filters.filterRecurringOnly && (
           <div className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1.5 text-sm">
             <span className="text-emerald-700">정기지출</span>
             <button
               type="button"
-              onClick={() => removeFilter("recurring")}
+              //   onClick={() => resetField("recurring")}
               className="ml-2 text-emerald-400 hover:text-emerald-600"
             >
               <X className="h-3 w-3" />
             </button>
           </div>
         )}
-        {(startDate || endDate) && (
+        {(filters.filterStartDate || filters.filterEndDate) && (
           <div className="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1.5 text-sm">
             <span className="font-medium text-indigo-700 mr-1">기간:</span>
             <span className="text-indigo-600">
-              {startDate || "처음"} ~ {endDate || "현재"}
+              {filters.filterStartDate || "처음"} ~{" "}
+              {filters.filterEndDate || "현재"}
             </span>
             <button
               type="button"
-              onClick={() => removeFilter("dateRange")}
+              //   onClick={() => resetField("dateRange")}
               className="ml-2 text-indigo-400 hover:text-indigo-600"
             >
               <X className="h-3 w-3" />

@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Dashboard from "@/pages/Dashboard";
 import Expenses from "./pages/Expenses";
 import Statistics from "./pages/Statistics";
-import Budget from "./pages/Budget";
+import Budget from "./pages/Budget.tsx";
 import Profile from "./pages/Profile";
 import MainLayout from "./layouts/MainLayout";
 import RequireAuth from "./contexts/RequireAuth";
@@ -23,11 +23,11 @@ function App() {
         path="/"
         element={
           <RequireAuth isAuthenticated={isAuthenticated} isLoading={isLoading}>
-            <MainLayout /> {/* ✅ MainLayout이 여기서! */}
+            <MainLayout />
           </RequireAuth>
         }
       >
-        <Route index element={<Dashboard />} /> {/* ✅ '/'는 Dashboard */}
+        <Route index element={<Dashboard />} />
         <Route path="expenses" element={<Expenses />} />
         <Route path="expenses/edit" element={<ExpenseFormPage />} />
         <Route path="statistics" element={<Statistics />} />

@@ -26,8 +26,8 @@ const ExpenseFormPage = () => {
       id: uuidv4(),
       date: new Date().toISOString().slice(0, 10),
       itemName: "",
-      amount: "0",
-      actualAmount: "0",
+      amount: 0,
+      actualAmount: 0,
       note: "",
       paymentMethodId: 0,
       categoryId: 0,
@@ -47,13 +47,7 @@ const ExpenseFormPage = () => {
 
   // newExpenses_저장 형식에 맞게 가공
   const formatExpenseForInsert = (item: IExpense) => {
-    const parsed = {
-      ...item,
-      amount: parseCurrency(item.amount),
-      actualAmount: parseCurrency(item.actualAmount),
-    };
-
-    const snakeCase = formatKeyCase(parsed, "snake");
+    const snakeCase = formatKeyCase(item, "snake");
     const filtered = pickOnly(snakeCase, expenseKeys);
 
     return { ...filtered, user_id: user?.id };
