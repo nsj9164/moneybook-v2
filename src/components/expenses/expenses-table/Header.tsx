@@ -1,4 +1,12 @@
-export const ExpensesListTableHeader = () => {
+import { ExpenseColumns } from "@/pages/Expenses/types/filters";
+
+interface HeaderProps {
+  columns: ExpenseColumns[];
+  checked: boolean;
+  toggleSelectAll: () => void;
+}
+
+export const Header = ({ columns, checked, toggleSelectAll }: HeaderProps) => {
   return (
     <thead className="bg-gray-50">
       <tr>
@@ -6,10 +14,7 @@ export const ExpensesListTableHeader = () => {
           <input
             type="checkbox"
             className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-            checked={
-              selectedItems.length === filteredExpenses.length &&
-              filteredExpenses.length > 0
-            }
+            checked={checked}
             onChange={toggleSelectAll}
           />
         </th>
@@ -17,6 +22,7 @@ export const ExpensesListTableHeader = () => {
           (col) =>
             col.visible && (
               <th
+                key={col.id}
                 scope="col"
                 className="px-6 py-4 text-left text-sm font-semibold text-gray-900"
               >

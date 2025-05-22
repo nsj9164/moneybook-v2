@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Download, Trash2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ExpensesFilterPanel } from "@/components/expenses/ExpensesFilterPanel";
 import { useFetchExpenses } from "@/hooks/useFetchExpenses";
@@ -14,14 +13,12 @@ import { ExpensesListNoFilteredData } from "@/components/expenses/list/ExpensesL
 import { ExpensesListNoData } from "@/components/expenses/list/ExpensesListNoData";
 import { allColumns } from "./types/filters";
 import { ExpensesHeader } from "@/components/expenses/list/ExpensesHeader";
-import { formatCurrency } from "@/utils/format";
-import { ExpensesListRow } from "@/components/expenses/list/ExpensesListRow";
 import { UUID } from "@/types/expense-types";
-import { ExpensesListTable } from "@/components/expenses/list/ExpensesListTable";
 import { Button } from "@/components/ui/Button";
+import { ExpensesTable } from "@/components/expenses/expenses-table/Table";
+import { ExpensesPagination } from "@/components/expenses/ExpensesPagination";
 
 const Expenses = () => {
-  const navigate = useNavigate();
   const expenses = useFetchExpenses();
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
@@ -141,14 +138,13 @@ const Expenses = () => {
                 <Download className="mr-1.5 -ml-0.5 h-4 w-4" />
                 내보내기
               </Button>
-              <button
-                type="button"
-                className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+              <Button
+                variant="outlineWhite"
                 disabled={selectedItems.length === 0}
               >
                 <Trash2 className="mr-1.5 -ml-0.5 h-4 w-4 text-red-500" />
                 선택 삭제 ({selectedItems.length})
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -162,7 +158,7 @@ const Expenses = () => {
             <>
               {filteredExpenses.length > 0 ? (
                 // 검색 결과가 있는 경우
-                <ExpensesListTable
+                <ExpensesTable
                   columns={columns}
                   filteredExpenses={filteredExpenses}
                   selectedItems={selectedItems}
@@ -179,31 +175,7 @@ const Expenses = () => {
 
         {/* 페이지네이션 */}
         {filteredExpenses.length > 0 && (
-          <div className="border-t border-gray-200 px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <p className="text-sm text-gray-700">
-                  총{" "}
-                  <span className="font-medium">{filteredExpenses.length}</span>{" "}
-                  항목
-                </p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <button
-                  type="button"
-                  className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                >
-                  이전
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                >
-                  다음
-                </button>
-              </div>
-            </div>
-          </div>
+          <ExpensesPagination filteredExpensesLen={filteredExpenses.length} />
         )}
       </div>
 

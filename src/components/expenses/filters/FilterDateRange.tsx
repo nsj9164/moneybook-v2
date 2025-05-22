@@ -21,6 +21,7 @@ export const FilterDateRange = ({
         <input
           type="date"
           id="start-date"
+          name="startDate"
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           value={startDate}
           onChange={onChange}
@@ -29,6 +30,7 @@ export const FilterDateRange = ({
         <input
           type="date"
           id="end-date"
+          name="endDate"
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           value={endDate}
           onChange={onChange}

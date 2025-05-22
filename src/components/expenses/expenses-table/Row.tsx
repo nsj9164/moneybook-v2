@@ -3,20 +3,20 @@ import { IExpense, UUID } from "@/types/expense-types";
 import { formatCurrency } from "@/utils/format";
 import { Pencil } from "lucide-react";
 
-interface ExpensesListRowProps {
+interface RowProps {
   expense: IExpense;
   checked: boolean;
   columns: ExpenseColumns[];
   editExpense: (id: UUID) => void;
   toggleItemSelection: (id: UUID) => void;
 }
-export const ExpensesListRow = ({
+export const Row = ({
   expense,
   checked,
   columns,
   editExpense,
   toggleItemSelection,
-}: ExpensesListRowProps) => {
+}: RowProps) => {
   return (
     <tr
       key={expense.id}

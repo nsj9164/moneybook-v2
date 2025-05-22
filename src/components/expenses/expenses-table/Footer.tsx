@@ -1,17 +1,19 @@
 import { ExpenseColumns } from "@/pages/Expenses/types/filters";
 import { formatCurrency } from "@/utils/format";
 
-interface ExpensesListTableFooterProps {
+interface FooterProps {
   columns: ExpenseColumns[];
   filteredExpensesLen: number;
   totalPaymentAmount: number;
+  totalActualAmount: number;
 }
 
-export const ExpensesListTableFooter = ({
+export const Footer = ({
   columns,
   filteredExpensesLen,
   totalPaymentAmount,
-}: ExpensesListTableFooterProps) => {
+  totalActualAmount,
+}: FooterProps) => {
   return (
     <tfoot className="bg-gray-50">
       <tr className="border-t-2 border-gray-300">

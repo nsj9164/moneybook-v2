@@ -1,12 +1,11 @@
 import { ExpenseColumns } from "@/pages/Expenses/types/filters";
 import { IExpense, UUID } from "@/types/expense-types";
-import { formatCurrency } from "@/utils/format";
 import { useNavigate } from "react-router-dom";
-import { ExpensesListRow } from "./ExpensesListRow";
-import { ExpensesListTableFooter } from "./ExpensesListTableFooter";
-import { ExpensesListTableHeader } from "./ExpensesListTableHeader";
+import { Footer } from "./Footer";
+import { Header } from "./Header";
+import { Row } from "./Row";
 
-interface ExpensesListProps {
+interface ExpensesTableProps {
   columns: ExpenseColumns[];
   filteredExpenses: IExpense[];
   selectedItems: string[];
@@ -14,13 +13,13 @@ interface ExpensesListProps {
   toggleItemSelection: (id: UUID) => void;
 }
 
-export const ExpensesListTable = ({
+export const ExpensesTable = ({
   columns,
   filteredExpenses,
   selectedItems,
   toggleSelectAll,
   toggleItemSelection,
-}: ExpensesListProps) => {
+}: ExpensesTableProps) => {
   const navigate = useNavigate();
   const editExpense = (id: UUID) => {
     // id를 가져가야하는데 그 방법은 조금 더 생각이 필요함!!
@@ -41,10 +40,18 @@ export const ExpensesListTable = ({
     <div className="border rounded-lg overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <ExpensesListTableHeader />
+          <Header
+            columns={columns}
+            checked={
+              filteredExpenses.length === selectedItems.length &&
+              filteredExpenses.length > 0
+            }
+            toggleSelectAll={toggleSelectAll}
+          />
           <tbody className="divide-y divide-gray-200 bg-white">
             {filteredExpenses.map((expense) => (
-              <ExpensesListRow
+              <Row
+                key={expense.id}
                 expense={expense}
                 checked={selectedItems.includes(expense.id)}
                 columns={columns}
@@ -54,10 +61,11 @@ export const ExpensesListTable = ({
             ))}
           </tbody>
 
-          <ExpensesListTableFooter
+          <Footer
             columns={columns}
             filteredExpensesLen={filteredExpenses.length}
             totalPaymentAmount={totalPaymentAmount}
+            totalActualAmount={totalActualAmount}
           />
         </table>
       </div>
