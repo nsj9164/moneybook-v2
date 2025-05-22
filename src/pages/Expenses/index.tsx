@@ -17,6 +17,8 @@ import { ExpensesHeader } from "@/components/expenses/list/ExpensesHeader";
 import { formatCurrency } from "@/utils/format";
 import { ExpensesListRow } from "@/components/expenses/list/ExpensesListRow";
 import { UUID } from "@/types/expense-types";
+import { ExpensesListTable } from "@/components/expenses/list/ExpensesListTable";
+import { Button } from "@/components/ui/Button";
 
 const Expenses = () => {
   const navigate = useNavigate();
@@ -79,19 +81,9 @@ const Expenses = () => {
   // 보이는 컬럼 필터링
   const visibleColumns = columns.filter((col) => col.visible);
 
-  // 합계 계산
-  const totalPaymentAmount = filteredExpenses.reduce(
-    (sum, expense) => sum + expense.amount,
-    0
-  );
-  const totalActualAmount = filteredExpenses.reduce(
-    (sum, expense) => sum + expense.actualAmount,
-    0
-  );
-
-  const editExpense = (id: UUID) => {
-    // id를 가져가야하는데 그 방법은 조금 더 생각이 필요함!!
-    navigate("/expenses/edit");
+  // open & close Filter
+  const toggleFilterPanel = () => {
+    setIsFilterPanelOpen((prev) => !prev);
   };
 
   return (
@@ -101,7 +93,7 @@ const Expenses = () => {
         chkListCnt={expenses.length}
         filterQuery={filters.filterQuery}
         handleFiltersChange={handleFiltersChange}
-        isActiveFilters={isAcitveFilters}
+        toggleFilterPanel={toggleFilterPanel}
       />
 
       {/* 필터 패널 */}
@@ -117,7 +109,7 @@ const Expenses = () => {
             filters={filters}
             handleFiltersChange={handleFiltersChange}
             resetFilters={resetFilters}
-            setIsFilterPanelOpen={setIsFilterPanelOpen}
+            toggleFilterPanel={toggleFilterPanel}
             categories={categories}
             payMethods={payMethods}
             openColumnModal={openColumnModal}
@@ -145,13 +137,10 @@ const Expenses = () => {
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-medium text-gray-900">지출 내역</h2>
             <div className="flex items-center space-x-2">
-              <button
-                type="button"
-                className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-              >
+              <Button variant="outlineWhite">
                 <Download className="mr-1.5 -ml-0.5 h-4 w-4" />
                 내보내기
-              </button>
+              </Button>
               <button
                 type="button"
                 className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
@@ -173,100 +162,13 @@ const Expenses = () => {
             <>
               {filteredExpenses.length > 0 ? (
                 // 검색 결과가 있는 경우
-                <div className="border rounded-lg overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th
-                            scope="col"
-                            className="w-12 px-6 py-4 sm:w-16 sm:px-8"
-                          >
-                            <input
-                              type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                              checked={
-                                selectedItems.length ===
-                                  filteredExpenses.length &&
-                                filteredExpenses.length > 0
-                              }
-                              onChange={toggleSelectAll}
-                              disabled={filteredExpenses.length === 0}
-                            />
-                          </th>
-                          {columns.map(
-                            (col) =>
-                              col.visible && (
-                                <th
-                                  scope="col"
-                                  className="px-6 py-4 text-left text-sm font-semibold text-gray-900"
-                                >
-                                  {col.name}
-                                </th>
-                              )
-                          )}
-                          <th
-                            scope="col"
-                            className="px-6 py-4 text-right text-sm font-semibold text-gray-900"
-                          >
-                            액션
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200 bg-white">
-                        {filteredExpenses.map((expense) => (
-                          <ExpensesListRow
-                            expense={expense}
-                            checked={selectedItems.includes(expense.id)}
-                            columns={columns}
-                            editExpense={editExpense}
-                            toggleItemSelection={toggleItemSelection}
-                          />
-                        ))}
-                      </tbody>
-                      {filteredExpenses.length > 0 && (
-                        <tfoot className="bg-gray-50">
-                          <tr className="border-t-2 border-gray-300">
-                            <th
-                              colSpan={2}
-                              scope="row"
-                              className="px-6 py-4 text-left text-sm font-semibold text-gray-900"
-                            >
-                              합계
-                            </th>
-                            <th
-                              colSpan={
-                                columns.filter(
-                                  (col) =>
-                                    col.visible &&
-                                    col.id !== "date" &&
-                                    col.id !== "paymentAmount" &&
-                                    col.id !== "actualAmount"
-                                ).length
-                              }
-                              className="px-6 py-4 text-left text-sm font-semibold text-gray-900"
-                            >
-                              {filteredExpenses.length}건
-                            </th>
-                            {columns.find((col) => col.id === "paymentAmount")
-                              ?.visible && (
-                              <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
-                                {formatCurrency(totalPaymentAmount)}
-                              </th>
-                            )}
-                            {columns.find((col) => col.id === "actualAmount")
-                              ?.visible && (
-                              <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
-                                {formatCurrency(totalActualAmount)}
-                              </th>
-                            )}
-                            <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900"></th>
-                          </tr>
-                        </tfoot>
-                      )}
-                    </table>
-                  </div>
-                </div>
+                <ExpensesListTable
+                  columns={columns}
+                  filteredExpenses={filteredExpenses}
+                  selectedItems={selectedItems}
+                  toggleSelectAll={toggleSelectAll}
+                  toggleItemSelection={toggleItemSelection}
+                />
               ) : (
                 // 검색 결과가 없는 경우
                 <ExpensesListNoFilteredData resetFilters={resetFilters} />

@@ -1,7 +1,6 @@
 import { ExpenseFiltersState } from "@/pages/Expenses/types/filters";
 import { ICategory, IPayMethod } from "@/types/expense-types";
-import { ChevronDown, Filter, Search, Settings, X } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
+import { Filter, Settings, X } from "lucide-react";
 import { FilterCheckbox } from "./filters/FilterCheckbox";
 import { FilterDateRange } from "./filters/FilterDateRange";
 import { FilterInputText } from "./filters/FilterInputText";
@@ -13,7 +12,7 @@ interface ExpensesFilterPanelProps {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
   resetFilters: () => void;
-  setIsFilterPanelOpen: Dispatch<SetStateAction<boolean>>;
+  toggleFilterPanel: () => void;
   categories: ICategory[];
   payMethods: IPayMethod[];
   openColumnModal: () => void;
@@ -23,7 +22,7 @@ export const ExpensesFilterPanel = ({
   filters,
   handleFiltersChange,
   resetFilters,
-  setIsFilterPanelOpen,
+  toggleFilterPanel,
   categories,
   payMethods,
   openColumnModal,
@@ -34,7 +33,7 @@ export const ExpensesFilterPanel = ({
         <h2 className="text-lg font-medium text-gray-900">필터 설정</h2>
         <button
           type="button"
-          onClick={() => setIsFilterPanelOpen(false)}
+          onClick={toggleFilterPanel}
           className="text-gray-400 hover:text-gray-500"
         >
           <X className="h-5 w-5" />
@@ -55,7 +54,6 @@ export const ExpensesFilterPanel = ({
           />
         </div>
 
-        {/* {label, name, value, options, onChange} */}
         <FilterSelect
           label="카테고리"
           name="filterCategory"

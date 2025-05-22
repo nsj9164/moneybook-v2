@@ -1,7 +1,5 @@
-import { newExpensesState } from "@/recoil/atoms";
-import { Filter, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { Filter, Plus, Search } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
 
 interface ExpensesHeaderProps {
   chkListCnt: number;
@@ -9,14 +7,14 @@ interface ExpensesHeaderProps {
   handleFiltersChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
-  isActiveFilters: boolean;
+  toggleFilterPanel: () => void;
 }
 
 export const ExpensesHeader = ({
   chkListCnt,
   filterQuery,
   handleFiltersChange,
-  isActiveFilters,
+  toggleFilterPanel,
 }: ExpensesHeaderProps) => {
   return (
     <div className="mb-6">
@@ -42,22 +40,12 @@ export const ExpensesHeader = ({
               <Search className="h-4 w-4 text-gray-400" />
             </div>
           </div>
-          <button
-            type="button"
-            // onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-            className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-          >
+          <button type="button" onClick={toggleFilterPanel} className="">
             <Filter className="mr-1.5 -ml-0.5 h-4 w-4" />
             필터
-            {isActiveFilters && (
-              <span className="ml-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-xs font-medium text-emerald-700">
-                {/* {activeFilterCount} */}
-                1121111
-              </span>
-            )}
           </button>
           <Link
-            to="/expenses/add"
+            to="/expenses/edit"
             className="inline-flex items-center rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700"
           >
             <Plus className="mr-1.5 -ml-0.5 h-4 w-4" />

@@ -54,7 +54,7 @@ export const ExpensesListRow = ({
                         }
                         `}
           >
-            {expense.categoryId}
+            {expense.categories?.name}
           </span>
         </td>
       )}
