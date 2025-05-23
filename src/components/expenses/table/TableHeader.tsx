@@ -6,7 +6,11 @@ interface HeaderProps {
   toggleSelectAll: () => void;
 }
 
-export const Header = ({ columns, checked, toggleSelectAll }: HeaderProps) => {
+export const TableHeader = ({
+  columns,
+  checked,
+  toggleSelectAll,
+}: HeaderProps) => {
   return (
     <thead className="bg-gray-50">
       <tr>

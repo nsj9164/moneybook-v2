@@ -1,9 +1,7 @@
-interface AddExpenseSummaryProps {
+interface EditSummaryProps {
   newExpenseCount: number;
 }
-export const AddExpenseSummary = ({
-  newExpenseCount,
-}: AddExpenseSummaryProps) => {
+export const EditSummary = ({ newExpenseCount }: EditSummaryProps) => {
   return (
     <div className="mt-6 bg-gray-50 p-4 rounded-lg">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">

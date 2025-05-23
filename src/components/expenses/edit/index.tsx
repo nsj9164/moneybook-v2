@@ -5,14 +5,13 @@ import { expenseKeys } from "@/hooks/useFetchExpenses";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { IExpense } from "@/types/expense-types";
 import { formatKeyCase } from "@/utils/caseConverter";
-import { parseCurrency } from "@/utils/format";
 import { supabase } from "@/utils/supabase";
 import { useEffect } from "react";
-import { AddExpenseHeader } from "./ExpenseFormHeader";
-import { AddExpenseSummary } from "./ExpenseFormSummary";
 import { v4 as uuidv4 } from "uuid";
 import { useRecoilState } from "recoil";
 import { newExpensesState } from "@/recoil/atoms";
+import { EditHeader } from "./EditHeader";
+import { EditSummary } from "./EditSummary";
 
 const ExpenseFormPage = () => {
   const categories = useFetchCategories();
@@ -79,7 +78,7 @@ const ExpenseFormPage = () => {
   return (
     <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-sm mt-6 mb-6">
       {/* 헤더 영역 */}
-      <AddExpenseHeader
+      <EditHeader
         handleAddExpense={handleAddExpense}
         handleSaveExpense={handleSaveExpense}
       />
@@ -93,7 +92,7 @@ const ExpenseFormPage = () => {
       />
 
       {/* 요약 정보 */}
-      <AddExpenseSummary newExpenseCount={newExpenses.length} />
+      <EditSummary newExpenseCount={newExpenses.length} />
 
       {/* 하단 고정 저장 버튼 (모바일) */}
       {/* {isMobile && <AddExpenseMobileFooter />} */}

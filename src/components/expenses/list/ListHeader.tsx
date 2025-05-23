@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/Button";
 import { Filter, Plus, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 
-interface ExpensesHeaderProps {
+interface ListHeaderProps {
   chkListCnt: number;
   filterQuery: string;
   handleFiltersChange: (
@@ -11,12 +11,12 @@ interface ExpensesHeaderProps {
   toggleFilterPanel: () => void;
 }
 
-export const ExpensesHeader = ({
+export const ListHeader = ({
   chkListCnt,
   filterQuery,
   handleFiltersChange,
   toggleFilterPanel,
-}: ExpensesHeaderProps) => {
+}: ListHeaderProps) => {
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between">

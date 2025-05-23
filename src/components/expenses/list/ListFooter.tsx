@@ -1,6 +1,6 @@
-import { Button } from "../ui/Button";
+import { Button } from "@/components/ui/Button";
 
-export const ExpensesPagination = ({
+export const ListFooter = ({
   filteredExpensesLen,
 }: {
   filteredExpensesLen: number;

@@ -10,7 +10,7 @@ interface RowProps {
   editExpense: (id: UUID) => void;
   toggleItemSelection: (id: UUID) => void;
 }
-export const Row = ({
+export const TableRow = ({
   expense,
   checked,
   columns,

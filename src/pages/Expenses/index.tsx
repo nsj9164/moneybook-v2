@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { Download, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { ExpensesFilterPanel } from "@/components/expenses/ExpensesFilterPanel";
 import { useFetchExpenses } from "@/hooks/useFetchExpenses";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { useExpenseFilters } from "./hooks/useExpenseFilters";
-import { ColumnSettingsModal } from "@/components/expenses/ColumnSettingsModal";
-import { ExpensesFilterSummary } from "@/components/expenses/ExpensesFilterSummary";
-import { ExpensesFilterChips } from "@/components/expenses/ExpensesFilterChips";
-import { ExpensesListNoFilteredData } from "@/components/expenses/list/ExpensesListNoFilteredData";
-import { ExpensesListNoData } from "@/components/expenses/list/ExpensesListNoData";
+import { ColumnSettingsModal } from "@/components/expenses/modals/ColumnSettingsModal";
+import { ListNoFilteredData } from "@/components/expenses/list/ListNoFilteredData";
+import { ListNoData } from "@/components/expenses/list/ListNoData";
 import { allColumns } from "./types/filters";
-import { ExpensesHeader } from "@/components/expenses/list/ExpensesHeader";
+import { ListHeader } from "@/components/expenses/list/ListHeader";
 import { UUID } from "@/types/expense-types";
 import { Button } from "@/components/ui/Button";
-import { ExpensesTable } from "@/components/expenses/expenses-table/Table";
-import { ExpensesPagination } from "@/components/expenses/ExpensesPagination";
+import { ExpensesTable } from "@/components/expenses/table/Table";
+import { ListFooter } from "@/components/expenses/list/ListFooter";
+import { FilterPanel } from "@/components/expenses/filters/FilterPanel";
+import { FilterSummary } from "@/components/expenses/filters/FilterSummary";
+import { FilterChips } from "@/components/expenses/filters/FilterChips";
 
 const Expenses = () => {
   const expenses = useFetchExpenses();
@@ -86,7 +86,7 @@ const Expenses = () => {
   return (
     <div className="flex-1 overflow-auto bg-gray-50 p-6">
       {/* 페이지 헤더 */}
-      <ExpensesHeader
+      <ListHeader
         chkListCnt={expenses.length}
         filterQuery={filters.filterQuery}
         handleFiltersChange={handleFiltersChange}
@@ -102,7 +102,7 @@ const Expenses = () => {
           transition={{ duration: 0.3 }}
           className="mb-6 rounded-lg border border-gray-200 bg-white shadow-sm"
         >
-          <ExpensesFilterPanel
+          <FilterPanel
             filters={filters}
             handleFiltersChange={handleFiltersChange}
             resetFilters={resetFilters}
@@ -116,7 +116,7 @@ const Expenses = () => {
 
       {/* 적용된 필터 표시 영역 */}
       {isAcitveFilters && (
-        <ExpensesFilterSummary
+        <FilterSummary
           filters={filters}
           resetFilters={resetFilters}
           resetField={resetField}
@@ -125,7 +125,7 @@ const Expenses = () => {
 
       {/* 필터링 결과 요약 */}
       {filteredExpenses.length > 0 && isAcitveFilters && (
-        <ExpensesFilterChips filteredExpenses={filteredExpenses} />
+        <FilterChips filteredExpenses={filteredExpenses} />
       )}
 
       {/* 지출 목록 테이블 또는 빈 상태 */}
@@ -152,7 +152,7 @@ const Expenses = () => {
         <div className="p-5">
           {expenses.length === 0 ? (
             // 데이터 자체가 없는 경우 - 빈 상태 화면
-            <ExpensesListNoData />
+            <ListNoData />
           ) : (
             // 데이터가 있는 경우 - 테이블 표시 (검색 결과 있음/없음 모두 포함)
             <>
@@ -167,7 +167,7 @@ const Expenses = () => {
                 />
               ) : (
                 // 검색 결과가 없는 경우
-                <ExpensesListNoFilteredData resetFilters={resetFilters} />
+                <ListNoFilteredData resetFilters={resetFilters} />
               )}
             </>
           )}
@@ -175,7 +175,7 @@ const Expenses = () => {
 
         {/* 페이지네이션 */}
         {filteredExpenses.length > 0 && (
-          <ExpensesPagination filteredExpensesLen={filteredExpenses.length} />
+          <ListFooter filteredExpensesLen={filteredExpenses.length} />
         )}
       </div>
 

@@ -1,17 +1,17 @@
 import { ExpenseFiltersState } from "@/pages/Expenses/types/filters";
 import { X } from "lucide-react";
 
-interface ExpensesFilterSummaryProps {
+interface FilterSummaryProps {
   filters: ExpenseFiltersState;
   resetFilters: () => void;
   resetField: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export const ExpensesFilterSummary = ({
+export const FilterSummary = ({
   filters,
   resetFilters,
   resetField,
-}: ExpensesFilterSummaryProps) => {
+}: FilterSummaryProps) => {
   return (
     <div className="mb-6 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between mb-2">

@@ -1,7 +1,7 @@
 import { ArrowRight, Download, Plus, Receipt, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export const ExpensesListNoData = () => {
+export const ListNoData = () => {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 text-center bg-gray-50 rounded-lg">
       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 mb-4">
@@ -15,7 +15,7 @@ export const ExpensesListNoData = () => {
         시작해보세요.
       </p>
       <Link
-        to="/expenses/add"
+        to="/expenses/edit"
         className="inline-flex items-center justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors"
       >
         <Plus className="mr-2 -ml-1 h-4 w-4" />첫 지출 추가하기

@@ -1,6 +1,5 @@
 import { ICategory, IExpense, IPayMethod } from "@/types/expense-types";
 import { formatCurrency, parseCurrency } from "@/utils/format";
-import { format } from "date-fns";
 import { Trash2 } from "lucide-react";
 import {
   DelTableExpenseHandler,
@@ -17,7 +16,7 @@ interface ExpenseFormTableRow {
   updateActualAmount: UpdActualAmountHandler;
 }
 
-export const ExpenseFormTableRow = ({
+export const TableFormRow = ({
   expense,
   categories,
   payMethods,

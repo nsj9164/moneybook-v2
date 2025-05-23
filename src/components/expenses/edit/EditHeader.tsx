@@ -1,13 +1,13 @@
 import { ArrowLeft, Plus, Save } from "lucide-react";
 
-interface AddExpenseHeaderProps {
+interface EditHeaderProps {
   handleAddExpense: () => void;
   handleSaveExpense: () => void;
 }
-export const AddExpenseHeader = ({
+export const EditHeader = ({
   handleAddExpense,
   handleSaveExpense,
-}: AddExpenseHeaderProps) => {
+}: EditHeaderProps) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
       <div className="flex items-center mb-4 sm:mb-0">

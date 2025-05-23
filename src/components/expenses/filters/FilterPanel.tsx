@@ -1,12 +1,12 @@
 import { ExpenseFiltersState } from "@/pages/Expenses/types/filters";
 import { ICategory, IPayMethod } from "@/types/expense-types";
 import { Filter, Settings, X } from "lucide-react";
-import { FilterCheckbox } from "./filters/FilterCheckbox";
-import { FilterDateRange } from "./filters/FilterDateRange";
-import { FilterInputText } from "./filters/FilterInputText";
-import { FilterSelect } from "./filters/FilterSelect";
+import { FilterCheckbox } from "./inputs/FilterCheckbox";
+import { FilterDateRange } from "./inputs/FilterDateRange";
+import { FilterInputText } from "./inputs/FilterInputText";
+import { FilterSelect } from "./inputs/FilterSelect";
 
-interface ExpensesFilterPanelProps {
+interface FilterPanelProps {
   filters: ExpenseFiltersState;
   handleFiltersChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -18,7 +18,7 @@ interface ExpensesFilterPanelProps {
   openColumnModal: () => void;
 }
 
-export const ExpensesFilterPanel = ({
+export const FilterPanel = ({
   filters,
   handleFiltersChange,
   resetFilters,
@@ -26,7 +26,7 @@ export const ExpensesFilterPanel = ({
   categories,
   payMethods,
   openColumnModal,
-}: ExpensesFilterPanelProps) => {
+}: FilterPanelProps) => {
   return (
     <div className="p-5">
       <div className="flex items-center justify-between mb-4">

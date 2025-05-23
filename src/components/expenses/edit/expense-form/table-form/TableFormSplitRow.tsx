@@ -2,15 +2,15 @@ import { IExpense } from "@/types/expense-types";
 import { formatCurrency } from "@/utils/format";
 import { SplitAmountHandler } from "../types/handlers";
 
-interface ExpenseTableSplitRowInterface {
+interface TableFormSplitRowProps {
   expense: IExpense;
   getSplitAmount: SplitAmountHandler;
 }
 
-export const ExpenseFormTableSplitRow = ({
+export const TableFormSplitRow = ({
   expense,
   getSplitAmount,
-}: ExpenseTableSplitRowInterface) => {
+}: TableFormSplitRowProps) => {
   return (
     <tr className="bg-emerald-50 border-t border-emerald-100">
       <td colSpan={8} className="px-4 py-3">

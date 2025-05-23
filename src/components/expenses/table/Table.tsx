@@ -1,9 +1,9 @@
 import { ExpenseColumns } from "@/pages/Expenses/types/filters";
 import { IExpense, UUID } from "@/types/expense-types";
 import { useNavigate } from "react-router-dom";
-import { Footer } from "./Footer";
-import { Header } from "./Header";
-import { Row } from "./Row";
+import { TableFooter } from "./TableFooter";
+import { TableHeader } from "./TableHeader";
+import { TableRow } from "./TableRow";
 
 interface ExpensesTableProps {
   columns: ExpenseColumns[];
@@ -40,7 +40,7 @@ export const ExpensesTable = ({
     <div className="border rounded-lg overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <Header
+          <TableHeader
             columns={columns}
             checked={
               filteredExpenses.length === selectedItems.length &&
@@ -50,7 +50,7 @@ export const ExpensesTable = ({
           />
           <tbody className="divide-y divide-gray-200 bg-white">
             {filteredExpenses.map((expense) => (
-              <Row
+              <TableRow
                 key={expense.id}
                 expense={expense}
                 checked={selectedItems.includes(expense.id)}
@@ -61,7 +61,7 @@ export const ExpensesTable = ({
             ))}
           </tbody>
 
-          <Footer
+          <TableFooter
             columns={columns}
             filteredExpensesLen={filteredExpenses.length}
             totalPaymentAmount={totalPaymentAmount}

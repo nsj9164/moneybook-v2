@@ -8,7 +8,7 @@ interface FooterProps {
   totalActualAmount: number;
 }
 
-export const Footer = ({
+export const TableFooter = ({
   columns,
   filteredExpensesLen,
   totalPaymentAmount,

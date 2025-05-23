@@ -1,6 +1,6 @@
 import { Filter, Search } from "lucide-react";
 
-export const ExpensesListNoFilteredData = ({
+export const ListNoFilteredData = ({
   resetFilters,
 }: {
   resetFilters: () => void;

@@ -1,7 +1,7 @@
 import { IExpense } from "@/types/expense-types";
 import { formatCurrency } from "@/utils/format";
 
-export const ExpensesFilterChips = ({
+export const FilterChips = ({
   filteredExpenses,
 }: {
   filteredExpenses: IExpense[];

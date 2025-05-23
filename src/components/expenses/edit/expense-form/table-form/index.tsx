@@ -1,10 +1,10 @@
 import React from "react";
 import { ExpensesFormProps } from "../types/types";
-import { ExpenseFormTableHead } from "./ExpenseFormTableHead";
-import { ExpenseFormTableRow } from "./ExpenseFormTableRow";
-import { ExpenseFormTableSplitRow } from "./ExpenseFormTableSplitRow";
+import { TableFormHeader } from "./TableFormHeader";
+import { TableFormRow } from "./TableFormRow";
+import { TableFormSplitRow } from "./TableFormSplitRow";
 
-export const ExpenseTableForm = ({
+export const TableForm = ({
   newExpenses,
   categories,
   payMethods,
@@ -16,13 +16,13 @@ export const ExpenseTableForm = ({
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-300">
-        <ExpenseFormTableHead />
+        <TableFormHeader />
 
         <tbody className="divide-y divide-gray-200 bg-white">
           {newExpenses?.length > 0 &&
             newExpenses.map((expense) => (
               <React.Fragment key={expense.id}>
-                <ExpenseFormTableRow
+                <TableFormRow
                   expense={expense}
                   categories={categories}
                   payMethods={payMethods}
@@ -31,7 +31,7 @@ export const ExpenseTableForm = ({
                   updateActualAmount={updateActualAmount}
                 />
                 {expense.isDifferentAmount && (
-                  <ExpenseFormTableSplitRow
+                  <TableFormSplitRow
                     expense={expense}
                     getSplitAmount={getSplitAmount}
                   />
