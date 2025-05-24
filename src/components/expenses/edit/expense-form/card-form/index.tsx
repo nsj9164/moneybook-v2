@@ -2,7 +2,7 @@ import { formatCurrency } from "@/utils/format";
 import { Trash2 } from "lucide-react";
 import { ExpensesFormProps } from "../types/types";
 
-export const ExpenseCardForm = ({
+export const CardForm = ({
   newExpenses,
   categories,
   payMethods,

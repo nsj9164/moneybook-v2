@@ -3,13 +3,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import Dashboard from "@/pages/Dashboard";
 import Expenses from "./pages/Expenses";
 import Statistics from "./pages/Statistics";
-import Budget from "./pages/Budget.tsx";
+import Budget from "./pages/Budget";
 import Profile from "./pages/Profile";
 import MainLayout from "./layouts/MainLayout";
 import RequireAuth from "./contexts/RequireAuth";
 import Login from "./pages/Login";
 import { AuthCallback } from "./pages/AuthCallback";
-import Settings from "./pages/Settings";
+import Settings from "./pages/settings";
 import ExpenseFormPage from "./components/expenses/edit";
 
 function App() {

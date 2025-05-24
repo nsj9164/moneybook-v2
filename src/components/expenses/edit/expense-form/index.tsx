@@ -1,13 +1,13 @@
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { IExpense, UUID } from "@/types/expense-types";
 import { parseCurrency } from "@/utils/format";
-import { ExpenseCardForm } from "./ExpenseCardForm";
-import { ExpenseTableForm } from "./ExpenseTableForm";
+import { CardForm } from "./card-form";
+import { TableForm } from "./table-form";
 import { ExpensesProps } from "./types/types";
 
 export const ExpenseForm = (props: ExpensesProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const FormComponent = isMobile ? ExpenseCardForm : ExpenseTableForm;
+  const FormComponent = isMobile ? CardForm : TableForm;
 
   // newExpenses update
   const handleUpdExpense = (
@@ -37,13 +37,10 @@ export const ExpenseForm = (props: ExpensesProps) => {
     props.setNewExpenses((prev) =>
       prev.map((item) => {
         if (item.id === id) {
-          const splitAmount = calActualAmount(
-            parseCurrency(item.amount),
-            peopleCnt
-          );
+          const splitAmount = calActualAmount(item.amount, peopleCnt);
           return {
             ...item,
-            actualAmount: String(splitAmount),
+            actualAmount: splitAmount,
             numberOfPeople: peopleCnt,
           };
         }
@@ -59,18 +56,9 @@ export const ExpenseForm = (props: ExpensesProps) => {
         ? calActualAmount(parseCurrency(amount), peopleCnt)
         : parseCurrency(amount);
 
-    console.log(
-      "peopleCnt:::",
-      peopleCnt,
-      "////newActualAmount:::",
-      newActualAmount
-    );
-
     props.setNewExpenses((prev) =>
       prev.map((item) =>
-        item.id === id
-          ? { ...item, actualAmount: String(newActualAmount) }
-          : item
+        item.id === id ? { ...item, actualAmount: newActualAmount } : item
       )
     );
   };
