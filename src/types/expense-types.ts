@@ -20,8 +20,11 @@ export interface IExpense {
 export interface ICategory {
   id: number;
   name: string;
-  targetAmount: number;
-  transactionType: number;
+  targetAmount?: number;
+  transactionType?: number;
+  emoji: string;
+  color: string;
+  defaultYn: boolean;
 }
 
 export interface IPayMethod {

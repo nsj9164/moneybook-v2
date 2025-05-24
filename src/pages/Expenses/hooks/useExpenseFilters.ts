@@ -1,8 +1,8 @@
 import { IExpense } from "@/types/expense-types";
 import { format, sub } from "date-fns";
 import { useMemo, useState } from "react";
-import { ExpenseFiltersState, FilterKey } from "../types/filters";
-import Hangul from "hangul-js";
+import { FilterKey } from "../types/filters";
+import { matchHangul } from "@/utils/matchHangul";
 
 export const useExpenseFilters = (expenses: IExpense[]) => {
   const today = new Date();
@@ -21,11 +21,6 @@ export const useExpenseFilters = (expenses: IExpense[]) => {
   const [filters, setFilters] = useState(initialFilters);
 
   // 초성 검색
-  const matchHangul = (filterValue: string, expenseValue: string) => {
-    const normalize = (str: string) =>
-      Hangul.disassemble(str.toLowerCase().trim()).join("");
-    return normalize(expenseValue).includes(normalize(filterValue));
-  };
 
   // expenses에 검색 적용
   const filteredExpenses = useMemo(() => {

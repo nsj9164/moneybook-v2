@@ -8,12 +8,12 @@ import {
   List,
   Repeat,
 } from "lucide-react";
-import ManageCategories from "@/components/settings/ManageCategories";
 import ManagePayMethods from "@/components/settings/ManagePayMethods";
 import ManageRecurringExpenses from "@/components/settings/ManageRecurringExpenses";
 import { GeneralSettings } from "@/components/settings/GeneralSettings";
 import { NotificationSettings } from "@/components/settings/NotificationSettings";
 import { SecuritySettings } from "@/components/settings/SecuritySettings";
+import ManageCategories from "@/components/settings/manageCategoroies";
 
 // 설정 탭 정의
 type SettingTab =
@@ -86,6 +86,7 @@ const Settings = () => {
             <nav className="space-y-1">
               {settingTabs.map(({ key, label, icon }) => (
                 <button
+                  key={key}
                   onClick={() => setActiveTab(key as SettingTab)}
                   className={`flex items-center w-full px-3 py-2 text-sm font-medium rounded-md ${
                     activeTab === key

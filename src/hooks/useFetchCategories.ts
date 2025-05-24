@@ -13,7 +13,9 @@ export const useFetchCategories = () => {
     const fetchData = async () => {
       const { data, error } = await supabase
         .from("categories")
-        .select(`id, name, target_amount, transaction_type, emoji`)
+        .select(
+          `id, name, target_amount, transaction_type, emoji, color, default_yn`
+        )
         .eq("user_id", user?.id);
 
       if (error) console.error("Insert Error:", error.message);

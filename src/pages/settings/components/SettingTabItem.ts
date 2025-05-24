@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { Bell, CreditCard, Globe, Lock, List, Repeat } from "lucide-react";
 import { GeneralSettings } from "@/components/settings/GeneralSettings";
 import { NotificationSettings } from "@/components/settings/NotificationSettings";
-import ManageCategories from "@/components/settings/ManageCategories";
+import ManageCategories from "@/components/settings/manageCategoroies";
 import ManagePayMethods from "@/components/settings/ManagePayMethods";
 import ManageRecurringExpenses from "@/components/settings/ManageRecurringExpenses";
 import { SecuritySettings } from "@/components/settings/SecuritySettings";
@@ -15,14 +15,14 @@ type SettingTabKey =
   | "recurringExpenses"
   | "security";
 
-interface settingTabItemsProps {
+interface SettingTabItemsProps {
   key: SettingTabKey;
   label: string;
   icon: ReactElement;
   content: ReactElement;
 }
 
-const settingTabItems: settingTabItemsProps[] = [
+const settingTabItems: SettingTabItemsProps[] = [
   {
     key: "general",
     label: "일반 설정",
