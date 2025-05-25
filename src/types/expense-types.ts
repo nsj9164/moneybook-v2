@@ -25,6 +25,7 @@ export interface ICategory {
   emoji: string;
   color: string;
   defaultYn: boolean;
+  isModified?: boolean;
 }
 
 export interface IPayMethod {

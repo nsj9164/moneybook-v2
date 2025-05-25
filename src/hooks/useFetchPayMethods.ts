@@ -14,7 +14,8 @@ export const useFetchPayMethods = () => {
       const { data, error } = await supabase
         .from("payment_methods")
         .select(`id, name, billing_start_day, billing_end_day, type_id, emoji`)
-        .eq("user_id", user?.id);
+        .eq("user_id", user?.id)
+        .order("date", { ascending: false });
 
       if (error) console.error("Insert Error:", error.message);
 

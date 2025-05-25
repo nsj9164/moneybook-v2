@@ -2,10 +2,11 @@ import { ICategory } from "@/types/expense-types";
 import {
   Dialog,
   DialogPanel,
+  DialogTitle,
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   categoryColorOptions,
   categoryEmojiOptions,
@@ -27,6 +28,7 @@ export const CategoryModal = ({
   category,
   isEditing,
 }: CategoryModalProps) => {
+  console.log("💛❤❤category:::", category);
   const initialCategory = {
     id: category?.id || 0,
     name: category?.name || "",
@@ -37,23 +39,17 @@ export const CategoryModal = ({
   const [form, setForm] = useState<ICategory>(initialCategory);
 
   // 모달이 열릴 때마다 폼 초기화
-  useState(() => {
-    if (isOpen) {
-      setForm(initialCategory);
-    }
-  });
+  useEffect(() => {
+    if (isOpen) setForm(initialCategory);
+  }, [isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    setForm({ ...form, [name]: value, isModified: true });
   };
 
-  const handleColorChange = (color: string) => {
-    setForm({ ...form, color });
-  };
-
-  const handleIconChange = (emoji: string) => {
-    setForm({ ...form, emoji });
+  const handleStyleOptionChange = (key: string, styleOption: string) => {
+    setForm({ ...form, [key]: styleOption, isModified: true });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -88,7 +84,7 @@ export const CategoryModal = ({
               leaveTo="opacity-0 scale-95"
             >
               <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title
+                <DialogTitle
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900 flex justify-between items-center"
                 >
@@ -101,7 +97,7 @@ export const CategoryModal = ({
                     <span className="sr-only">닫기</span>
                     <X className="h-6 w-6" aria-hidden="true" />
                   </button>
-                </Dialog.Title>
+                </DialogTitle>
 
                 <form onSubmit={handleSubmit} className="mt-4 space-y-4">
                   <div>
@@ -132,7 +128,9 @@ export const CategoryModal = ({
                         <button
                           key={emoji}
                           type="button"
-                          onClick={() => handleIconChange(emoji)}
+                          onClick={() =>
+                            handleStyleOptionChange("emoji", emoji)
+                          }
                           className={`flex h-8 w-8 items-center justify-center rounded-md text-lg ${
                             form.emoji === emoji
                               ? "bg-emerald-100 ring-2 ring-emerald-500"
@@ -156,7 +154,9 @@ export const CategoryModal = ({
                         <button
                           key={color.value}
                           type="button"
-                          onClick={() => handleColorChange(color.value)}
+                          onClick={() =>
+                            handleStyleOptionChange("color", color.value)
+                          }
                           className={`flex h-8 w-full items-center justify-center rounded-md ${
                             form.color === color.value
                               ? "ring-2 ring-offset-2 ring-emerald-500"

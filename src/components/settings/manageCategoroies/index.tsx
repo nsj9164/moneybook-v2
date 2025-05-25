@@ -61,7 +61,7 @@ const ManageCategories = () => {
   };
 
   const handleSaveCategory = async (category: ICategory) => {
-    if (!isEditing) return;
+    if (!category.isModified) return;
 
     const { error } = await supabase
       .from("categories")

@@ -16,7 +16,8 @@ export const useFetchCategories = () => {
         .select(
           `id, name, target_amount, transaction_type, emoji, color, default_yn`
         )
-        .eq("user_id", user?.id);
+        .eq("user_id", user?.id)
+        .order("id");
 
       if (error) console.error("Insert Error:", error.message);
 
