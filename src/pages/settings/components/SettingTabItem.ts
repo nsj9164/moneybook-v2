@@ -3,7 +3,7 @@ import { Bell, CreditCard, Globe, Lock, List, Repeat } from "lucide-react";
 import { GeneralSettings } from "@/components/settings/GeneralSettings";
 import { NotificationSettings } from "@/components/settings/NotificationSettings";
 import ManageCategories from "@/components/settings/manageCategoroies";
-import ManagePayMethods from "@/components/settings/ManagePayMethods";
+import ManagePayMethods from "@/components/settings/managePayMethods";
 import ManageRecurringExpenses from "@/components/settings/ManageRecurringExpenses";
 import { SecuritySettings } from "@/components/settings/SecuritySettings";
 

@@ -34,4 +34,7 @@ export interface IPayMethod {
   billingStartDay: number;
   billingEndDay: number;
   typeId: number;
+  emoji: string;
+  color: string;
+  defaultYn: boolean;
 }

@@ -7,6 +7,7 @@ import { CategoryTable } from "./table/Table";
 import { CategoryPagination } from "./CategoryPagination";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { supabase } from "@/utils/supabase";
+import { deleteCateogy, saveCategory } from "../utils/useCategoryCrud";
 
 const ManageCategories = () => {
   const categories = useFetchCategories();
@@ -51,29 +52,12 @@ const ManageCategories = () => {
 
   const handleDeleteCategory = async (id: number) => {
     if (window.confirm("이 카테고리를 삭제하시겠습니까?")) {
-      const { error } = await supabase.from("categories").delete().eq("id", id);
-
-      if (error) {
-        console.error("Delete error:", error.message);
-        return;
-      }
+      await deleteCateogy(id);
     }
   };
 
   const handleSaveCategory = async (category: ICategory) => {
-    if (!category.isModified) return;
-
-    const { error } = await supabase
-      .from("categories")
-      .upsert(category)
-      .select();
-
-    if (error) {
-      console.error("Insert error:", error.message);
-      return;
-    }
-
-    setIsModalOpen(false);
+    await saveCategory(category, () => setIsModalOpen(false));
   };
 
   return (

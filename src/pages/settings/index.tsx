@@ -8,7 +8,7 @@ import {
   List,
   Repeat,
 } from "lucide-react";
-import ManagePayMethods from "@/components/settings/ManagePayMethods";
+import ManagePayMethods from "@/components/settings/managePayMethods";
 import ManageRecurringExpenses from "@/components/settings/ManageRecurringExpenses";
 import { GeneralSettings } from "@/components/settings/GeneralSettings";
 import { NotificationSettings } from "@/components/settings/NotificationSettings";
