@@ -7,14 +7,14 @@ import { useRecoilState } from "recoil";
 
 export const useFetchPayMethods = () => {
   const [payMethods, setPayMethods] = useRecoilState(payMethodsState);
-  const { user } = useAuth();
+  const { userId } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase
         .from("payment_methods")
         .select(`id, name, billing_start_day, billing_end_day, type_id, emoji`)
-        .eq("user_id", user?.id)
+        .eq("user_id", userId)
         .order("date", { ascending: false });
 
       if (error) console.error("Insert Error:", error.message);

@@ -7,17 +7,19 @@ import {
 } from "react";
 import { supabase } from "@/utils/supabase";
 import { User as SupabaseUser } from "@supabase/supabase-js";
+import { UUID } from "@/types/expense-types";
 
 interface User {
-  id?: string;
+  id: UUID;
   email: string;
   name?: string;
   profileImage?: string;
-  provider?: string;
+  provider: string;
 }
 
 interface AuthContextType {
   user: User | null;
+  userId: UUID | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   loginWithGoogle: () => void;
@@ -66,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const newUser: User = {
+    const newUser = {
       email: userData.email ?? "",
       name: userData.user_metadata?.name ?? userData.user_metadata?.full_name,
       profileImage:
@@ -76,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       provider: userData.app_metadata?.provider ?? "unknown",
     };
 
-    let userId: string | undefined;
+    let userId: UUID | undefined;
 
     const existingUser = await checkIfUserExists(
       newUser.email,
@@ -118,7 +120,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    setUser({ ...newUser, ...(userId && { id: userId }) });
+    if (!userId) {
+      setUser(null);
+      setIsAuthenticated(false);
+      setIsLoading(false);
+      return;
+    }
+
+    setUser({ ...newUser, id: userId });
     setIsAuthenticated(true);
     setIsLoading(false);
   };
@@ -152,6 +161,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
+        userId: user ? user.id : null,
         isAuthenticated,
         isLoading,
         loginWithGoogle,

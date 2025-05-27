@@ -7,7 +7,7 @@ import { useRecoilState } from "recoil";
 
 export const useFetchCategories = () => {
   const [categories, setCategories] = useRecoilState(categoriesState);
-  const { user } = useAuth();
+  const { userId } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +16,7 @@ export const useFetchCategories = () => {
         .select(
           `id, name, target_amount, transaction_type, emoji, color, default_yn`
         )
-        .eq("user_id", user?.id)
+        .eq("user_id", userId)
         .order("id");
 
       if (error) console.error("Insert Error:", error.message);

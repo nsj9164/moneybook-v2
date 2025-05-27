@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 import Dashboard from "@/pages/Dashboard";
 import Expenses from "./pages/Expenses";
 import Statistics from "./pages/Statistics";
@@ -13,8 +12,6 @@ import Settings from "./pages/settings";
 import ExpenseFormPage from "./components/expenses/edit";
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuth();
-
   return (
     <Routes>
       <Route path="login" element={<Login />} />
@@ -22,7 +19,7 @@ function App() {
       <Route
         path="/"
         element={
-          <RequireAuth isAuthenticated={isAuthenticated} isLoading={isLoading}>
+          <RequireAuth>
             <MainLayout />
           </RequireAuth>
         }

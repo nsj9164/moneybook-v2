@@ -27,7 +27,7 @@ export const GeneralSettings = () => {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        {/* <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center mb-2 sm:mb-0">
             <Globe className="h-5 w-5 text-gray-400 mr-3" />
             <div>
@@ -67,7 +67,7 @@ export const GeneralSettings = () => {
             <option value="EUR">Euro (€)</option>
             <option value="JPY">Japanese Yen (¥)</option>
           </select>
-        </div>
+        </div> */}
       </div>
     </div>
   );

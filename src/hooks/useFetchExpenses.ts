@@ -19,7 +19,7 @@ export const expenseKeys = [
 
 export const useFetchExpenses = () => {
   const [expenses, setExpenses] = useRecoilState(expensesState);
-  const { user } = useAuth();
+  const { userId } = useAuth();
 
   const joinColumns = ["categories(name)", "payment_methods(name)"];
 
@@ -30,7 +30,7 @@ export const useFetchExpenses = () => {
       const { data, error } = await supabase
         .from("expenses")
         .select(selectColumns)
-        .eq("user_id", user?.id);
+        .eq("user_id", userId);
 
       if (error) console.error("Insert Error:", error.message);
 

@@ -12,7 +12,6 @@ export interface IExpense {
   recurringExpenseId?: number;
   isDifferentAmount: boolean;
   numberOfPeople?: number;
-  isModified?: boolean;
   paymentMethods?: { name: string };
   categories?: { name: string };
 }
@@ -20,12 +19,12 @@ export interface IExpense {
 export interface ICategory {
   id: number;
   name: string;
-  targetAmount?: number;
-  transactionType?: number;
+  targetAmount: number;
+  transactionType: number;
   emoji: string;
   color: string;
   defaultYn: boolean;
-  isModified?: boolean;
+  userId: UUID;
 }
 
 export interface IPayMethod {
@@ -35,6 +34,5 @@ export interface IPayMethod {
   billingEndDay: number;
   typeId: number;
   emoji: string;
-  color: string;
   defaultYn: boolean;
 }

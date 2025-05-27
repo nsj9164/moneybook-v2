@@ -5,7 +5,7 @@ export const NotificationSettings = () => {
     <div className="p-4">
       <h2 className="text-lg font-medium text-gray-900 mb-4">알림 설정</h2>
       <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        {/* <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center mb-2 sm:mb-0">
             <Bell className="h-5 w-5 text-gray-400 mr-3" />
             <div>
@@ -25,7 +25,7 @@ export const NotificationSettings = () => {
               ></span>
             </button>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center mb-2 sm:mb-0">

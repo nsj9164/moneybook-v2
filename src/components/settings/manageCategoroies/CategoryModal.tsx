@@ -12,14 +12,24 @@ import {
   categoryEmojiOptions,
 } from "./constants/CategoryConstants";
 import { Check, X } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface CategoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (category: ICategory) => void;
+  onSave: (category: Partial<ICategory>) => void;
   category?: ICategory;
   isEditing: boolean;
 }
+
+export type CategoryFormData = {
+  id: number;
+  name: string;
+  color: string;
+  emoji: string;
+  defaultYn: boolean;
+};
 
 export const CategoryModal = ({
   isOpen,
@@ -28,34 +38,60 @@ export const CategoryModal = ({
   category,
   isEditing,
 }: CategoryModalProps) => {
-  console.log("💛❤❤category:::", category);
+  const { userId } = useAuth();
+
+  // if (!userId) {
+  //   alert("로그인이 필요합니다.");
+  //   return;
+  // }
+
+  const tempId = new Date().getTime();
   const initialCategory = {
-    id: category?.id || 0,
+    id: category?.id || tempId,
     name: category?.name || "",
     color: category?.color || categoryColorOptions[0].value,
     emoji: category?.emoji || categoryEmojiOptions[0],
     defaultYn: category?.defaultYn || false,
   };
-  const [form, setForm] = useState<ICategory>(initialCategory);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { dirtyFields },
+    reset,
+    watch,
+  } = useForm({ defaultValues: initialCategory });
 
   // 모달이 열릴 때마다 폼 초기화
   useEffect(() => {
-    if (isOpen) setForm(initialCategory);
+    if (isOpen) reset(initialCategory);
   }, [isOpen]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value, isModified: true });
+  const handleStyleOptionChange = (key: "emoji" | "color", value: string) => {
+    setValue(key, value, { shouldDirty: true });
   };
 
-  const handleStyleOptionChange = (key: string, styleOption: string) => {
-    setForm({ ...form, [key]: styleOption, isModified: true });
+  const onSubmit = (data: CategoryFormData) => {
+    const modified = Object.fromEntries(
+      Object.keys(dirtyFields).map((key) => [
+        key,
+        data[key as keyof CategoryFormData],
+      ])
+    ) as Partial<ICategory>;
+
+    const merged: ICategory = {
+      ...initialCategory,
+      ...modified,
+      targetAmount: 0,
+      transactionType: 2,
+      userId: userId!,
+    };
+
+    onSave(merged);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(form);
-  };
+  const fieldValues = watch();
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -99,7 +135,10 @@ export const CategoryModal = ({
                   </button>
                 </DialogTitle>
 
-                <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="mt-4 space-y-4"
+                >
                   <div>
                     <label
                       htmlFor="name"
@@ -108,11 +147,9 @@ export const CategoryModal = ({
                       카테고리명
                     </label>
                     <input
+                      {...register("name")}
                       type="text"
-                      name="name"
                       id="name"
-                      value={form.name}
-                      onChange={handleChange}
                       required
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
                       placeholder="카테고리명을 입력하세요"
@@ -132,7 +169,7 @@ export const CategoryModal = ({
                             handleStyleOptionChange("emoji", emoji)
                           }
                           className={`flex h-8 w-8 items-center justify-center rounded-md text-lg ${
-                            form.emoji === emoji
+                            fieldValues.emoji === emoji
                               ? "bg-emerald-100 ring-2 ring-emerald-500"
                               : "bg-gray-100 hover:bg-gray-200"
                           }`}
@@ -158,13 +195,13 @@ export const CategoryModal = ({
                             handleStyleOptionChange("color", color.value)
                           }
                           className={`flex h-8 w-full items-center justify-center rounded-md ${
-                            form.color === color.value
+                            fieldValues.color === color.value
                               ? "ring-2 ring-offset-2 ring-emerald-500"
                               : ""
                           }`}
                           style={{ backgroundColor: color.value }}
                         >
-                          {form.color === color.value && (
+                          {fieldValues.color === color.value && (
                             <Check className="h-5 w-5 text-white" />
                           )}
                         </button>

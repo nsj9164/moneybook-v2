@@ -16,7 +16,7 @@ import { EditSummary } from "./EditSummary";
 const ExpenseFormPage = () => {
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
-  const { user } = useAuth();
+  const { userId } = useAuth();
   const [newExpenses, setNewExpenses] = useRecoilState(newExpensesState);
 
   // newExpenses add
@@ -49,7 +49,7 @@ const ExpenseFormPage = () => {
     const snakeCase = formatKeyCase(item, "snake");
     const filtered = pickOnly(snakeCase, expenseKeys);
 
-    return { ...filtered, user_id: user?.id };
+    return { ...filtered, user_id: userId };
   };
 
   // newExpenses save

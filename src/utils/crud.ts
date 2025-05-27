@@ -1,28 +1,40 @@
+import { UUID } from "@/types/expense-types";
+import { formatKeyCase } from "./caseConverter";
 import { supabase } from "./supabase";
 
-export const deleteItem = async (table: string, id: number) => {
-  if (window.confirm("이 카테고리를 삭제하시겠습니까?")) {
-    const { error } = await supabase.from("categories").delete().eq("id", id);
-
-    if (error) {
-      console.error("Delete error:", error.message);
-      return;
-    }
-  }
-};
-
-export const saveItem = async (
+export async function deleteItem(
   table: string,
-  category: any,
+  id: number | UUID,
   onSuccess?: () => void
-) => {
-  //   if (!category.isModified) return;
+) {
+  const { error } = await supabase.from(table).delete().eq("id", id);
 
-  const { error } = await supabase.from("categories").upsert(category).select();
+  if (error) {
+    console.error("Delete error:", error.message);
+    return;
+  }
+
+  onSuccess?.();
+}
+
+export async function saveItem<T extends Object>(
+  table: string,
+  item: Partial<T>,
+  userId: UUID,
+  onSuccess?: (row: T) => void
+) {
+  console.log("user!!!", userId, item);
+  const snakeItem = formatKeyCase(item, "snake");
+  const insertData = { ...snakeItem, user_id: userId };
+
+  const { data, error } = await supabase
+    .from(table)
+    .upsert(insertData)
+    .select();
 
   if (error) {
     console.error("Insert error:", error.message);
-  } else {
-    onSuccess?.();
+  } else if (data && data.length) {
+    onSuccess?.(data[0]);
   }
-};
+}

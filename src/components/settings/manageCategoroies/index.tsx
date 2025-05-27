@@ -6,11 +6,17 @@ import { CategoryModal } from "./CategoryModal";
 import { CategoryTable } from "./table/Table";
 import { CategoryPagination } from "./CategoryPagination";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
-import { supabase } from "@/utils/supabase";
-import { deleteCateogy, saveCategory } from "../utils/useCategoryCrud";
+import { useAuth } from "@/contexts/AuthContext";
+import { deleteItem, saveItem } from "@/utils/crud";
+import { useSetRecoilState } from "recoil";
+import { categoriesState } from "@/recoil/atoms";
+import { patchOrAddItem } from "@/utils/patchOrAddItem";
 
 const ManageCategories = () => {
+  const { user } = useAuth();
   const categories = useFetchCategories();
+  const setCategories = useSetRecoilState(categoriesState);
+
   console.log("#######", categories);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<ICategory | undefined>(
@@ -52,12 +58,17 @@ const ManageCategories = () => {
 
   const handleDeleteCategory = async (id: number) => {
     if (window.confirm("이 카테고리를 삭제하시겠습니까?")) {
-      await deleteCateogy(id);
+      await deleteItem("categories", id, () => {
+        setCategories((prev) => prev.filter((cat) => cat.id !== id));
+      });
     }
   };
 
-  const handleSaveCategory = async (category: ICategory) => {
-    await saveCategory(category, () => setIsModalOpen(false));
+  const handleSaveCategory = (category: Partial<ICategory>) => {
+    saveItem("categories", category, user!.id, (saved) => {
+      setCategories((prev) => patchOrAddItem(prev, saved));
+      setIsModalOpen(false);
+    });
   };
 
   return (
@@ -135,7 +146,5 @@ const ManageCategories = () => {
     </div>
   );
 };
-
-// 카테고리 추가/수정 모달
 
 export default ManageCategories;
