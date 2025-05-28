@@ -7,6 +7,7 @@ import {
 } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
+import { FormType, initialForm } from "../constants/formConfigs";
 
 interface FieldOption {
   type: "text" | "emoji" | "color";
@@ -16,13 +17,12 @@ interface FieldOption {
 }
 
 interface GenericFormModalProps<T> {
+  formTitle: string;
+  formData: T;
   isOpen: boolean;
+  isEditing: boolean;
   onClose: () => void;
   onSave: (form: T) => void;
-  isEditing: boolean;
-  initialForm: T;
-  fieldOptions: FieldOption[];
-  formTitle: string;
 }
 
 export function GenericFormModal<T>({
@@ -30,11 +30,10 @@ export function GenericFormModal<T>({
   onClose,
   onSave,
   isEditing,
-  initialForm,
   fieldOptions,
   formTitle,
 }: GenericFormModalProps<T>) {
-  const [form, setForm] = useState<T>(initialForm);
+  const [form, setForm] = useState<T>(initialForm[FormType.Categories]());
 
   // 모달이 열릴 때마다 폼 초기화
   useEffect(() => {

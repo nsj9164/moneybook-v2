@@ -4,15 +4,11 @@ import { ICategory } from "@/types/expense-types";
 
 interface tableRowProps {
   category: ICategory;
-  handleEditCategory: (category: ICategory) => void;
-  handleDeleteCategory: (id: number) => void;
+  onEdit: (category: ICategory) => void;
+  onDelete: (id: number) => void;
 }
 
-export const TableRow = ({
-  category,
-  handleEditCategory,
-  handleDeleteCategory,
-}: tableRowProps) => {
+export const TableRow = ({ category, onEdit, onDelete }: tableRowProps) => {
   return (
     <tr key={category.id} className="hover:bg-gray-50">
       <td className="whitespace-nowrap px-6 py-4 text-center text-xl">
@@ -49,7 +45,7 @@ export const TableRow = ({
       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
         <div className="flex justify-end space-x-2">
           <button
-            onClick={() => handleEditCategory(category)}
+            onClick={() => onEdit(category)}
             className="text-emerald-600 hover:text-emerald-900"
           >
             <Pencil className="h-4 w-4" />
@@ -57,7 +53,7 @@ export const TableRow = ({
           </button>
           {!category.defaultYn && (
             <button
-              onClick={() => handleDeleteCategory(category.id)}
+              onClick={() => onDelete(category.id)}
               className="text-red-600 hover:text-red-900"
             >
               <Trash2 className="h-4 w-4" />

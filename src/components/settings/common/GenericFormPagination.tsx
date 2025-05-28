@@ -1,18 +1,18 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-interface CategoryPaginationProps {
+interface paginationProps {
   filteredLen: number;
   handlePageChange: (type: string) => void;
   currentPage: number;
   totalPages: number;
 }
 
-export const CategoryPagination = ({
+export const GenericFormPagination = ({
   filteredLen,
   handlePageChange,
   currentPage,
   totalPages,
-}: CategoryPaginationProps) => {
+}: paginationProps) => {
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
@@ -40,10 +40,10 @@ export const CategoryPagination = ({
               <span className="sr-only">이전</span>
               <ChevronLeft className="h-5 w-5" aria-hidden="true" />
             </button>
-            {/* {Array.from({ length: totalPages }).map((_, i) => (
+            {Array.from({ length: totalPages }).map((_, i) => (
               <button
                 key={i}
-                onClick={() => setCurrentPage(i + 1)}
+                // onClick={() => setCurrentPage(i + 1)}
                 className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
                   currentPage === i + 1
                     ? "z-10 bg-emerald-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
@@ -52,7 +52,7 @@ export const CategoryPagination = ({
               >
                 {i + 1}
               </button>
-            ))} */}
+            ))}
             <button
               onClick={() => handlePageChange("next")}
               disabled={currentPage === totalPages}

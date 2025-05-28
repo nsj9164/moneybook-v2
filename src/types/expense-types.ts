@@ -30,8 +30,8 @@ export interface ICategory {
 export interface IPayMethod {
   id: number;
   name: string;
-  billingStartDay: number;
-  billingEndDay: number;
+  billingStartDay?: number;
+  billingEndDay?: number;
   typeId: number;
   emoji: string;
   defaultYn: boolean;
