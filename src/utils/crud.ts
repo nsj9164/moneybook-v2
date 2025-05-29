@@ -26,6 +26,7 @@ export async function saveItem<T extends Object>(
   console.log("user!!!", userId, item);
   const snakeItem = formatKeyCase(item, "snake");
   const insertData = { ...snakeItem, user_id: userId };
+  console.log("insertData!!!!", insertData);
 
   const { data, error } = await supabase
     .from(table)
@@ -35,6 +36,7 @@ export async function saveItem<T extends Object>(
   if (error) {
     console.error("Insert error:", error.message);
   } else if (data && data.length) {
-    onSuccess?.(data[0]);
+    const mappedData = formatKeyCase(data[0], "camel");
+    onSuccess?.(mappedData);
   }
 }

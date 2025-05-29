@@ -2,28 +2,25 @@ import { IPayMethod } from "@/types/expense-types";
 import { Pencil, Trash2 } from "lucide-react";
 
 interface TableRowProps {
-  method: IPayMethod;
-  handleEditPayMethod: (payMethod: IPayMethod) => void;
-  handleDeletePayMethod: (id: number) => void;
+  payMethod: IPayMethod;
+  onEdit: (payMethod: IPayMethod) => void;
+  onDelete: (id: number) => void;
 }
 
-export const TableRow = ({
-  method,
-  handleEditPayMethod,
-  handleDeletePayMethod,
-}: TableRowProps) => {
+export const TableRow = ({ payMethod, onEdit, onDelete }: TableRowProps) => {
+  console.log("payMethod:::", payMethod);
   return (
-    <tr key={method.id} className="hover:bg-gray-50">
+    <tr key={payMethod.id} className="hover:bg-gray-50">
       <td className="whitespace-nowrap px-6 py-4 text-center text-xl">
-        <span role="img" aria-label={method.name}>
-          {method.emoji}
+        <span role="img" aria-label={payMethod.name}>
+          {payMethod.emoji}
         </span>
       </td>
       <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
-        {method.name}
+        {payMethod.name}
       </td>
       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-        {method.defaultYn ? (
+        {payMethod.defaultYn ? (
           <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
             기본
           </span>
@@ -36,15 +33,15 @@ export const TableRow = ({
       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
         <div className="flex justify-end space-x-2">
           <button
-            onClick={() => handleEditPayMethod(method)}
+            onClick={() => onEdit(payMethod)}
             className="text-emerald-600 hover:text-emerald-900"
           >
             <Pencil className="h-4 w-4" />
             <span className="sr-only">편집</span>
           </button>
-          {!method.defaultYn && (
+          {!payMethod.defaultYn && (
             <button
-              onClick={() => handleDeletePayMethod(method.id)}
+              onClick={() => onDelete(payMethod.id)}
               className="text-red-600 hover:text-red-900"
             >
               <Trash2 className="h-4 w-4" />

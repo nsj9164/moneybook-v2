@@ -8,12 +8,7 @@ import { patchOrAddItem } from "@/utils/patchOrAddItem";
 import { TableRow } from "./table/TableRow";
 import { TableHeader } from "./table/TableHeader";
 import GenericForm from "../common/GenericForm";
-import { FormType } from "../constants/types";
-
-interface RenderRowProps {
-  onEdit: (category: ICategory) => void;
-  onDelete: (id: number) => void;
-}
+import { FormType } from "../types/GenericFromTypes";
 
 const ManageCategories = () => {
   const { userId } = useAuth();
@@ -31,8 +26,9 @@ const ManageCategories = () => {
       setCategories((prev) => patchOrAddItem(prev, saved));
     });
   };
+
   return (
-    <GenericForm<ICategory, FormType.Categories>
+    <GenericForm<FormType.Categories>
       formType={FormType.Categories}
       headers={<TableHeader />}
       fetchData={categories}

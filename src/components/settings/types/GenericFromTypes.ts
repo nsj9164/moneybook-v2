@@ -1,3 +1,5 @@
+import { ICategory, UUID } from "@/types/expense-types";
+
 export interface BaseForm {
   id: number;
   name: string;
@@ -5,11 +7,16 @@ export interface BaseForm {
   defaultYn: boolean;
 }
 
-export interface CategoryForm extends BaseForm {
-  color: string;
+export interface PayMethodForm extends BaseForm {
+  typeId: number;
 }
 
-export type PayMethodForm = BaseForm;
+export interface CategoryForm extends BaseForm {
+  color: string;
+  targetAmount: number;
+  transactionType: number;
+  userId: UUID;
+}
 
 export enum FormType {
   Categories = "categories",
@@ -20,3 +27,10 @@ export type FormMap = {
   [FormType.Categories]: CategoryForm;
   [FormType.PayMethods]: PayMethodForm;
 };
+
+export interface FieldOption {
+  type: "text" | "emoji" | "color";
+  name: string;
+  label: string;
+  options?: string[] | { value: string; label?: string }[];
+}

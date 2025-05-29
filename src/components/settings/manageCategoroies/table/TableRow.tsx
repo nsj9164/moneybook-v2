@@ -2,13 +2,13 @@ import { Pencil, Trash2 } from "lucide-react";
 import { categoryColorOptions } from "../constants/CategoryConstants";
 import { ICategory } from "@/types/expense-types";
 
-interface tableRowProps {
+interface TableRowProps {
   category: ICategory;
   onEdit: (category: ICategory) => void;
   onDelete: (id: number) => void;
 }
 
-export const TableRow = ({ category, onEdit, onDelete }: tableRowProps) => {
+export const TableRow = ({ category, onEdit, onDelete }: TableRowProps) => {
   return (
     <tr key={category.id} className="hover:bg-gray-50">
       <td className="whitespace-nowrap px-6 py-4 text-center text-xl">
@@ -33,12 +33,13 @@ export const TableRow = ({ category, onEdit, onDelete }: tableRowProps) => {
       </td>
       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
         {category.defaultYn ? (
-          <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
-            기본
+          <span className="...">
+            기본 ({typeof category.defaultYn}: {String(category.defaultYn)})
           </span>
         ) : (
-          <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
-            사용자 정의
+          <span className="...">
+            사용자 정의 ({typeof category.defaultYn}:{" "}
+            {String(category.defaultYn)})
           </span>
         )}
       </td>

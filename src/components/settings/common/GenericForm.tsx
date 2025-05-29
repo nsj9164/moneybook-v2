@@ -4,8 +4,8 @@ import { matchHangul } from "@/utils/matchHangul";
 import { GenericFormPagination } from "./GenericFormPagination";
 import { GenericFormTable } from "../../common/table/GenericFormTable";
 import { GenericFormModal } from "./GenericFormModal";
-import { formMeta } from "../constants/formConfigs";
-import { FormType } from "../constants/types";
+import { formFieldOptions, formMeta } from "../constants/formConfigs";
+import { FormMap, FormType } from "../types/GenericFromTypes";
 
 type GenericFormHandler<T> = {
   onEdit: (row: T) => void;
@@ -20,18 +20,18 @@ interface GenericFormProps<T> {
   onSave: (row: Partial<T>) => void;
 }
 
-function GenericForm<T extends { name: string }, K extends FormType>({
+function GenericForm<K extends FormType>({
   formType,
   headers,
   fetchData,
   renderRow,
   onDelete,
   onSave,
-}: GenericFormProps<T> & { formType: K }) {
+}: GenericFormProps<FormMap[K]> & { formType: K }) {
   const { title, initial } = formMeta[formType];
   console.log("#######", fetchData);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentData, setCurrentData] = useState<T | undefined>();
+  const [currentData, setCurrentData] = useState<FormMap[K] | undefined>();
   const [isEditing, setIsEditing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,12 +55,12 @@ function GenericForm<T extends { name: string }, K extends FormType>({
   };
 
   const handleAddData = () => {
-    setCurrentData(initial() as T);
+    setCurrentData(initial());
     setIsEditing(false);
     setIsModalOpen(true);
   };
 
-  const handleEditData = (data: T) => {
+  const handleEditData = (data: FormMap[K]) => {
     setCurrentData(data);
     setIsEditing(true);
     setIsModalOpen(true);
@@ -72,7 +72,7 @@ function GenericForm<T extends { name: string }, K extends FormType>({
     }
   };
 
-  const handleSaveData = async (data: Partial<T>) => {
+  const handleSaveData = async (data: Partial<FormMap[K]>) => {
     await onSave(data);
     setIsModalOpen(false);
   };
@@ -150,6 +150,7 @@ function GenericForm<T extends { name: string }, K extends FormType>({
       <GenericFormModal
         formTitle={title}
         formData={currentData ?? initial()}
+        fieldOptions={formFieldOptions[formType]}
         isOpen={isModalOpen}
         isEditing={isEditing}
         onClose={() => setIsModalOpen(false)}

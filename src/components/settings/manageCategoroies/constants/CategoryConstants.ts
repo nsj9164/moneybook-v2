@@ -33,12 +33,3 @@ export const categoryColorOptions = [
   { name: "분홍", value: "#ec4899" },
   { name: "회색", value: "#6b7280" },
 ];
-
-const tempId = new Date().getTime();
-export const initialCategory = {
-  id: tempId,
-  name: "",
-  color: categoryColorOptions[0].value,
-  emoji: categoryEmojiOptions[0],
-  defaultYn: false,
-};

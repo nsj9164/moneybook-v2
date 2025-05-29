@@ -7,18 +7,13 @@ import {
 } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
-import { FormType, initialForm } from "../constants/formConfigs";
-
-interface FieldOption {
-  type: "text" | "emoji" | "color";
-  name: string;
-  label: string;
-  options?: string[] | { value: string; label?: string }[];
-}
+import { FieldOption } from "../types/GenericFromTypes";
+import { formFieldOptions } from "../constants/formConfigs";
 
 interface GenericFormModalProps<T> {
   formTitle: string;
   formData: T;
+  fieldOptions: FieldOption[];
   isOpen: boolean;
   isEditing: boolean;
   onClose: () => void;
@@ -26,22 +21,24 @@ interface GenericFormModalProps<T> {
 }
 
 export function GenericFormModal<T>({
+  formTitle,
+  formData,
+  fieldOptions,
   isOpen,
+  isEditing,
   onClose,
   onSave,
-  isEditing,
-  fieldOptions,
-  formTitle,
 }: GenericFormModalProps<T>) {
-  const [form, setForm] = useState<T>(initialForm[FormType.Categories]());
+  const [form, setForm] = useState<T>(formData);
 
   // 모달이 열릴 때마다 폼 초기화
   useEffect(() => {
-    if (isOpen) setForm(initialForm);
+    if (isOpen) setForm(formData);
   }, [isOpen]);
 
   const handleChange = (key: string, option: string) => {
-    setForm({ ...form, [key]: option, isModified: true });
+    console.log("handleChange:::", key, option, form);
+    setForm({ ...form, [key]: option });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -93,17 +90,17 @@ export function GenericFormModal<T>({
 
                 <form onSubmit={handleSubmit} className="mt-4 space-y-4">
                   {fieldOptions.map((field) => {
-                    const fieldKey = field.name as keyof T;
+                    const fieldKey = field.name as keyof typeof formData;
                     const fieldValue = form[fieldKey];
 
                     if (field.type === "text") {
                       return (
-                        <div>
+                        <div key={field.name}>
                           <label
                             htmlFor="name"
                             className="block text-sm font-medium text-gray-700"
                           >
-                            {formTitle}명
+                            {field.label}
                           </label>
                           <input
                             type="text"
@@ -160,7 +157,7 @@ export function GenericFormModal<T>({
 
                     if (field.type === "color") {
                       const colorOptions = (field.options ?? []) as {
-                        label: string;
+                        name: string;
                         value: string;
                       }[];
                       return (
