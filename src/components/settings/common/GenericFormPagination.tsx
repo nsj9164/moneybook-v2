@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 interface paginationProps {
   filteredLen: number;
   handlePageChange: (type: string) => void;
+  goToPage: (page: number) => void;
   currentPage: number;
   totalPages: number;
 }
@@ -10,6 +11,7 @@ interface paginationProps {
 export const GenericFormPagination = ({
   filteredLen,
   handlePageChange,
+  goToPage,
   currentPage,
   totalPages,
 }: paginationProps) => {
@@ -43,7 +45,7 @@ export const GenericFormPagination = ({
             {Array.from({ length: totalPages }).map((_, i) => (
               <button
                 key={i}
-                // onClick={() => setCurrentPage(i + 1)}
+                onClick={() => goToPage(i + 1)}
                 className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
                   currentPage === i + 1
                     ? "z-10 bg-emerald-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"

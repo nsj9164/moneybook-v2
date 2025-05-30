@@ -8,7 +8,7 @@ import { patchOrAddItem } from "@/utils/patchOrAddItem";
 import { TableRow } from "./table/TableRow";
 import { TableHeader } from "./table/TableHeader";
 import GenericForm from "../common/GenericForm";
-import { FormType } from "../types/GenericFromTypes";
+import { FormType } from "../types/GenericFormTypes";
 
 const ManageCategories = () => {
   const { userId } = useAuth();

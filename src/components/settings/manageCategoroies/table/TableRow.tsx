@@ -33,13 +33,12 @@ export const TableRow = ({ category, onEdit, onDelete }: TableRowProps) => {
       </td>
       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
         {category.defaultYn ? (
-          <span className="...">
-            기본 ({typeof category.defaultYn}: {String(category.defaultYn)})
+          <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+            기본
           </span>
         ) : (
-          <span className="...">
-            사용자 정의 ({typeof category.defaultYn}:{" "}
-            {String(category.defaultYn)})
+          <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
+            사용자 정의
           </span>
         )}
       </td>

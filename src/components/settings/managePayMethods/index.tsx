@@ -6,7 +6,7 @@ import { deleteItem, saveItem } from "@/utils/crud";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
 import { IPayMethod } from "@/types/expense-types";
 import GenericForm from "../common/GenericForm";
-import { FormType } from "../types/GenericFromTypes";
+import { FormType } from "../types/GenericFormTypes";
 import { TableRow } from "./table/TableRow";
 import { TableHeader } from "./table/TableHeader";
 

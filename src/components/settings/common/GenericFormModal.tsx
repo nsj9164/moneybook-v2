@@ -7,8 +7,7 @@ import {
 } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { Check, X } from "lucide-react";
-import { FieldOption } from "../types/GenericFromTypes";
-import { formFieldOptions } from "../constants/formConfigs";
+import { FieldOption } from "../types/GenericFormTypes";
 
 interface GenericFormModalProps<T> {
   formTitle: string;
@@ -37,7 +36,6 @@ export function GenericFormModal<T>({
   }, [isOpen]);
 
   const handleChange = (key: string, option: string) => {
-    console.log("handleChange:::", key, option, form);
     setForm({ ...form, [key]: option });
   };
 

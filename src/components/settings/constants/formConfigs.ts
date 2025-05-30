@@ -3,7 +3,7 @@ import {
   categoryEmojiOptions,
 } from "../manageCategoroies/constants/CategoryConstants";
 import { payMethodEmojiOptions } from "../managePayMethods/constants/PayMethodConstants";
-import { FieldOption, FormMap, FormType } from "../types/GenericFromTypes";
+import { FieldOption, FormMap, FormType } from "../types/GenericFormTypes";
 
 export const formMeta: {
   [K in FormType]: {
