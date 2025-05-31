@@ -1,123 +1,148 @@
 import { useState, ReactNode } from "react";
-import { Plus } from "lucide-react";
 import { matchHangul } from "@/utils/matchHangul";
-import { GenericFormPagination } from "./GenericFormPagination";
-import { GenericFormTable } from "@/components/common/table/GenericFormTable";
-import { GenericFormModal } from "./GenericFormModal";
+import { GenericFormTable } from "../../common/table/GenericFormTable";
 import { formFieldOptions, formMeta } from "../constants/formConfigs";
 import { FormMap, FormType } from "../types/GenericFormTypes";
-import { useGenericForm } from "../hooks/useGenericForm";
+import { GenericFormHeader } from "./GenericFormHeader";
+import { usePagination } from "../utils/usePagination";
+import { PaginationFooter } from "./pagination/\bPaginationFooter";
+import { GenericFormModal } from "./Modal/GenericFormModal";
+
+type GenericFormHandler<T> = {
+  onEdit: (row: T) => void;
+  onDelete: (id: number) => void;
+};
 
 interface GenericFormProps<T> {
-  data: T[];
-  title: string;
-  match: (query: string, item: T) => boolean;
-  renderRow: (item: T) => React.ReactNode;
-  renderModal: (props: {
-    isOpen: boolean;
-    onClose: () => void;
-    data?: T;
-    isEditing: boolean;
-    onSave: (partial: Partial<T>) => void;
-  }) => React.ReactNode;
-  onDelete: (id: number) => void;
-  onSave: (partial: Partial<T>) => void;
-  initial: () => T;
+  headers: ReactNode;
+  fetchData: T[];
+  renderRow: (row: T, handler: GenericFormHandler<T>) => ReactNode;
+  onDelete: GenericFormHandler<T>["onDelete"];
+  onSave: (row: Partial<T>) => void;
 }
 
-function GenericForm<T extends { id: number }>({
-  data,
-  title,
-  match,
+function GenericForm<K extends FormType>({
+  formType,
+  headers,
+  fetchData,
   renderRow,
-  renderModal,
   onDelete,
   onSave,
-  initial,
-}: GenericFormProps<T>) {
-  const {
-    searchQuery,
-    setSearchQuery,
-    currentPage,
-    setCurrentPage,
-    totalPages,
-    paginatedData,
-    filteredData,
-  } = useGenericForm<T>(data, match);
+}: GenericFormProps<FormMap[K]> & { formType: K }) {
+  const { title, initial } = formMeta[formType];
+  console.log("#######", fetchData);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentData, setCurrentData] = useState<FormMap[K] | undefined>();
+  const [isEditing, setIsEditing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editingData, setEditingData] = useState<T | undefined>(undefined);
-  const isEditing = !!editingData;
+  // data_검색 적용
+  const filteredData = fetchData.filter((data) =>
+    matchHangul(searchQuery, data.name)
+  );
 
-  const handleEdit = (item: T) => {
-    setEditingData(item);
-    setModalOpen(true);
+  const { currentPage, totalPages, handlePageChange, startIndex, endIndex } =
+    usePagination(filteredData.length);
+
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * 10,
+    currentPage * 10
+  );
+
+  const handleAddData = () => {
+    setCurrentData(initial());
+    setIsEditing(false);
+    setIsModalOpen(true);
   };
 
-  const handleAdd = () => {
-    setEditingData(initial());
-    setModalOpen(true);
+  const handleEditData = (data: FormMap[K]) => {
+    setCurrentData(data);
+    setIsEditing(true);
+    setIsModalOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      onDelete(id);
+  const handleDeleteData = async (id: number) => {
+    if (window.confirm("이 카테고리를 삭제하시겠습니까?")) {
+      await onDelete(id);
     }
   };
 
-  const handleSave = (partial: Partial<T>) => {
-    onSave(partial);
-    setModalOpen(false);
+  const handleSaveData = async (data: Partial<FormMap[K]>) => {
+    await onSave(data);
+    setIsModalOpen(false);
   };
 
   return (
-    <div className="bg-white">
-      <div className="flex justify-between items-center p-4 border-b">
-        <h2 className="text-lg font-medium">{title} 관리</h2>
-        <button
-          onClick={handleAdd}
-          className="bg-emerald-600 text-white rounded px-3 py-2"
-        >
-          + {title} 추가
-        </button>
-      </div>
+    <div className="bg-white h-full">
+      <GenericFormHeader title={title} handleAddData={handleAddData} />
 
       <div className="p-4">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder={`${title} 검색`}
-          className="w-full mb-4 p-2 border"
-        />
+        <div className="mb-4">
+          <label htmlFor="search" className="sr-only">
+            {title} 검색
+          </label>
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg
+                className="h-5 w-5 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <input
+              id="search"
+              name="search"
+              placeholder={`${title} 검색`}
+              type="search"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                handlePageChange(1);
+              }}
+              className="block w-full rounded-md border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm"
+            />
+          </div>
+        </div>
 
-        <table className="w-full">
-          <thead>{/* your headers */}</thead>
-          <tbody>{paginatedData.map((d) => renderRow(d))}</tbody>
-        </table>
-
-        <div className="flex justify-center gap-1 mt-4">
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-2 py-1 ${
-                currentPage === i + 1 ? "bg-emerald-600 text-white" : "border"
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
+        <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+          <GenericFormTable
+            headers={headers}
+            rows={paginatedData}
+            renderRow={(row) =>
+              renderRow(row, {
+                onEdit: handleEditData,
+                onDelete: handleDeleteData,
+              })
+            }
+          />
+          {/* 페이지네이션 */}
+          {totalPages > 1 && (
+            <PaginationFooter
+              currentPage={currentPage}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+              startIndex={startIndex}
+              endIndex={endIndex}
+            />
+          )}
         </div>
       </div>
 
-      {renderModal({
-        isOpen: modalOpen,
-        onClose: () => setModalOpen(false),
-        data: editingData,
-        isEditing,
-        onSave: handleSave,
-      })}
+      <GenericFormModal
+        formTitle={title}
+        formData={currentData ?? initial()}
+        fieldOptions={formFieldOptions[formType]}
+        isOpen={isModalOpen}
+        isEditing={isEditing}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveData}
+      />
     </div>
   );
 }

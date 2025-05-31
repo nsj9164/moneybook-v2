@@ -33,10 +33,9 @@ export const useFetchExpenses = () => {
         .eq("user_id", userId)
         .order("date", { ascending: false });
 
-      if (error) console.error("Insert Error:", error.message);
+      if (error) console.error("Fetch Error:", error.message);
 
       if (data) {
-        console.log("Data::::", data);
         const mappedData = formatKeyCase(data, "camel");
         setExpenses(mappedData ?? []);
       }

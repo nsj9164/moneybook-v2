@@ -36,3 +36,15 @@ export interface IPayMethod {
   emoji: string;
   defaultYn: boolean;
 }
+
+export interface IRecurring {
+  id: number;
+  name: string;
+  amount: number;
+  cycle: string;
+  billingStartDay: number;
+  billingEndDay: number;
+  nextPaymentDate: Date;
+  categories: { name: string };
+  paymentMethods: { name: string };
+}

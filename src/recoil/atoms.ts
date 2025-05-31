@@ -1,4 +1,9 @@
-import { ICategory, IExpense, IPayMethod } from "@/types/expense-types";
+import {
+  ICategory,
+  IExpense,
+  IPayMethod,
+  IRecurring,
+} from "@/types/expense-types";
 import { atom } from "recoil";
 
 export const expensesState = atom<IExpense[]>({
@@ -18,5 +23,10 @@ export const payMethodsState = atom<IPayMethod[]>({
 
 export const newExpensesState = atom<IExpense[]>({
   key: "newExpensesState",
+  default: [],
+});
+
+export const recurringState = atom<IRecurring[]>({
+  key: "recurringState",
   default: [],
 });
