@@ -1,4 +1,4 @@
-import { PaginationNav } from "./\bPaginationNav";
+import { PaginationNav } from "./PaginationNav";
 
 interface paginationProps {
   currentPage: number;

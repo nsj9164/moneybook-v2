@@ -5,7 +5,7 @@ import { formFieldOptions, formMeta } from "../constants/formConfigs";
 import { FormMap, FormType } from "../types/GenericFormTypes";
 import { GenericFormHeader } from "./GenericFormHeader";
 import { usePagination } from "../utils/usePagination";
-import { PaginationFooter } from "./pagination/\bPaginationFooter";
+import { PaginationFooter } from "./pagination/PaginationFooter";
 import { GenericFormModal } from "./Modal/GenericFormModal";
 
 type GenericFormHandler<T> = {

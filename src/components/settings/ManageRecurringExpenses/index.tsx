@@ -3,7 +3,7 @@ import { Pencil, Trash2, X, Calendar, CreditCard } from "lucide-react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { GenericFormHeader } from "../common/GenericFormHeader";
-import { PaginationFooter } from "../common/pagination/\bPaginationFooter";
+import { PaginationFooter } from "../common/pagination/PaginationFooter";
 import { usePagination } from "../utils/usePagination";
 import { formatCurrency } from "@/utils/format";
 import { GenericFormModal } from "../common/Modal/GenericFormModal";
