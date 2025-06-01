@@ -1,4 +1,13 @@
-export const RecurringExpenseModal = () => {
+import { IRecurring } from "@/types/expense-types";
+
+interface RecurringModalProps {
+  form: IRecurring;
+  onChange: () => void;
+}
+export const RecurringExpenseModal = ({
+  form,
+  onChange,
+}: RecurringModalProps) => {
   return (
     <>
       <div>
@@ -13,7 +22,7 @@ export const RecurringExpenseModal = () => {
           name="title"
           id="title"
           value={form.title}
-          onChange={handleChange}
+          onChange={onChange}
           required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           placeholder="지출 항목을 입력하세요"
@@ -36,7 +45,7 @@ export const RecurringExpenseModal = () => {
             name="amount"
             id="amount"
             value={form.amount}
-            onChange={handleChange}
+            onChange={onChange}
             required
             min="0"
             className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
@@ -57,7 +66,7 @@ export const RecurringExpenseModal = () => {
             id="category"
             name="category"
             value={form.category}
-            onChange={handleChange}
+            onChange={onChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           >
             {categories.map((category) => (
@@ -79,7 +88,7 @@ export const RecurringExpenseModal = () => {
             id="paymentMethod"
             name="paymentMethod"
             value={form.paymentMethod}
-            onChange={handleChange}
+            onChange={onChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           >
             {paymentMethods.map((method) => (
@@ -103,7 +112,7 @@ export const RecurringExpenseModal = () => {
             id="frequency"
             name="frequency"
             value={form.frequency}
-            onChange={handleChange}
+            onChange={onChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           >
             {frequencyOptions.map((option) => (
@@ -126,7 +135,7 @@ export const RecurringExpenseModal = () => {
             name="paymentDay"
             id="paymentDay"
             value={form.paymentDay}
-            onChange={handleChange}
+            onChange={onChange}
             min="1"
             max="31"
             required
@@ -148,7 +157,7 @@ export const RecurringExpenseModal = () => {
             name="startDate"
             id="startDate"
             value={form.startDate}
-            onChange={handleChange}
+            onChange={onChange}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
@@ -166,7 +175,7 @@ export const RecurringExpenseModal = () => {
             name="endDate"
             id="endDate"
             value={form.endDate || ""}
-            onChange={handleChange}
+            onChange={onChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
         </div>
@@ -183,7 +192,7 @@ export const RecurringExpenseModal = () => {
           id="memo"
           name="memo"
           value={form.memo}
-          onChange={handleChange}
+          onChange={onChange}
           rows={2}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           placeholder="추가 정보를 입력하세요"

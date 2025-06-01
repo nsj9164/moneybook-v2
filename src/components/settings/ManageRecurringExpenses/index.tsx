@@ -8,140 +8,14 @@ import { usePagination } from "../utils/usePagination";
 import { formatCurrency } from "@/utils/format";
 import { GenericFormModal } from "../common/Modal/GenericFormModal";
 import { deleteItem, saveItem } from "@/utils/crud";
-
-// 샘플 데이터
-const initialRecurringExpenses = [
-  {
-    id: "1",
-    title: "월세",
-    amount: 500000,
-    category: "주거비",
-    paymentMethod: "계좌이체",
-    paymentDay: 25,
-    startDate: "2023-01-25",
-    endDate: null,
-    frequency: "monthly",
-    memo: "매월 25일 자동이체",
-    isActive: true,
-  },
-  {
-    id: "2",
-    title: "휴대폰 요금",
-    amount: 55000,
-    category: "통신비",
-    paymentMethod: "자동이체",
-    paymentDay: 15,
-    startDate: "2023-02-15",
-    endDate: null,
-    frequency: "monthly",
-    memo: "KT 통신비",
-    isActive: true,
-  },
-  {
-    id: "3",
-    title: "넷플릭스",
-    amount: 17000,
-    category: "여가",
-    paymentMethod: "신용카드",
-    paymentDay: 10,
-    startDate: "2023-01-10",
-    endDate: null,
-    frequency: "monthly",
-    memo: "프리미엄 요금제",
-    isActive: true,
-  },
-  {
-    id: "4",
-    title: "헬스장 회비",
-    amount: 99000,
-    category: "의료/건강",
-    paymentMethod: "신용카드",
-    paymentDay: 5,
-    startDate: "2023-03-05",
-    endDate: "2023-12-05",
-    frequency: "monthly",
-    memo: "1년 약정",
-    isActive: true,
-  },
-  {
-    id: "5",
-    title: "아이폰 할부금",
-    amount: 65000,
-    category: "쇼핑",
-    paymentMethod: "신용카드",
-    paymentDay: 20,
-    startDate: "2023-04-20",
-    endDate: "2024-04-20",
-    frequency: "monthly",
-    memo: "24개월 할부",
-    isActive: true,
-  },
-  {
-    id: "6",
-    title: "인터넷 요금",
-    amount: 35000,
-    category: "통신비",
-    paymentMethod: "자동이체",
-    paymentDay: 15,
-    startDate: "2023-02-15",
-    endDate: null,
-    frequency: "monthly",
-    memo: "KT 인터넷",
-    isActive: true,
-  },
-  {
-    id: "7",
-    title: "전기세",
-    amount: 45000,
-    category: "주거비",
-    paymentMethod: "자동이체",
-    paymentDay: 25,
-    startDate: "2023-01-25",
-    endDate: null,
-    frequency: "monthly",
-    memo: "변동 금액",
-    isActive: true,
-  },
-  {
-    id: "8",
-    title: "수도세",
-    amount: 30000,
-    category: "주거비",
-    paymentMethod: "자동이체",
-    paymentDay: 25,
-    startDate: "2023-01-25",
-    endDate: null,
-    frequency: "bimonthly",
-    memo: "2개월마다 청구",
-    isActive: true,
-  },
-];
-
-// 카테고리 샘플 데이터
-const categories = [
-  { id: "1", name: "식비", color: "#ef4444", icon: "🍔" },
-  { id: "2", name: "교통비", color: "#3b82f6", icon: "🚗" },
-  { id: "3", name: "주거비", color: "#f59e0b", icon: "🏠" },
-  { id: "4", name: "통신비", color: "#10b981", icon: "📱" },
-  { id: "5", name: "의료/건강", color: "#6366f1", icon: "💊" },
-  { id: "6", name: "교육", color: "#8b5cf6", icon: "📚" },
-  { id: "7", name: "쇼핑", color: "#ec4899", icon: "🛍️" },
-  { id: "8", name: "여가", color: "#14b8a6", icon: "🎮" },
-  { id: "9", name: "기타", color: "#6b7280", icon: "📌" },
-];
-
-// 결제수단 샘플 데이터
-const paymentMethods = [
-  { id: "1", name: "신용카드", icon: "💳" },
-  { id: "2", name: "체크카드", icon: "💳" },
-  { id: "3", name: "현금", icon: "💵" },
-  { id: "4", name: "계좌이체", icon: "🏦" },
-  { id: "5", name: "자동이체", icon: "⏱️" },
-  { id: "6", name: "네이버페이", icon: "🟢" },
-  { id: "7", name: "카카오페이", icon: "🟡" },
-  { id: "8", name: "토스", icon: "🔵" },
-  { id: "9", name: "기타", icon: "📌" },
-];
+import { useFetchCategories } from "@/hooks/useFetchCategories";
+import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
+import { useFetchRecurringExpenses } from "@/hooks/useFetchRecurringExpenses";
+import { useSetRecoilState } from "recoil";
+import { recurringState } from "@/recoil/atoms";
+import { IRecurring } from "@/types/expense-types";
+import { patchOrAddItem } from "@/utils/patchOrAddItem";
+import { useAuth } from "@/contexts/AuthContext";
 
 // 주기 옵션
 const frequencyOptions = [
@@ -155,51 +29,32 @@ const frequencyOptions = [
   { value: "annually", label: "매년" },
 ];
 
-interface RecurringExpense {
-  id: string;
-  title: string;
-  amount: number;
-  category: string;
-  paymentMethod: string;
-  paymentDay: number;
-  startDate: string;
-  endDate: string | null;
-  frequency: string;
-  memo: string;
-  isActive: boolean;
-}
-
-interface RecurringExpenseModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (expense: RecurringExpense) => void;
-  expense?: RecurringExpense;
-  isEditing: boolean;
-}
-
 const ManageRecurringExpenses = () => {
-  const [recurringExpenses, setRecurringExpenses] = useState<
-    RecurringExpense[]
-  >(initialRecurringExpenses);
+  const { userId } = useAuth();
+  const recurrings = useFetchRecurringExpenses();
+  const setRecurrings = useSetRecoilState(recurringState);
+  const categories = useFetchCategories();
+  const payMethods = useFetchPayMethods();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentExpense, setCurrentExpense] = useState<
-    RecurringExpense | undefined
-  >(undefined);
+  const [currentExpense, setCurrentExpense] = useState<IRecurring | undefined>(
+    undefined
+  );
   const [isEditing, setIsEditing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterCategory, setFilterCategory] = useState<string>("all");
-  const [filterActive, setFilterActive] = useState<string>("all");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [filterActive, setFilterActive] = useState("");
   const itemsPerPage = 6;
 
   // 검색 및 필터링 적용된 고정지출 목록
-  const filteredExpenses = recurringExpenses.filter((expense) => {
-    const matchesSearch = expense.title
+  const filteredExpenses = recurrings.filter((expense) => {
+    const matchesSearch = expense.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesCategory =
-      filterCategory === "all" || expense.category === filterCategory;
+      filterCategory === "" || expense.categories === filterCategory;
     const matchesActive =
-      filterActive === "all" ||
+      filterActive === "" ||
       (filterActive === "active" && expense.isActive) ||
       (filterActive === "inactive" && !expense.isActive);
     return matchesSearch && matchesCategory && matchesActive;
@@ -213,63 +68,51 @@ const ManageRecurringExpenses = () => {
     currentPage * 10
   );
 
-  const handleAddExpense = () => {
+  const handleAddRecurring = () => {
     setCurrentExpense(undefined);
     setIsEditing(false);
     setIsModalOpen(true);
   };
 
-  const handleEditExpense = (expense: RecurringExpense) => {
+  const handleEditRecurring = (expense: IRecurring) => {
     setCurrentExpense(expense);
     setIsEditing(true);
     setIsModalOpen(true);
   };
 
-  const handleDeleteExpense = (expenseId: string) => {
+  const handleDeleteRecurring = async (id: number) => {
     if (window.confirm("이 고정지출을 삭제하시겠습니까?")) {
-      setRecurringExpenses(recurringExpenses.filter((e) => e.id !== expenseId));
+      // setRecurringExpenses(recurrings.filter((e) => e.id !== expenseId));
+      await deleteItem("recurring_expenses", id, () => {
+        setRecurrings((prev) => prev.filter((item) => item.id !== id));
+      });
     }
   };
 
-  const handleToggleActive = (expenseId: string) => {
-    setRecurringExpenses(
-      recurringExpenses.map((expense) =>
-        expense.id === expenseId
+  const handleToggleActive = (id: number) => {
+    setRecurrings(
+      recurrings.map((expense) =>
+        expense.id === id
           ? { ...expense, isActive: !expense.isActive }
           : expense
       )
     );
   };
 
-  const handleDeleteRecurring = async (id: number) => {
-    await deleteItem("categories", id, () => {
-      // setCategories((prev) => prev.filter((item) => item.id !== id));
-    });
-  };
-
-  const handleSaveRecurring = async (category: Partial<ICategory>) => {
-    await saveItem("categories", category, userId!, (saved) => {
+  const handleSaveRecurring = async (recurring: Partial<IRecurring>) => {
+    await saveItem("recurring_expenses", recurring, userId!, (saved) => {
       // setCategories((prev) => patchOrAddItem(prev, saved));
+      setRecurrings((prev) => patchOrAddItem(prev, saved));
     });
-  };
-
-  const handleSaveData = async (data: Partial<FormMap[K]>) => {
-    await onSave(data);
-    setIsModalOpen(false);
-  };
-
-  const handleSaveExpense = (expense: RecurringExpense) => {
-    await onSave(data);
-    setIsModalOpen(false);
   };
 
   // 총 월간 고정지출 계산
-  const totalMonthlyAmount = recurringExpenses
+  const totalMonthlyAmount = recurrings
     .filter((expense) => expense.isActive)
     .reduce((sum, expense) => {
       // 주기에 따른 월간 환산 금액 계산
       let monthlyAmount = 0;
-      switch (expense.frequency) {
+      switch (expense.cycle) {
         case "daily":
           monthlyAmount = expense.amount * 30;
           break;
@@ -313,8 +156,8 @@ const ManageRecurringExpenses = () => {
                 월간 고정지출 요약
               </h3>
               <p className="text-sm text-gray-500">
-                활성화된 고정지출{" "}
-                {recurringExpenses.filter((e) => e.isActive).length}개
+                활성화된 고정지출 {recurrings.filter((e) => e.isActive).length}
+                개
               </p>
             </div>
             <div className="mt-3 sm:mt-0">
@@ -431,15 +274,15 @@ const ManageRecurringExpenses = () => {
                     >
                       <span className="text-white text-sm">
                         {categories.find((c) => c.name === expense.category)
-                          ?.icon || "📌"}
+                          ?.emoji || "📌"}
                       </span>
                     </div>
                     <div>
                       <h3 className="text-base font-medium text-gray-900">
-                        {expense.title}
+                        {expense.name}
                       </h3>
                       <p className="text-sm text-gray-500">
-                        {expense.category}
+                        {expense.categories}
                       </p>
                     </div>
                   </div>
@@ -448,9 +291,8 @@ const ManageRecurringExpenses = () => {
                       {formatCurrency(expense.amount)}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {frequencyOptions.find(
-                        (f) => f.value === expense.frequency
-                      )?.label || "매월"}
+                      {frequencyOptions.find((f) => f.value === expense.cycle)
+                        ?.label || "매월"}
                     </p>
                   </div>
                 </div>
@@ -458,9 +300,9 @@ const ManageRecurringExpenses = () => {
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <Calendar className="h-4 w-4 mr-1" />
                   <span>
-                    매월 {expense.paymentDay}일
-                    {expense.endDate
-                      ? ` (${expense.endDate.substring(0, 7)}까지)`
+                    매월 {expense.nextPaymentDate}일
+                    {expense.billingEndDay
+                      ? ` (${expense.billingEndDay.substring(0, 7)}까지)`
                       : ""}
                   </span>
                 </div>
@@ -468,16 +310,15 @@ const ManageRecurringExpenses = () => {
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <CreditCard className="h-4 w-4 mr-1" />
                   <span>
-                    {paymentMethods.find(
-                      (p) => p.name === expense.paymentMethod
-                    )?.icon || "💳"}{" "}
-                    {expense.paymentMethod}
+                    {payMethods.find((p) => p.name === expense.paymentMethods)
+                      ?.emoji || "💳"}{" "}
+                    {expense.paymentMethods}
                   </span>
                 </div>
 
-                {expense.memo && (
+                {/* {expense.note && (
                   <p className="text-sm text-gray-600 mb-3">{expense.memo}</p>
-                )}
+                )} */}
 
                 <div className="flex justify-between items-center mt-2">
                   <div>
@@ -494,14 +335,14 @@ const ManageRecurringExpenses = () => {
                   </div>
                   <div className="flex space-x-2">
                     <button
-                      onClick={() => handleEditExpense(expense)}
+                      onClick={() => handleEditRecurring(expense)}
                       className="text-emerald-600 hover:text-emerald-900"
                     >
                       <Pencil className="h-4 w-4" />
                       <span className="sr-only">편집</span>
                     </button>
                     <button
-                      onClick={() => handleDeleteExpense(expense.id)}
+                      onClick={() => handleDeleteRecurring(expense.id)}
                       className="text-red-600 hover:text-red-900"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -535,7 +376,7 @@ const ManageRecurringExpenses = () => {
         isOpen={isModalOpen}
         isEditing={isEditing}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSaveExpense}
+        onSubmit={handleSaveRecurring}
       >
         <RecurringExpenseModal />
       </GenericFormModal>

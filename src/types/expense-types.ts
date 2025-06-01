@@ -47,4 +47,5 @@ export interface IRecurring {
   nextPaymentDate: Date;
   categories: { name: string };
   paymentMethods: { name: string };
+  isActive: boolean;
 }

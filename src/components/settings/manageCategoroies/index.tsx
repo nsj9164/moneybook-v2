@@ -29,9 +29,9 @@ const ManageCategories = () => {
 
   return (
     <GenericForm<FormType.Categories>
+      fetchData={categories}
       formType={FormType.Categories}
       headers={<TableHeader />}
-      fetchData={categories}
       renderRow={(category, { onEdit, onDelete }) => (
         <TableRow
           key={category.id}
