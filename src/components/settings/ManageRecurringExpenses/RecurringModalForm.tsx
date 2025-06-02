@@ -1,13 +1,17 @@
-import { IRecurring } from "@/types/expense-types";
+import { ICategory, IPayMethod, IRecurring } from "@/types/expense-types";
+import { format, getDate } from "date-fns";
+import { frequencyOptions } from "./constants/RecurringConstans";
 
-interface RecurringModalProps {
+interface RecurringModalFormProps {
   form: IRecurring;
-  onChange: () => void;
+  categories: ICategory[];
+  payMethods: IPayMethod[];
 }
-export const RecurringExpenseModal = ({
+export const RecurringModalForm = ({
   form,
-  onChange,
-}: RecurringModalProps) => {
+  categories,
+  payMethods,
+}: RecurringModalFormProps) => {
   return (
     <>
       <div>
@@ -21,8 +25,7 @@ export const RecurringExpenseModal = ({
           type="text"
           name="title"
           id="title"
-          value={form.title}
-          onChange={onChange}
+          value={form.name}
           required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           placeholder="지출 항목을 입력하세요"
@@ -45,7 +48,6 @@ export const RecurringExpenseModal = ({
             name="amount"
             id="amount"
             value={form.amount}
-            onChange={onChange}
             required
             min="0"
             className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
@@ -65,8 +67,7 @@ export const RecurringExpenseModal = ({
           <select
             id="category"
             name="category"
-            value={form.category}
-            onChange={onChange}
+            value={form.categoryId}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           >
             {categories.map((category) => (
@@ -87,11 +88,10 @@ export const RecurringExpenseModal = ({
           <select
             id="paymentMethod"
             name="paymentMethod"
-            value={form.paymentMethod}
-            onChange={onChange}
+            value={form.paymentMethodId}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           >
-            {paymentMethods.map((method) => (
+            {payMethods.map((method) => (
               <option key={method.id} value={method.name}>
                 {method.name}
               </option>
@@ -111,8 +111,7 @@ export const RecurringExpenseModal = ({
           <select
             id="frequency"
             name="frequency"
-            value={form.frequency}
-            onChange={onChange}
+            value={form.cycle}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           >
             {frequencyOptions.map((option) => (
@@ -134,8 +133,7 @@ export const RecurringExpenseModal = ({
             type="number"
             name="paymentDay"
             id="paymentDay"
-            value={form.paymentDay}
-            onChange={onChange}
+            value={getDate(form.nextPaymentDate)}
             min="1"
             max="31"
             required
@@ -156,8 +154,7 @@ export const RecurringExpenseModal = ({
             type="date"
             name="startDate"
             id="startDate"
-            value={form.startDate}
-            onChange={onChange}
+            value={format(form.billingStartDay, "yyyy-MM-dd")}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
@@ -174,8 +171,7 @@ export const RecurringExpenseModal = ({
             type="date"
             name="endDate"
             id="endDate"
-            value={form.endDate || ""}
-            onChange={onChange}
+            value={format(form.billingEndDay, "yyyy-MM-dd") || ""}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
         </div>
@@ -191,8 +187,7 @@ export const RecurringExpenseModal = ({
         <textarea
           id="memo"
           name="memo"
-          value={form.memo}
-          onChange={onChange}
+          value="메모"
           rows={2}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           placeholder="추가 정보를 입력하세요"
@@ -205,28 +200,13 @@ export const RecurringExpenseModal = ({
           name="isActive"
           type="checkbox"
           checked={form.isActive}
-          onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
+          // onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
+
           className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
         />
         <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900">
           활성화
         </label>
-      </div>
-
-      <div className="mt-6 flex justify-end space-x-3">
-        <button
-          type="button"
-          className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-          onClick={onClose}
-        >
-          취소
-        </button>
-        <button
-          type="submit"
-          className="rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700"
-        >
-          {isEditing ? "수정" : "추가"}
-        </button>
       </div>
     </>
   );

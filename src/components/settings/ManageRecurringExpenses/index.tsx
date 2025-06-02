@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { Pencil, Trash2, X, Calendar, CreditCard } from "lucide-react";
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Pencil, Trash2, Calendar, CreditCard } from "lucide-react";
 import { GenericFormHeader } from "../common/GenericFormHeader";
 import { PaginationFooter } from "../common/pagination/PaginationFooter";
 import { usePagination } from "../utils/usePagination";
@@ -16,18 +14,11 @@ import { recurringState } from "@/recoil/atoms";
 import { IRecurring } from "@/types/expense-types";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
 import { useAuth } from "@/contexts/AuthContext";
+import { format } from "date-fns";
+import { frequencyOptions } from "./constants/RecurringConstans";
+import { RecurringModalForm } from "./RecurringModalForm";
 
 // 주기 옵션
-const frequencyOptions = [
-  { value: "daily", label: "매일" },
-  { value: "weekly", label: "매주" },
-  { value: "biweekly", label: "격주" },
-  { value: "monthly", label: "매월" },
-  { value: "bimonthly", label: "격월" },
-  { value: "quarterly", label: "분기" },
-  { value: "semiannually", label: "반기" },
-  { value: "annually", label: "매년" },
-];
 
 const ManageRecurringExpenses = () => {
   const { userId } = useAuth();
@@ -43,23 +34,23 @@ const ManageRecurringExpenses = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
-  const [filterActive, setFilterActive] = useState("");
+  const [filterActive, setFilterActive] = useState("active");
   const itemsPerPage = 6;
-
+  console.log("✨recurrings:::", recurrings);
   // 검색 및 필터링 적용된 고정지출 목록
   const filteredExpenses = recurrings.filter((expense) => {
     const matchesSearch = expense.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesCategory =
-      filterCategory === "" || expense.categories === filterCategory;
+      filterCategory === "" || expense.categoryId === Number(filterCategory);
     const matchesActive =
       filterActive === "" ||
       (filterActive === "active" && expense.isActive) ||
       (filterActive === "inactive" && !expense.isActive);
     return matchesSearch && matchesCategory && matchesActive;
   });
-
+  console.log("filteredExpenses:::", filteredExpenses);
   const { currentPage, totalPages, handlePageChange, startIndex, endIndex } =
     usePagination(filteredExpenses.length);
 
@@ -67,7 +58,7 @@ const ManageRecurringExpenses = () => {
     (currentPage - 1) * 10,
     currentPage * 10
   );
-
+  console.log("paginatedExpenses:::", paginatedExpenses);
   const handleAddRecurring = () => {
     setCurrentExpense(undefined);
     setIsEditing(false);
@@ -145,7 +136,7 @@ const ManageRecurringExpenses = () => {
 
   return (
     <div className="bg-white h-full">
-      <GenericFormHeader title="고정지출" handleAddData={handleAddExpense} />
+      <GenericFormHeader title="고정지출" handleAddData={handleAddRecurring} />
 
       <div className="p-4">
         {/* 요약 정보 */}
@@ -216,7 +207,7 @@ const ManageRecurringExpenses = () => {
               className="block w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm"
               value={filterCategory}
               onChange={(e) => {
-                setFilterCategory(e.target.value);
+                setFilterCategory(Number(e.target.value));
                 handlePageChange(1);
               }}
             >
@@ -268,12 +259,12 @@ const ManageRecurringExpenses = () => {
                       className="h-8 w-8 rounded-full flex items-center justify-center mr-3"
                       style={{
                         backgroundColor:
-                          categories.find((c) => c.name === expense.category)
+                          categories.find((c) => c.id === expense.categoryId)
                             ?.color || "#6b7280",
                       }}
                     >
                       <span className="text-white text-sm">
-                        {categories.find((c) => c.name === expense.category)
+                        {categories.find((c) => c.id === expense.categoryId)
                           ?.emoji || "📌"}
                       </span>
                     </div>
@@ -282,7 +273,7 @@ const ManageRecurringExpenses = () => {
                         {expense.name}
                       </h3>
                       <p className="text-sm text-gray-500">
-                        {expense.categories}
+                        {expense.categoryId}
                       </p>
                     </div>
                   </div>
@@ -302,7 +293,7 @@ const ManageRecurringExpenses = () => {
                   <span>
                     매월 {expense.nextPaymentDate}일
                     {expense.billingEndDay
-                      ? ` (${expense.billingEndDay.substring(0, 7)}까지)`
+                      ? ` (${format(expense.billingEndDay, "yyyy-MM-dd")}까지)`
                       : ""}
                   </span>
                 </div>
@@ -310,9 +301,9 @@ const ManageRecurringExpenses = () => {
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <CreditCard className="h-4 w-4 mr-1" />
                   <span>
-                    {payMethods.find((p) => p.name === expense.paymentMethods)
+                    {payMethods.find((p) => p.id === expense.paymentMethodId)
                       ?.emoji || "💳"}{" "}
-                    {expense.paymentMethods}
+                    {expense.paymentMethodId}
                   </span>
                 </div>
 
@@ -378,71 +369,77 @@ const ManageRecurringExpenses = () => {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSaveRecurring}
       >
-        <RecurringExpenseModal />
+        <RecurringModalForm
+          form={currentExpense}
+          categories={categories}
+          payMethods={payMethods}
+        />
       </GenericFormModal>
     </div>
   );
 };
 
 // 고정지출 추가/수정 모달
-const RecurringExpenseModal = ({
-  isOpen,
-  onClose,
-  onSave,
-  expense,
-  isEditing,
-}: RecurringExpenseModalProps) => {
-  const [form, setForm] = useState<RecurringExpense>({
-    id: expense?.id || "",
-    title: expense?.title || "",
-    amount: expense?.amount || 0,
-    category: expense?.category || "기타",
-    paymentMethod: expense?.paymentMethod || "신용카드",
-    paymentDay: expense?.paymentDay || 1,
-    startDate: expense?.startDate || new Date().toISOString().split("T")[0],
-    endDate: expense?.endDate || null,
-    frequency: expense?.frequency || "monthly",
-    memo: expense?.memo || "",
-    isActive: expense?.isActive ?? true,
-  });
+// const RecurringExpenseModal = ({
+//   isOpen,
+//   onClose,
+//   onSave,
+//   expense,
+//   isEditing,
+// }: RecurringExpenseModalProps) => {
+//   const [form, setForm] = useState<RecurringExpense>({
+//     id: expense?.id || "",
+//     title: expense?.title || "",
+//     amount: expense?.amount || 0,
+//     category: expense?.category || "기타",
+//     paymentMethod: expense?.paymentMethod || "신용카드",
+//     paymentDay: expense?.paymentDay || 1,
+//     startDate: expense?.startDate || new Date().toISOString().split("T")[0],
+//     endDate: expense?.endDate || null,
+//     frequency: expense?.frequency || "monthly",
+//     memo: expense?.memo || "",
+//     isActive: expense?.isActive ?? true,
+//   });
 
-  // 모달이 열릴 때마다 폼 초기화
-  useState(() => {
-    if (isOpen) {
-      setForm({
-        id: expense?.id || "",
-        title: expense?.title || "",
-        amount: expense?.amount || 0,
-        category: expense?.category || "기타",
-        paymentMethod: expense?.paymentMethod || "신용카드",
-        paymentDay: expense?.paymentDay || 1,
-        startDate: expense?.startDate || new Date().toISOString().split("T")[0],
-        endDate: expense?.endDate || null,
-        frequency: expense?.frequency || "monthly",
-        memo: expense?.memo || "",
-        isActive: expense?.isActive ?? true,
-      });
-    }
-  });
+//   // 모달이 열릴 때마다 폼 초기화
+//   useState(() => {
+//     if (isOpen) {
+//       setForm({
+//         id: expense?.id || "",
+//         title: expense?.title || "",
+//         amount: expense?.amount || 0,
+//         category: expense?.category || "기타",
+//         paymentMethod: expense?.paymentMethod || "신용카드",
+//         paymentDay: expense?.paymentDay || 1,
+//         startDate: expense?.startDate || new Date().toISOString().split("T")[0],
+//         endDate: expense?.endDate || null,
+//         frequency: expense?.frequency || "monthly",
+//         memo: expense?.memo || "",
+//         isActive: expense?.isActive ?? true,
+//       });
+//     }
+//   });
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { name, value, type } = e.target;
+//   const handleChange = (
+//     e: React.ChangeEvent<
+//       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+//     >
+//   ) => {
+//     const { name, value, type } = e.target;
 
-    if (type === "number") {
-      setForm({ ...form, [name]: Number(value) });
-    } else if (name === "isActive") {
-      setForm({ ...form, isActive: (e.target as HTMLInputElement).checked });
-    } else {
-      setForm({ ...form, [name]: value });
-    }
-  };
+//     if (type === "number") {
+//       setForm({ ...form, [name]: Number(value) });
+//     } else if (name === "isActive") {
+//       setForm({ ...form, isActive: (e.target as HTMLInputElement).checked });
+//     } else {
+//       setForm({ ...form, [name]: value });
+//     }
+//   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(form);
-  };
-};
+//   const handleSubmit = (e: React.FormEvent) => {
+//     e.preventDefault();
+//     onSave(form);
+//   };
+// };
+
+export default ManageRecurringExpenses;

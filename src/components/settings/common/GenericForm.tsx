@@ -1,24 +1,30 @@
 import { useState, ReactNode } from "react";
 import { matchHangul } from "@/utils/matchHangul";
 import { GenericFormTable } from "../../common/table/GenericFormTable";
-import { formFieldOptions, formMeta } from "../constants/formConfigs";
+import { formFieldConfigs, formMeta } from "../constants/formConfigs";
 import { FormMap, FormType } from "../types/GenericFormTypes";
 import { GenericFormHeader } from "./GenericFormHeader";
 import { usePagination } from "../utils/usePagination";
 import { PaginationFooter } from "./pagination/PaginationFooter";
 import { GenericFormModal } from "./Modal/GenericFormModal";
+import { GenericFormModalFields } from "./Modal/GenericFormModalFields";
+import { DefaultValues, FormProvider, useForm } from "react-hook-form";
 
 type GenericFormHandler<T> = {
   onEdit: (row: T) => void;
   onDelete: (id: number) => void;
 };
 
-interface GenericFormProps<T> {
-  headers: ReactNode;
-  fetchData: T[];
-  renderRow: (row: T, handler: GenericFormHandler<T>) => ReactNode;
-  onDelete: GenericFormHandler<T>["onDelete"];
-  onSave: (row: Partial<T>) => void;
+interface GenericFormProps<K extends FormType> {
+  formType: K;
+  headers: React.ReactNode;
+  fetchData: FormMap[K][];
+  renderRow: (
+    row: FormMap[K],
+    handler: GenericFormHandler<FormMap[K]>
+  ) => React.ReactNode;
+  onDelete: GenericFormHandler<FormMap[K]>["onDelete"];
+  onSave: (row: Partial<FormMap[K]>) => void;
 }
 
 function GenericForm<K extends FormType>({
@@ -28,19 +34,22 @@ function GenericForm<K extends FormType>({
   renderRow,
   onDelete,
   onSave,
-}: GenericFormProps<FormMap[K]> & { formType: K }) {
+}: GenericFormProps<K>) {
   const { title, initial } = formMeta[formType];
-  console.log("#######", fetchData);
+  const fieldConfigs = formFieldConfigs[formType];
+  const initialData = formMeta[formType].initial() as DefaultValues<FormMap[K]>;
+  const methods = useForm<FormMap[K]>({ defaultValues: initialData });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentData, setCurrentData] = useState<FormMap[K] | undefined>();
   const [isEditing, setIsEditing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   // data_검색 적용
-  const filteredData = fetchData.filter((data) =>
-    matchHangul(searchQuery, data.name)
+  const filteredData = fetchData.filter((item) =>
+    matchHangul(searchQuery, item.name)
   );
 
+  // data_pagination 적용
   const { currentPage, totalPages, handlePageChange, startIndex, endIndex } =
     usePagination(filteredData.length);
 
@@ -50,13 +59,13 @@ function GenericForm<K extends FormType>({
   );
 
   const handleAddData = () => {
-    setCurrentData(initial());
+    methods.reset(initial());
     setIsEditing(false);
     setIsModalOpen(true);
   };
 
   const handleEditData = (data: FormMap[K]) => {
-    setCurrentData(data);
+    methods.reset(data);
     setIsEditing(true);
     setIsModalOpen(true);
   };
@@ -65,11 +74,6 @@ function GenericForm<K extends FormType>({
     if (window.confirm("이 카테고리를 삭제하시겠습니까?")) {
       await onDelete(id);
     }
-  };
-
-  const handleSaveData = async (data: Partial<FormMap[K]>) => {
-    await onSave(data);
-    setIsModalOpen(false);
   };
 
   return (
@@ -133,16 +137,20 @@ function GenericForm<K extends FormType>({
           )}
         </div>
       </div>
-
-      <GenericFormModal
-        formTitle={title}
-        formData={currentData ?? initial()}
-        fieldOptions={formFieldOptions[formType]}
-        isOpen={isModalOpen}
-        isEditing={isEditing}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveData}
-      />
+      <FormProvider {...methods}>
+        <GenericFormModal
+          formTitle={title}
+          isOpen={isModalOpen}
+          isEditing={isEditing}
+          onClose={() => setIsModalOpen(false)}
+          onSave={onSave}
+        >
+          <GenericFormModalFields
+            formTitle={title}
+            fieldConfigs={fieldConfigs}
+          />
+        </GenericFormModal>
+      </FormProvider>
     </div>
   );
 }

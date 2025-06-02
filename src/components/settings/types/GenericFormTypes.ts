@@ -1,26 +1,28 @@
 import { ICategory, UUID } from "@/types/expense-types";
-
-export interface BaseForm {
-  id: number;
-  name: string;
-  emoji: string;
-  defaultYn: boolean;
-}
-
-export interface PayMethodForm extends BaseForm {
-  typeId: number;
-}
-
-export interface CategoryForm extends BaseForm {
-  color: string;
-  targetAmount: number;
-  transactionType: number;
-  userId: UUID;
-}
+import { FieldValues, Path } from "react-hook-form";
 
 export enum FormType {
   Categories = "categories",
   PayMethods = "payMethods",
+}
+
+export interface CategoryForm {
+  id: number;
+  name: string;
+  color: string;
+  emoji: string;
+  defaultYn: boolean;
+  targetAmount: number;
+  transactionType: number;
+  userId: string;
+}
+
+export interface PayMethodForm {
+  id: number;
+  name: string;
+  emoji: string;
+  defaultYn: boolean;
+  typeId: number;
 }
 
 export type FormMap = {
@@ -28,9 +30,21 @@ export type FormMap = {
   [FormType.PayMethods]: PayMethodForm;
 };
 
-export interface FieldOption {
-  type: "text" | "emoji" | "color";
-  name: string;
-  label: string;
-  options?: string[] | { value: string; label?: string }[];
-}
+export type FieldConfig<T> =
+  | {
+      type: "text";
+      name: keyof T & string;
+      label: string;
+    }
+  | {
+      type: "emoji";
+      name: keyof T & string;
+      label: string;
+      options: string[];
+    }
+  | {
+      type: "color";
+      name: keyof T & string;
+      label: string;
+      options: { value: string; label?: string }[];
+    };

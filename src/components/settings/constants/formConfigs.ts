@@ -3,7 +3,7 @@ import {
   categoryEmojiOptions,
 } from "../manageCategoroies/constants/CategoryConstants";
 import { payMethodEmojiOptions } from "../managePayMethods/constants/PayMethodConstants";
-import { FieldOption, FormMap, FormType } from "../types/GenericFormTypes";
+import { FieldConfig, FormMap, FormType } from "../types/GenericFormTypes";
 
 export const formMeta: {
   [K in FormType]: {
@@ -37,8 +37,8 @@ export const formMeta: {
   },
 };
 
-export const formFieldOptions: {
-  [K in FormType]: FieldOption[];
+export const formFieldConfigs: {
+  [K in FormType]: FieldConfig[];
 } = {
   [FormType.Categories]: [
     { name: "name", type: "text", label: "카테고리명" },

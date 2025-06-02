@@ -7,24 +7,47 @@ import {
 } from "@headlessui/react";
 import { Fragment } from "react";
 import { X } from "lucide-react";
+import { useForm, useFormContext } from "react-hook-form";
+import { FormMap, FormType } from "../../types/GenericFormTypes";
 
-interface GenericFormModalProps {
+interface GenericFormModalProps<K extends FormType> {
   formTitle: string;
   isOpen: boolean;
   isEditing: boolean;
+  onSave: (data: Partial<FormMap[K]>) => void;
   onClose: () => void;
-  onSubmit: (e: React.FormEvent) => void;
   children: React.ReactNode;
 }
 
-export function GenericFormModal({
+export function GenericFormModal<K extends FormType>({
   formTitle,
   isOpen,
   isEditing,
+  onSave,
   onClose,
-  onSubmit,
   children,
-}: GenericFormModalProps) {
+}: GenericFormModalProps<K>) {
+  const {
+    handleSubmit,
+    getValues,
+    formState: { dirtyFields },
+  } = useFormContext<FormMap[K]>();
+
+  const onSubmit = handleSubmit(async (data) => {
+    const dirtyData = Object.keys(dirtyFields).reduce((acc, key) => {
+      acc[key as keyof FormMap[K]] = data[key as keyof FormMap[K]];
+      return acc;
+    }, {} as Partial<FormMap[K]>);
+
+    if (Object.keys(dirtyData).length === 0) {
+      console.log("변경 사항 없음");
+      return;
+    }
+
+    await onSave(dirtyData);
+    onClose();
+  });
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
@@ -67,7 +90,10 @@ export function GenericFormModal({
                   </button>
                 </DialogTitle>
 
-                <form onSubmit={onSubmit} className="mt-4 space-y-4">
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="mt-4 space-y-4"
+                >
                   {children}
 
                   <div className="mt-6 flex justify-end space-x-3">

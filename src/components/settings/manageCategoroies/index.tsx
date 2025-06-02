@@ -9,6 +9,7 @@ import { TableRow } from "./table/TableRow";
 import { TableHeader } from "./table/TableHeader";
 import GenericForm from "../common/GenericForm";
 import { FormType } from "../types/GenericFormTypes";
+import { GenericFormModalFields } from "../common/Modal/GenericFormModalFields";
 
 const ManageCategories = () => {
   const { userId } = useAuth();
@@ -29,8 +30,8 @@ const ManageCategories = () => {
 
   return (
     <GenericForm<FormType.Categories>
-      fetchData={categories}
       formType={FormType.Categories}
+      fetchData={categories}
       headers={<TableHeader />}
       renderRow={(category, { onEdit, onDelete }) => (
         <TableRow
@@ -42,7 +43,7 @@ const ManageCategories = () => {
       )}
       onDelete={handleDeleteCategory}
       onSave={handleSaveCategory}
-    />
+    ></GenericForm>
   );
 };
 
