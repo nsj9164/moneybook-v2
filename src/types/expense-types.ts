@@ -41,10 +41,12 @@ export interface IRecurring {
   id: number;
   name: string;
   amount: number;
-  cycle: string;
+  cycle: number;
   billingStartDay: Date;
-  billingEndDay: Date;
+  billingEndDay?: Date;
+  paymentDay: number;
   nextPaymentDate: Date;
+  note?: string;
   isActive: boolean;
   categoryId: number;
   paymentMethodId: number;

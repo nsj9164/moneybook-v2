@@ -43,7 +43,7 @@ const ManageCategories = () => {
       )}
       onDelete={handleDeleteCategory}
       onSave={handleSaveCategory}
-    ></GenericForm>
+    />
   );
 };
 

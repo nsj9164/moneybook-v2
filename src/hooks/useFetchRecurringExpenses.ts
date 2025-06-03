@@ -12,10 +12,8 @@ export const useFetchRecurringExpenses = () => {
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase
-        .from("recurring_expenses")
-        .select(
-          `id, name, amount, cycle, billing_start_day, billing_end_day, next_payment_date, category_id, payent_method_id, is_active`
-        )
+        .from("recurring_expenses_with_label")
+        .select("*")
         .eq("user_id", userId)
         .order("id");
 

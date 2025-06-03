@@ -15,10 +15,9 @@ import { IRecurring } from "@/types/expense-types";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
 import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
-import { frequencyOptions } from "./constants/RecurringConstans";
-import { RecurringModalForm } from "./RecurringModalForm";
-
-// 주기 옵션
+import { cycleOptions, initialRecurrings } from "./constants/RecurringConstans";
+import { RecurringModalFields } from "./RecurringModalFields";
+import { FormProvider, useForm } from "react-hook-form";
 
 const ManageRecurringExpenses = () => {
   const { userId } = useAuth();
@@ -26,6 +25,9 @@ const ManageRecurringExpenses = () => {
   const setRecurrings = useSetRecoilState(recurringState);
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
+
+  const methods = useForm({ defaultValues: initialRecurrings });
+  console.log("!!!!!!!!!!!!!!!!!!", methods);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentExpense, setCurrentExpense] = useState<IRecurring | undefined>(
@@ -104,28 +106,28 @@ const ManageRecurringExpenses = () => {
       // 주기에 따른 월간 환산 금액 계산
       let monthlyAmount = 0;
       switch (expense.cycle) {
-        case "daily":
+        case 1:
           monthlyAmount = expense.amount * 30;
           break;
-        case "weekly":
+        case 2:
           monthlyAmount = expense.amount * 4.33;
           break;
-        case "biweekly":
+        case 3:
           monthlyAmount = expense.amount * 2.17;
           break;
-        case "monthly":
+        case 4:
           monthlyAmount = expense.amount;
           break;
-        case "bimonthly":
+        case 5:
           monthlyAmount = expense.amount / 2;
           break;
-        case "quarterly":
+        case 6:
           monthlyAmount = expense.amount / 3;
           break;
-        case "semiannually":
+        case 7:
           monthlyAmount = expense.amount / 6;
           break;
-        case "annually":
+        case 8:
           monthlyAmount = expense.amount / 12;
           break;
         default:
@@ -207,7 +209,7 @@ const ManageRecurringExpenses = () => {
               className="block w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm"
               value={filterCategory}
               onChange={(e) => {
-                setFilterCategory(Number(e.target.value));
+                setFilterCategory(e.target.value);
                 handlePageChange(1);
               }}
             >
@@ -281,20 +283,25 @@ const ManageRecurringExpenses = () => {
                     <p className="text-lg font-semibold text-gray-900">
                       {formatCurrency(expense.amount)}
                     </p>
-                    <p className="text-xs text-gray-500">
-                      {frequencyOptions.find((f) => f.value === expense.cycle)
+                    {/* <p className="text-xs text-gray-500">
+                      {cycleOptions.find((f) => f.value === expense.cycle)
                         ?.label || "매월"}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
 
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <Calendar className="h-4 w-4 mr-1" />
                   <span>
-                    매월 {expense.nextPaymentDate}일
-                    {expense.billingEndDay
-                      ? ` (${format(expense.billingEndDay, "yyyy-MM-dd")}까지)`
-                      : ""}
+                    {`매월 {expense.nextPaymentDate}일
+                    ${
+                      expense.billingEndDay
+                        ? ` (${format(
+                            expense.billingEndDay,
+                            "yyyy-MM-dd"
+                          )}까지)`
+                        : ""
+                    }`}
                   </span>
                 </div>
 
@@ -362,84 +369,22 @@ const ManageRecurringExpenses = () => {
         )}
       </div>
 
-      <GenericFormModal
-        formTitle="고정지출"
-        isOpen={isModalOpen}
-        isEditing={isEditing}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSaveRecurring}
-      >
-        <RecurringModalForm
-          form={currentExpense}
-          categories={categories}
-          payMethods={payMethods}
-        />
-      </GenericFormModal>
+      <FormProvider {...methods}>
+        <GenericFormModal
+          formTitle="고정지출"
+          isOpen={isModalOpen}
+          isEditing={isEditing}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSaveRecurring}
+        >
+          <RecurringModalFields
+            categories={categories}
+            payMethods={payMethods}
+          />
+        </GenericFormModal>
+      </FormProvider>
     </div>
   );
 };
-
-// 고정지출 추가/수정 모달
-// const RecurringExpenseModal = ({
-//   isOpen,
-//   onClose,
-//   onSave,
-//   expense,
-//   isEditing,
-// }: RecurringExpenseModalProps) => {
-//   const [form, setForm] = useState<RecurringExpense>({
-//     id: expense?.id || "",
-//     title: expense?.title || "",
-//     amount: expense?.amount || 0,
-//     category: expense?.category || "기타",
-//     paymentMethod: expense?.paymentMethod || "신용카드",
-//     paymentDay: expense?.paymentDay || 1,
-//     startDate: expense?.startDate || new Date().toISOString().split("T")[0],
-//     endDate: expense?.endDate || null,
-//     frequency: expense?.frequency || "monthly",
-//     memo: expense?.memo || "",
-//     isActive: expense?.isActive ?? true,
-//   });
-
-//   // 모달이 열릴 때마다 폼 초기화
-//   useState(() => {
-//     if (isOpen) {
-//       setForm({
-//         id: expense?.id || "",
-//         title: expense?.title || "",
-//         amount: expense?.amount || 0,
-//         category: expense?.category || "기타",
-//         paymentMethod: expense?.paymentMethod || "신용카드",
-//         paymentDay: expense?.paymentDay || 1,
-//         startDate: expense?.startDate || new Date().toISOString().split("T")[0],
-//         endDate: expense?.endDate || null,
-//         frequency: expense?.frequency || "monthly",
-//         memo: expense?.memo || "",
-//         isActive: expense?.isActive ?? true,
-//       });
-//     }
-//   });
-
-//   const handleChange = (
-//     e: React.ChangeEvent<
-//       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-//     >
-//   ) => {
-//     const { name, value, type } = e.target;
-
-//     if (type === "number") {
-//       setForm({ ...form, [name]: Number(value) });
-//     } else if (name === "isActive") {
-//       setForm({ ...form, isActive: (e.target as HTMLInputElement).checked });
-//     } else {
-//       setForm({ ...form, [name]: value });
-//     }
-//   };
-
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-//     onSave(form);
-//   };
-// };
 
 export default ManageRecurringExpenses;

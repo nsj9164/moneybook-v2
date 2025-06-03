@@ -30,21 +30,21 @@ export type FormMap = {
   [FormType.PayMethods]: PayMethodForm;
 };
 
-export type FieldConfig<T> =
+export type FieldConfig<K extends FieldValues = FieldValues> =
   | {
       type: "text";
-      name: keyof T & string;
+      name: Path<K>;
       label: string;
     }
   | {
       type: "emoji";
-      name: keyof T & string;
+      name: Path<K>;
       label: string;
       options: string[];
     }
   | {
       type: "color";
-      name: keyof T & string;
+      name: Path<K>;
       label: string;
       options: { value: string; label?: string }[];
     };

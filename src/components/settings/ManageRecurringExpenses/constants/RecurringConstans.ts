@@ -1,10 +1,17 @@
-export const frequencyOptions = [
-  { value: "daily", label: "매일" },
-  { value: "weekly", label: "매주" },
-  { value: "biweekly", label: "격주" },
-  { value: "monthly", label: "매월" },
-  { value: "bimonthly", label: "격월" },
-  { value: "quarterly", label: "분기" },
-  { value: "semiannually", label: "반기" },
-  { value: "annually", label: "매년" },
-];
+import { IRecurring } from "@/types/expense-types";
+import { addMonths, startOfMonth } from "date-fns";
+
+export const initialRecurrings: IRecurring = {
+  id: Date.now(),
+  name: "",
+  amount: 0,
+  cycle: 4,
+  billingStartDay: new Date(),
+  billingEndDay: undefined,
+  paymentDay: 1,
+  nextPaymentDate: startOfMonth(addMonths(new Date(), 1)),
+  note: "",
+  isActive: true,
+  categoryId: 0,
+  paymentMethodId: 0,
+};
