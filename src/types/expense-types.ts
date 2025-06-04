@@ -42,8 +42,8 @@ export interface IRecurring {
   name: string;
   amount: number;
   cycle: number;
-  billingStartDay: Date;
-  billingEndDay?: Date;
+  billingStartDate: Date;
+  billingEndDate?: Date;
   paymentDay: number;
   nextPaymentDate: Date;
   note?: string;

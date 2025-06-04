@@ -1,9 +1,10 @@
+import { useEffect } from "react";
 import { ICategory, IPayMethod } from "@/types/expense-types";
 import { useFormContext } from "react-hook-form";
-import { cycleOptions } from "../constants/RecurringConstans";
 import { useCycleOptions } from "../hooks/useCycleOptions";
 import { InputField } from "./InputField";
 import { SelectField } from "./SelectField";
+import { addMonths, getMonth, getYear } from "date-fns";
 
 interface RecurringModalFieldsProps {
   categories: ICategory[];
@@ -21,6 +22,20 @@ export const RecurringModalFields = ({
   } = useFormContext();
   const isActive = watch("isActive");
   const cycleOptions = useCycleOptions();
+
+  const billingStartDate = watch("billingStartDate");
+  const paymentDay = watch("paymentDay");
+
+  useEffect(() => {
+    let nextPaymentDate = new Date(
+      getYear(billingStartDate) | getMonth(billingStartDate) | paymentDay
+    );
+
+    if (billingStartDate >= nextPaymentDate)
+      nextPaymentDate = addMonths(nextPaymentDate, 1);
+
+    setValue("nextPaymentDate", nextPaymentDate);
+  }, [watch("billingStartDate"), watch("paymentDay")]);
   return (
     <>
       <InputField label="지출 항목" name="name" type="text" required={true} />
@@ -61,7 +76,7 @@ export const RecurringModalFields = ({
 
         <InputField
           label="결제일"
-          name="nextPaymentDate"
+          name="paymentDay"
           type="number"
           required={true}
         />

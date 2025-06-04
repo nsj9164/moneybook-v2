@@ -7,7 +7,7 @@ import {
 } from "@headlessui/react";
 import { Fragment } from "react";
 import { X } from "lucide-react";
-import { useForm, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { FormMap, FormType } from "../../types/GenericFormTypes";
 
 interface GenericFormModalProps<K extends FormType> {
@@ -28,7 +28,9 @@ export function GenericFormModal<K extends FormType>({
   children,
 }: GenericFormModalProps<K>) {
   const {
+    watch,
     handleSubmit,
+    setValue,
     getValues,
     formState: { dirtyFields },
   } = useFormContext<FormMap[K]>();

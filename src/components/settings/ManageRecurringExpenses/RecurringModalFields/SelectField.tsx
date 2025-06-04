@@ -31,7 +31,7 @@ export const SelectField = ({
         name={name}
         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
       >
-        <option value="">선택</option>
+        <option value="0">선택</option>
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}

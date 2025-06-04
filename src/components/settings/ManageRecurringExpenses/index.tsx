@@ -15,9 +15,11 @@ import { IRecurring } from "@/types/expense-types";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
 import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
-import { cycleOptions, initialRecurrings } from "./constants/RecurringConstans";
+import { initialRecurrings } from "./constants/RecurringConstans";
 import { RecurringModalFields } from "./RecurringModalFields";
 import { FormProvider, useForm } from "react-hook-form";
+import { useCycleOptions } from "./hooks/useCycleOptions";
+import { CommonCode } from "./types/common";
 
 const ManageRecurringExpenses = () => {
   const { userId } = useAuth();
@@ -25,6 +27,7 @@ const ManageRecurringExpenses = () => {
   const setRecurrings = useSetRecoilState(recurringState);
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
+  const cycleOptions = useCycleOptions();
 
   const methods = useForm({ defaultValues: initialRecurrings });
   console.log("!!!!!!!!!!!!!!!!!!", methods);
@@ -94,7 +97,6 @@ const ManageRecurringExpenses = () => {
 
   const handleSaveRecurring = async (recurring: Partial<IRecurring>) => {
     await saveItem("recurring_expenses", recurring, userId!, (saved) => {
-      // setCategories((prev) => patchOrAddItem(prev, saved));
       setRecurrings((prev) => patchOrAddItem(prev, saved));
     });
   };
@@ -283,6 +285,7 @@ const ManageRecurringExpenses = () => {
                     <p className="text-lg font-semibold text-gray-900">
                       {formatCurrency(expense.amount)}
                     </p>
+
                     {/* <p className="text-xs text-gray-500">
                       {cycleOptions.find((f) => f.value === expense.cycle)
                         ?.label || "매월"}
@@ -295,9 +298,9 @@ const ManageRecurringExpenses = () => {
                   <span>
                     {`매월 {expense.nextPaymentDate}일
                     ${
-                      expense.billingEndDay
+                      expense.billingEndDate
                         ? ` (${format(
-                            expense.billingEndDay,
+                            expense.billingEndDate,
                             "yyyy-MM-dd"
                           )}까지)`
                         : ""
