@@ -9,6 +9,7 @@ import { Fragment } from "react";
 import { X } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { FormMap, FormType } from "../../types/GenericFormTypes";
+import { diffFields, filterEmptyFields } from "@/utils/form";
 
 interface GenericFormModalProps<K extends FormType> {
   formTitle: string;
@@ -27,26 +28,21 @@ export function GenericFormModal<K extends FormType>({
   onClose,
   children,
 }: GenericFormModalProps<K>) {
-  const {
-    watch,
-    handleSubmit,
-    setValue,
-    getValues,
-    formState: { dirtyFields },
-  } = useFormContext<FormMap[K]>();
+  const methods = useFormContext<FormMap[K]>();
 
-  const onSubmit = handleSubmit(async (data) => {
-    const dirtyData = Object.keys(dirtyFields).reduce((acc, key) => {
-      acc[key as keyof FormMap[K]] = data[key as keyof FormMap[K]];
-      return acc;
-    }, {} as Partial<FormMap[K]>);
-
-    if (Object.keys(dirtyData).length === 0) {
-      console.log("변경 사항 없음");
-      return;
+  const onSubmit = methods.handleSubmit(async (data) => {
+    if (isEditing) {
+      const saveData = diffFields(methods.getValues(), data);
+      if (Object.keys(saveData).length === 0) {
+        console.log("변경 사항 없음");
+        return;
+      }
+      await onSave(saveData);
+    } else {
+      const saveData = filterEmptyFields(data);
+      await onSave(saveData);
     }
 
-    await onSave(dirtyData);
     onClose();
   });
 
@@ -93,7 +89,7 @@ export function GenericFormModal<K extends FormType>({
                 </DialogTitle>
 
                 <form
-                  onSubmit={handleSubmit(onSubmit)}
+                  onSubmit={methods.handleSubmit(onSubmit)}
                   className="mt-4 space-y-4"
                 >
                   {children}

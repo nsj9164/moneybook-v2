@@ -1,4 +1,4 @@
-import { useState, ReactNode } from "react";
+import { useState } from "react";
 import { matchHangul } from "@/utils/matchHangul";
 import { GenericFormTable } from "../../common/table/GenericFormTable";
 import { formFieldConfigs, formMeta } from "../constants/formConfigs";

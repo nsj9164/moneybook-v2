@@ -30,7 +30,6 @@ const ManageRecurringExpenses = () => {
   const cycleOptions = useCycleOptions();
 
   const methods = useForm({ defaultValues: initialRecurrings });
-  console.log("!!!!!!!!!!!!!!!!!!", methods);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentExpense, setCurrentExpense] = useState<IRecurring | undefined>(
@@ -41,7 +40,6 @@ const ManageRecurringExpenses = () => {
   const [filterCategory, setFilterCategory] = useState("");
   const [filterActive, setFilterActive] = useState("active");
   const itemsPerPage = 6;
-  console.log("✨recurrings:::", recurrings);
   // 검색 및 필터링 적용된 고정지출 목록
   const filteredExpenses = recurrings.filter((expense) => {
     const matchesSearch = expense.name
@@ -55,7 +53,6 @@ const ManageRecurringExpenses = () => {
       (filterActive === "inactive" && !expense.isActive);
     return matchesSearch && matchesCategory && matchesActive;
   });
-  console.log("filteredExpenses:::", filteredExpenses);
   const { currentPage, totalPages, handlePageChange, startIndex, endIndex } =
     usePagination(filteredExpenses.length);
 
@@ -63,7 +60,6 @@ const ManageRecurringExpenses = () => {
     (currentPage - 1) * 10,
     currentPage * 10
   );
-  console.log("paginatedExpenses:::", paginatedExpenses);
   const handleAddRecurring = () => {
     setCurrentExpense(undefined);
     setIsEditing(false);

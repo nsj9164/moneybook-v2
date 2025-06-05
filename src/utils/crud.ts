@@ -17,7 +17,7 @@ export async function deleteItem(
   onSuccess?.();
 }
 
-export async function saveItem<T extends Object>(
+export async function saveItem<T extends object>(
   table: string,
   item: Partial<T>,
   userId: UUID,

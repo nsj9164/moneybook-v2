@@ -9,7 +9,6 @@ import { TableRow } from "./table/TableRow";
 import { TableHeader } from "./table/TableHeader";
 import GenericForm from "../common/GenericForm";
 import { FormType } from "../types/GenericFormTypes";
-import { GenericFormModalFields } from "../common/Modal/GenericFormModalFields";
 
 const ManageCategories = () => {
   const { userId } = useAuth();

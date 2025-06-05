@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { useCycleOptions } from "../hooks/useCycleOptions";
 import { InputField } from "./InputField";
 import { SelectField } from "./SelectField";
-import { addMonths, getMonth, getYear } from "date-fns";
+import { addMonths, format, getMonth, getYear, setDate } from "date-fns";
 
 interface RecurringModalFieldsProps {
   categories: ICategory[];
@@ -23,18 +23,16 @@ export const RecurringModalFields = ({
   const isActive = watch("isActive");
   const cycleOptions = useCycleOptions();
 
-  const billingStartDate = watch("billingStartDate");
-  const paymentDay = watch("paymentDay");
-
   useEffect(() => {
-    let nextPaymentDate = new Date(
-      getYear(billingStartDate) | getMonth(billingStartDate) | paymentDay
-    );
+    const billingStartDate = new Date(watch("billingStartDate"));
+    const paymentDay = watch("paymentDay");
+
+    let nextPaymentDate = setDate(billingStartDate, paymentDay);
 
     if (billingStartDate >= nextPaymentDate)
       nextPaymentDate = addMonths(nextPaymentDate, 1);
 
-    setValue("nextPaymentDate", nextPaymentDate);
+    setValue("nextPaymentDate", format(nextPaymentDate, "yyyy-MM-dd"));
   }, [watch("billingStartDate"), watch("paymentDay")]);
   return (
     <>

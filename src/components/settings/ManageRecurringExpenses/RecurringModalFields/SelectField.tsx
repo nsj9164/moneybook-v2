@@ -19,7 +19,6 @@ export const SelectField = ({
   required = false,
 }: SelectFieldProps) => {
   const { register } = useFormContext();
-  console.log("🎈🎈🎈🎈🎈🎈", options);
   return (
     <div>
       <label htmlFor={name} className="block text-sm font-medium text-gray-700">
