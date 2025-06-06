@@ -258,14 +258,11 @@ const ManageRecurringExpenses = () => {
                     <div
                       className="h-8 w-8 rounded-full flex items-center justify-center mr-3"
                       style={{
-                        backgroundColor:
-                          categories.find((c) => c.id === expense.categoryId)
-                            ?.color || "#6b7280",
+                        backgroundColor: expense.categoryColor,
                       }}
                     >
                       <span className="text-white text-sm">
-                        {categories.find((c) => c.id === expense.categoryId)
-                          ?.emoji || "📌"}
+                        {expense.categoryEmoji}
                       </span>
                     </div>
                     <div>
@@ -273,7 +270,7 @@ const ManageRecurringExpenses = () => {
                         {expense.name}
                       </h3>
                       <p className="text-sm text-gray-500">
-                        {expense.categoryId}
+                        {expense.categoryName}
                       </p>
                     </div>
                   </div>
@@ -282,17 +279,16 @@ const ManageRecurringExpenses = () => {
                       {formatCurrency(expense.amount)}
                     </p>
 
-                    {/* <p className="text-xs text-gray-500">
-                      {cycleOptions.find((f) => f.value === expense.cycle)
-                        ?.label || "매월"}
-                    </p> */}
+                    <p className="text-xs text-gray-500">
+                      {expense.cycleLabel}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <Calendar className="h-4 w-4 mr-1" />
                   <span>
-                    {`매월 {expense.nextPaymentDate}일
+                    {`매월 ${expense.paymentDay}일
                     ${
                       expense.billingEndDate
                         ? ` (${format(
@@ -307,15 +303,13 @@ const ManageRecurringExpenses = () => {
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <CreditCard className="h-4 w-4 mr-1" />
                   <span>
-                    {payMethods.find((p) => p.id === expense.paymentMethodId)
-                      ?.emoji || "💳"}{" "}
-                    {expense.paymentMethodId}
+                    {expense.paymentMethodEmoji} {expense.paymentMethodName}
                   </span>
                 </div>
 
-                {/* {expense.note && (
-                  <p className="text-sm text-gray-600 mb-3">{expense.memo}</p>
-                )} */}
+                {expense.note && (
+                  <p className="text-sm text-gray-600 mb-3">{expense.note}</p>
+                )}
 
                 <div className="flex justify-between items-center mt-2">
                   <div>

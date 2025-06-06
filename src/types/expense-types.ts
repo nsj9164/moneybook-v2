@@ -42,6 +42,7 @@ export interface IRecurring {
   name: string;
   amount: number;
   cycle: number;
+  cycleLabel: string;
   billingStartDate: Date;
   billingEndDate?: Date;
   paymentDay: number;
@@ -50,4 +51,9 @@ export interface IRecurring {
   isActive: boolean;
   categoryId: number;
   paymentMethodId: number;
+  categoryName: string;
+  categoryColor: string;
+  categoryEmoji: string;
+  paymentMethodName: string;
+  paymentMethodEmoji: string;
 }
