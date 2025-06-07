@@ -1,11 +1,11 @@
-import { ICategory } from "@/types/expense-types";
+import { CategoryEntity } from "@/types/expense-types";
 
 interface RecurringFilterPanelProps {
   filters: { search: string; category: string; active: string };
   updateFilter: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
-  categories: ICategory[];
+  categories: CategoryEntity[];
 }
 export const RecurringFilterPanel = ({
   filters,

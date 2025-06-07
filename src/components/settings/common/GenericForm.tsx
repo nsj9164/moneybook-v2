@@ -8,7 +8,7 @@ import { usePagination } from "../utils/usePagination";
 import { PaginationFooter } from "./pagination/PaginationFooter";
 import { GenericFormModal } from "./Modal/GenericFormModal";
 import { GenericFormModalFields } from "./Modal/GenericFormModalFields";
-import { DefaultValues, FormProvider, useForm } from "react-hook-form";
+import { DefaultValues, FormProvider } from "react-hook-form";
 import { useModalForm } from "../hooks/useModalForm";
 
 type GenericFormHandler<T> = {

@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Pencil, Trash2, Calendar, CreditCard } from "lucide-react";
 import { GenericFormHeader } from "../common/GenericFormHeader";
 import { PaginationFooter } from "../common/pagination/PaginationFooter";
 import { usePagination } from "../utils/usePagination";
-import { formatCurrency } from "@/utils/format";
 import { GenericFormModal } from "../common/Modal/GenericFormModal";
 import { deleteItem, insertItem, updateItem } from "@/utils/crud";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
@@ -13,10 +11,9 @@ import { useSetRecoilState } from "recoil";
 import { recurringState } from "@/recoil/atoms";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
 import { useAuth } from "@/contexts/AuthContext";
-import { format } from "date-fns";
-import { initialRecurrings } from "./constants/RecurringConstans";
+import { initialRecurrings } from "./constants/RecurringConstants";
 import { RecurringModalFields } from "./RecurringModalFields";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { FormProvider } from "react-hook-form";
 import { useCycleOptions } from "./hooks/useCycleOptions";
 import { RecurringSummaryCard } from "./RecurringSummaryCard";
 import { RecurringFilterPanel } from "./RecurringFilterPanel";
@@ -26,7 +23,7 @@ import {
   RecurringEntity,
   RecurringInput,
 } from "@/types/expense-types";
-import { calcTotalMonthlyAmount } from "./util";
+import { calcTotalMonthlyAmount } from "./monthlyAmountUtil";
 import { RecurringCardList } from "./RecurringCardList";
 import { useModalForm } from "../hooks/useModalForm";
 

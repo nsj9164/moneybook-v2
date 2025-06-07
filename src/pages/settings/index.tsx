@@ -13,7 +13,7 @@ import ManageRecurringExpenses from "@/components/settings/ManageRecurringExpens
 import { GeneralSettings } from "@/components/settings/GeneralSettings";
 import { NotificationSettings } from "@/components/settings/NotificationSettings";
 import { SecuritySettings } from "@/components/settings/SecuritySettings";
-import ManageCategories from "@/components/settings/manageCategoroies";
+import ManageCategories from "@/components/settings/manageCategories";
 
 // 설정 탭 정의
 type SettingTab =

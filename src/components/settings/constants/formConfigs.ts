@@ -1,7 +1,7 @@
 import {
   categoryColorOptions,
   categoryEmojiOptions,
-} from "../manageCategoroies/constants/CategoryConstants";
+} from "../manageCategories/constants/CategoryConstants";
 import { payMethodEmojiOptions } from "../managePayMethods/constants/PayMethodConstants";
 import { FieldConfig, FormMap, FormType } from "../types/GenericFormTypes";
 
