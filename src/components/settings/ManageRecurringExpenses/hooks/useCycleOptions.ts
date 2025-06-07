@@ -2,7 +2,12 @@ import { useMemo } from "react";
 import { useFetchCommonCodes } from "@/hooks/useFetchCommonCodes";
 import { CommonCode } from "../types/common";
 
-export const useCycleOptions = () => {
+interface Option {
+  label: string;
+  value: string | number;
+}
+
+export const useCycleOptions = (): Option[] => {
   const { data = [] } = useFetchCommonCodes("RECURRING_CYCLE_TYPE");
 
   return useMemo(

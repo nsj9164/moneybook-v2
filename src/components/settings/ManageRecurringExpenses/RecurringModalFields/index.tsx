@@ -38,7 +38,6 @@ export const RecurringModalFields = ({
     <>
       <InputField label="지출 항목" name="name" type="text" required={true} />
 
-      {/* min은? */}
       <InputField
         label="금액"
         name="amount"
@@ -92,7 +91,6 @@ export const RecurringModalFields = ({
           label="종료일 (선택사항)"
           name="billingEndDate"
           type="date"
-          required={true}
         />
       </div>
 

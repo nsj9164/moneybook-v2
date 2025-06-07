@@ -1,7 +1,7 @@
-import { ICategory } from "@/types/expense-types";
+import { CategoryEntity, CategoryInput } from "@/types/expense-types";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { useAuth } from "@/contexts/AuthContext";
-import { deleteItem, saveItem } from "@/utils/crud";
+import { deleteItem, insertItem, updateItem } from "@/utils/crud";
 import { useSetRecoilState } from "recoil";
 import { categoriesState } from "@/recoil/atoms";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
@@ -21,8 +21,19 @@ const ManageCategories = () => {
     });
   };
 
-  const handleSaveCategory = async (category: Partial<ICategory>) => {
-    await saveItem("categories", category, userId!, (saved) => {
+  const handleSaveCategory = async (
+    category: Partial<CategoryInput> | Partial<CategoryEntity>
+  ) => {
+    const isEditing = "id" in category && typeof category.id === "number";
+
+    const saveFn = isEditing
+      ? updateItem<CategoryEntity>
+      : insertItem<CategoryInput>;
+    await saveFn("categories", category, userId!, (saved) => {
+      if (!("id" in saved)) {
+        throw new Error("id 데이터가 누락되었습니다.");
+      }
+
       setCategories((prev) => patchOrAddItem(prev, saved));
     });
   };
@@ -32,11 +43,11 @@ const ManageCategories = () => {
       formType={FormType.Categories}
       fetchData={categories}
       headers={<TableHeader />}
-      renderRow={(category, { onEdit, onDelete }) => (
+      renderRow={(category, { openModal, onDelete }) => (
         <TableRow
           key={category.id}
           category={category}
-          onEdit={onEdit}
+          openModal={openModal}
           onDelete={onDelete}
         />
       )}

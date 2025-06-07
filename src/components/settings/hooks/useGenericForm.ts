@@ -8,7 +8,6 @@ export function useGenericForm<T>(
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log("###########", data, searchQuery);
   // data_검색 적용
   const filteredData = useMemo(
     () => data.filter((d) => match(searchQuery, d)),

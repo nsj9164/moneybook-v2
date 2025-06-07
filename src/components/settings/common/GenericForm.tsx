@@ -9,9 +9,10 @@ import { PaginationFooter } from "./pagination/PaginationFooter";
 import { GenericFormModal } from "./Modal/GenericFormModal";
 import { GenericFormModalFields } from "./Modal/GenericFormModalFields";
 import { DefaultValues, FormProvider, useForm } from "react-hook-form";
+import { useModalForm } from "../hooks/useModalForm";
 
 type GenericFormHandler<T> = {
-  onEdit: (row: T) => void;
+  openModal: (row?: T) => void;
   onDelete: (id: number) => void;
 };
 
@@ -38,10 +39,11 @@ function GenericForm<K extends FormType>({
   const { title, initial } = formMeta[formType];
   const fieldConfigs = formFieldConfigs[formType];
   const initialData = formMeta[formType].initial() as DefaultValues<FormMap[K]>;
-  const methods = useForm<FormMap[K]>({ defaultValues: initialData });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const { methods, isOpen, isEditing, openModal, closeModal } = useModalForm<
+    FormMap[K]
+  >(() => initialData);
+
   const [searchQuery, setSearchQuery] = useState("");
 
   // data_검색 적용
@@ -58,18 +60,6 @@ function GenericForm<K extends FormType>({
     currentPage * 10
   );
 
-  const handleAddData = () => {
-    methods.reset(initial());
-    setIsEditing(false);
-    setIsModalOpen(true);
-  };
-
-  const handleEditData = (data: FormMap[K]) => {
-    methods.reset(data);
-    setIsEditing(true);
-    setIsModalOpen(true);
-  };
-
   const handleDeleteData = async (id: number) => {
     if (window.confirm("이 카테고리를 삭제하시겠습니까?")) {
       await onDelete(id);
@@ -78,7 +68,7 @@ function GenericForm<K extends FormType>({
 
   return (
     <div className="bg-white h-full">
-      <GenericFormHeader title={title} handleAddData={handleAddData} />
+      <GenericFormHeader title={title} openModal={openModal} />
 
       <div className="p-4">
         <div className="mb-4">
@@ -120,7 +110,7 @@ function GenericForm<K extends FormType>({
             rows={paginatedData}
             renderRow={(row) =>
               renderRow(row, {
-                onEdit: handleEditData,
+                openModal: openModal,
                 onDelete: handleDeleteData,
               })
             }
@@ -140,9 +130,9 @@ function GenericForm<K extends FormType>({
       <FormProvider {...methods}>
         <GenericFormModal
           formTitle={title}
-          isOpen={isModalOpen}
+          isOpen={isOpen}
           isEditing={isEditing}
-          onClose={() => setIsModalOpen(false)}
+          onClose={closeModal}
           onSave={onSave}
         >
           <GenericFormModalFields

@@ -2,9 +2,9 @@ import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSetRecoilState } from "recoil";
 import { payMethodsState } from "@/recoil/atoms";
-import { deleteItem, saveItem } from "@/utils/crud";
+import { deleteItem, insertItem, updateItem } from "@/utils/crud";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
-import { IPayMethod } from "@/types/expense-types";
+import { PayMethodEntity, PayMethodInput } from "@/types/expense-types";
 import GenericForm from "../common/GenericForm";
 import { FormType } from "../types/GenericFormTypes";
 import { TableRow } from "./table/TableRow";
@@ -21,8 +21,15 @@ const ManagePayMethods = () => {
     });
   };
 
-  const handleSavePayMethod = async (payMethod: Partial<IPayMethod>) => {
-    await saveItem("payment_methods", payMethod, userId!, (saved) => {
+  const handleSavePayMethod = async (
+    payMethod: Partial<PayMethodInput> | Partial<PayMethodEntity>
+  ) => {
+    const isEditing = "id" in payMethod && typeof payMethod.id === "number";
+
+    const saveFn = isEditing
+      ? updateItem<PayMethodEntity>
+      : insertItem<PayMethodInput>;
+    await saveFn("payment_methods", payMethod, userId!, (saved) => {
       setPayMethods((prev) => patchOrAddItem(prev, saved));
     });
   };
@@ -32,11 +39,11 @@ const ManagePayMethods = () => {
       formType={FormType.PayMethods}
       headers={<TableHeader />}
       fetchData={payMethods}
-      renderRow={(payMethod, { onEdit, onDelete }) => (
+      renderRow={(payMethod, { openModal, onDelete }) => (
         <TableRow
           key={payMethod.id}
           payMethod={payMethod}
-          onEdit={onEdit}
+          openModal={openModal}
           onDelete={onDelete}
         />
       )}

@@ -16,7 +16,7 @@ export interface IExpense {
   categories?: { name: string };
 }
 
-export interface ICategory {
+export interface CategoryEntity {
   id: number;
   name: string;
   targetAmount: number;
@@ -27,7 +27,9 @@ export interface ICategory {
   userId: UUID;
 }
 
-export interface IPayMethod {
+export type CategoryInput = Partial<Omit<CategoryEntity, "id">>;
+
+export interface PayMethodEntity {
   id: number;
   name: string;
   billingStartDay?: number;
@@ -37,23 +39,30 @@ export interface IPayMethod {
   defaultYn: boolean;
 }
 
-export interface IRecurring {
+export type PayMethodInput = Partial<Omit<PayMethodEntity, "id">>;
+
+export interface RecurringEntity {
   id: number;
   name: string;
   amount: number;
   cycle: number;
-  cycleLabel: string;
-  billingStartDate: Date;
-  billingEndDate?: Date;
+  billingStartDate: string;
+  billingEndDate?: string;
   paymentDay: number;
-  nextPaymentDate: Date;
-  note?: string;
+  nextPaymentDate: string;
   isActive: boolean;
+  note: string;
   categoryId: number;
   paymentMethodId: number;
-  categoryName: string;
-  categoryColor: string;
-  categoryEmoji: string;
-  paymentMethodName: string;
-  paymentMethodEmoji: string;
 }
+
+export interface RecurringDisplay extends RecurringEntity {
+  categoryName?: string;
+  categoryColor?: string;
+  categoryEmoji?: string;
+  paymentMethodName?: string;
+  paymentMethodEmoji?: string;
+  cycleLabel?: string;
+}
+
+export type RecurringInput = Partial<Omit<RecurringEntity, "id">>;

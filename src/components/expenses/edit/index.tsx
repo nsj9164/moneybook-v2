@@ -36,7 +36,6 @@ const ExpenseFormPage = () => {
   };
 
   useEffect(() => {
-    console.log("😀newExpenses:::", newExpenses);
     if (newExpenses.length === 0) handleAddExpense();
   }, [newExpenses]);
 
@@ -57,13 +56,10 @@ const ExpenseFormPage = () => {
     if (newExpenses.length < 1) {
       return;
     }
-    console.log("newExpenses:::", newExpenses);
 
     const saveData = newExpenses
       .filter((expense) => expense.isModified)
       .map((item) => formatExpenseForInsert(item));
-
-    console.log("saveData::::", saveData);
 
     const { error } = await supabase.from("expenses").upsert(saveData).select();
 

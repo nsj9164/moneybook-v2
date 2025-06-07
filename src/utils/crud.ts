@@ -17,26 +17,47 @@ export async function deleteItem(
   onSuccess?.();
 }
 
-export async function saveItem<T extends object>(
+export async function insertItem<T extends object>(
+  table: string,
+  item: T,
+  userId: UUID,
+  onSuccess?: (row: T) => void
+) {
+  const snakeItem = formatKeyCase(item, "snake");
+  const insertData = { ...snakeItem, user_id: userId };
+
+  const { data, error } = await supabase
+    .from(table)
+    .insert(insertData)
+    .select();
+
+  if (error) throw new Error(`Insert failed: ${error.message}`);
+  if (data && data.length > 0) {
+    const mapped = formatKeyCase(data[0], "camel");
+    onSuccess?.(mapped);
+  }
+}
+
+export async function updateItem<T extends { id: number | string }>(
   table: string,
   item: Partial<T>,
   userId: UUID,
   onSuccess?: (row: T) => void
 ) {
-  console.log("user!!!", userId, item);
-  const snakeItem = formatKeyCase(item, "snake");
-  const insertData = { ...snakeItem, user_id: userId };
-  console.log("insertData!!!!", insertData);
+  if (!item.id) throw new Error("updateItem requires 'id' field");
+
+  const snake = formatKeyCase(item, "snake");
 
   const { data, error } = await supabase
     .from(table)
-    .upsert(insertData)
+    .update(snake)
+    .eq("id", item.id)
+    .eq("user_id", userId)
     .select();
 
-  if (error) {
-    console.error("Insert error:", error.message);
-  } else if (data && data.length) {
-    const mappedData = formatKeyCase(data[0], "camel");
-    onSuccess?.(mappedData);
+  if (error) throw new Error(`Update failed: ${error.message}`);
+  if (data && data.length > 0) {
+    const mapped = formatKeyCase(data[0], "camel");
+    onSuccess?.(mapped);
   }
 }

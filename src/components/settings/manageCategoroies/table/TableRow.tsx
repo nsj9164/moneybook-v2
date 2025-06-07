@@ -1,14 +1,14 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { categoryColorOptions } from "../constants/CategoryConstants";
-import { ICategory } from "@/types/expense-types";
+import { CategoryEntity } from "@/types/expense-types";
 
 interface TableRowProps {
-  category: ICategory;
-  onEdit: (category: ICategory) => void;
+  category: CategoryEntity;
+  openModal: (category: CategoryEntity) => void;
   onDelete: (id: number) => void;
 }
 
-export const TableRow = ({ category, onEdit, onDelete }: TableRowProps) => {
+export const TableRow = ({ category, openModal, onDelete }: TableRowProps) => {
   return (
     <tr key={category.id} className="hover:bg-gray-50">
       <td className="whitespace-nowrap px-6 py-4 text-center text-xl">
@@ -45,7 +45,7 @@ export const TableRow = ({ category, onEdit, onDelete }: TableRowProps) => {
       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
         <div className="flex justify-end space-x-2">
           <button
-            onClick={() => onEdit(category)}
+            onClick={() => openModal(category)}
             className="text-emerald-600 hover:text-emerald-900"
           >
             <Pencil className="h-4 w-4" />

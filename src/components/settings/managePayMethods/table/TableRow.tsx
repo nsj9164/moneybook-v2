@@ -1,14 +1,13 @@
-import { IPayMethod } from "@/types/expense-types";
+import { PayMethodEntity } from "@/types/expense-types";
 import { Pencil, Trash2 } from "lucide-react";
 
 interface TableRowProps {
-  payMethod: IPayMethod;
-  onEdit: (payMethod: IPayMethod) => void;
+  payMethod: PayMethodEntity;
+  openModal: (payMethod: PayMethodEntity) => void;
   onDelete: (id: number) => void;
 }
 
-export const TableRow = ({ payMethod, onEdit, onDelete }: TableRowProps) => {
-  console.log("payMethod:::", payMethod);
+export const TableRow = ({ payMethod, openModal, onDelete }: TableRowProps) => {
   return (
     <tr key={payMethod.id} className="hover:bg-gray-50">
       <td className="whitespace-nowrap px-6 py-4 text-center text-xl">
@@ -33,7 +32,7 @@ export const TableRow = ({ payMethod, onEdit, onDelete }: TableRowProps) => {
       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
         <div className="flex justify-end space-x-2">
           <button
-            onClick={() => onEdit(payMethod)}
+            onClick={() => openModal(payMethod)}
             className="text-emerald-600 hover:text-emerald-900"
           >
             <Pencil className="h-4 w-4" />
