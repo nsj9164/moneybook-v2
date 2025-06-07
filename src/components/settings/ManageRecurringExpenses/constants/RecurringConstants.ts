@@ -1,10 +1,10 @@
-import { RecurringEntity } from "@/types/expense-types";
+import { RecurringInput } from "@/types/expense-types";
 import { addMonths, format, startOfMonth } from "date-fns";
 
 const today = new Date();
 const startOfNextMonth = startOfMonth(addMonths(today, 1));
 
-export const initialRecurrings: RecurringEntity = {
+export const initialRecurrings: RecurringInput = {
   name: "",
   amount: 0,
   cycle: 4,
