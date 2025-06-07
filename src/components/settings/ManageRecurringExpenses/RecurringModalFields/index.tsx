@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { ICategory, IPayMethod } from "@/types/expense-types";
 import { useFormContext } from "react-hook-form";
 import { useCycleOptions } from "../hooks/useCycleOptions";
 import { InputField } from "./InputField";
 import { SelectField } from "./SelectField";
-import { addMonths, format, getMonth, getYear, setDate } from "date-fns";
+import { addMonths, format, setDate } from "date-fns";
+import { CategoryEntity, PayMethodEntity } from "@/types/expense-types";
 
 interface RecurringModalFieldsProps {
-  categories: ICategory[];
-  payMethods: IPayMethod[];
+  categories: CategoryEntity[];
+  payMethods: PayMethodEntity[];
 }
 export const RecurringModalFields = ({
   categories,
@@ -20,12 +20,16 @@ export const RecurringModalFields = ({
     watch,
     formState: { errors },
   } = useFormContext();
-  const isActive = watch("isActive");
+  // const isActive = watch("isActive");
   const cycleOptions = useCycleOptions();
 
   useEffect(() => {
-    const billingStartDate = new Date(watch("billingStartDate"));
+    const billingStart = watch("billingStartDate");
     const paymentDay = watch("paymentDay");
+
+    if (!billingStart || typeof paymentDay !== "number") return;
+
+    const billingStartDate = new Date(billingStart);
 
     let nextPaymentDate = setDate(billingStartDate, paymentDay);
 
@@ -34,6 +38,10 @@ export const RecurringModalFields = ({
 
     setValue("nextPaymentDate", format(nextPaymentDate, "yyyy-MM-dd"));
   }, [watch("billingStartDate"), watch("paymentDay")]);
+
+  const value = watch("isActive");
+  console.log("*********", value);
+
   return (
     <>
       <InputField label="지출 항목" name="name" type="text" required={true} />
@@ -115,7 +123,6 @@ export const RecurringModalFields = ({
           {...register("isActive")}
           id="isActive"
           type="checkbox"
-          checked={isActive}
           className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
         />
         <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900">

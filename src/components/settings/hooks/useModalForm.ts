@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DefaultValues,
   FieldValues,
@@ -19,14 +19,20 @@ export function useModalForm<T extends FieldValues>(
     defaultValues: initialValues(),
   });
 
+  useEffect(() => {
+    methods.reset(initialValues());
+  }, [initialValues]);
+
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   const openModal = (data?: Partial<T>) => {
+    console.log("🎇🎇🎇🎇", data);
     if (data) {
       methods.reset(data as T);
       setIsEditing(true);
     } else {
+      console.log("🎀🎀🎀🎀", initialValues());
       methods.reset(initialValues());
       setIsEditing(false);
     }

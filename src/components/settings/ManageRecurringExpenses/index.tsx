@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { GenericFormHeader } from "../common/GenericFormHeader";
 import { PaginationFooter } from "../common/pagination/PaginationFooter";
 import { usePagination } from "../utils/usePagination";
@@ -35,8 +35,14 @@ const ManageRecurringExpenses = () => {
   const payMethods = useFetchPayMethods();
   const cycleOptions = useCycleOptions();
 
+  const initialValues = useCallback(() => {
+    console.log("🚨 초기값:", initialRecurrings);
+    return initialRecurrings;
+  }, []);
   const { methods, isOpen, isEditing, openModal, closeModal } =
-    useModalForm<RecurringEntity>(() => initialRecurrings);
+    useModalForm<RecurringEntity>(initialValues);
+
+  console.log("############", methods.getValues());
 
   const [filters, setFilters] = useState({
     search: "",
@@ -49,11 +55,11 @@ const ManageRecurringExpenses = () => {
   ) => {
     const key = e.currentTarget.name;
     const filterValue = e.currentTarget.value;
+
     setFilters((prev) => ({ ...prev, [key]: filterValue }));
     handlePageChange(1);
   };
 
-  const itemsPerPage = 6;
   // 검색 및 필터링 적용된 고정지출 목록
   const filteredExpenses = recurrings.filter((expense) => {
     const matchesSearch = matchHangul(filters.search, expense.name);
@@ -67,12 +73,13 @@ const ManageRecurringExpenses = () => {
     return matchesSearch && matchesCategory && matchesActive;
   });
 
+  const itemsPerPage = 6;
   const { currentPage, totalPages, handlePageChange, startIndex, endIndex } =
-    usePagination(filteredExpenses.length);
+    usePagination(filteredExpenses.length, itemsPerPage);
 
   const paginatedExpenses = filteredExpenses.slice(
-    (currentPage - 1) * 10,
-    currentPage * 10
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleDeleteRecurring = async (id: number) => {

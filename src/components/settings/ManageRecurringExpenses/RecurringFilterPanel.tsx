@@ -45,19 +45,19 @@ export const RecurringFilterPanel = ({
       </div>
 
       <div>
-        <label htmlFor="category-filter" className="sr-only">
+        <label htmlFor="category" className="sr-only">
           카테고리 필터
         </label>
         <select
-          id="category-filter"
-          name="category-filter"
+          id="category"
+          name="category"
           className="block w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm"
           value={filters.category}
           onChange={(e) => updateFilter(e)}
         >
-          <option value="all">모든 카테고리</option>
+          <option value="">모든 카테고리</option>
           {categories.map((category) => (
-            <option key={category.id} value={category.name}>
+            <option key={category.id} value={category.id}>
               {category.name}
             </option>
           ))}
@@ -65,17 +65,17 @@ export const RecurringFilterPanel = ({
       </div>
 
       <div>
-        <label htmlFor="active-filter" className="sr-only">
+        <label htmlFor="active" className="sr-only">
           상태 필터
         </label>
         <select
-          id="active-filter"
-          name="active-filter"
+          id="active"
+          name="active"
           className="block w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm"
           value={filters.active}
           onChange={(e) => updateFilter(e)}
         >
-          <option value="all">모든 상태</option>
+          <option value="">모든 상태</option>
           <option value="active">활성화</option>
           <option value="inactive">비활성화</option>
         </select>
