@@ -1,4 +1,3 @@
-import { ICategory, UUID } from "@/types/expense-types";
 import { FieldValues, Path } from "react-hook-form";
 
 export enum FormType {
@@ -12,7 +11,7 @@ export interface CategoryForm {
   color: string;
   emoji: string;
   defaultYn: boolean;
-  targetAmount: number;
+  budget: number;
   transactionType: number;
   userId: string;
 }

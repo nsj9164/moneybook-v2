@@ -1,4 +1,4 @@
-import { ICategory, IExpense, IPayMethod } from "@/types/expense-types";
+import { CategoryEntity, IExpense, PayMethodEntity } from "@/types";
 import { formatCurrency, parseCurrency } from "@/utils/format";
 import { Trash2 } from "lucide-react";
 import {
@@ -9,8 +9,8 @@ import {
 
 interface ExpenseFormTableRow {
   expense: IExpense;
-  categories: ICategory[];
-  payMethods: IPayMethod[];
+  categories: CategoryEntity[];
+  payMethods: PayMethodEntity[];
   handleUpdExpense: UpdTableExpenseHandler;
   handleDelExpense: DelTableExpenseHandler;
   updateActualAmount: UpdActualAmountHandler;

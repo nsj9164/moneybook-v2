@@ -1,4 +1,4 @@
-import { IExpense, UUID } from "@/types/expense-types";
+import { IExpense, UUID } from "@/types";
 
 export type UpdTableExpenseHandler = (
   value: IExpense[keyof IExpense],

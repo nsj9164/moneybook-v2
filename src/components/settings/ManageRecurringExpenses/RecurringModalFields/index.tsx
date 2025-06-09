@@ -4,7 +4,7 @@ import { useCycleOptions } from "../hooks/useCycleOptions";
 import { InputField } from "./InputField";
 import { SelectField } from "./SelectField";
 import { addMonths, format, setDate } from "date-fns";
-import { CategoryEntity, PayMethodEntity } from "@/types/expense-types";
+import { CategoryEntity, PayMethodEntity } from "@/types";
 
 interface RecurringModalFieldsProps {
   categories: CategoryEntity[];

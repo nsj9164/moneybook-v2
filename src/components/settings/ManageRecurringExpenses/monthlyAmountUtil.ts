@@ -1,4 +1,4 @@
-import { RecurringEntity } from "@/types/expense-types";
+import { RecurringEntity } from "@/types";
 
 // 고정지출 cycle에 따른 월 환산
 const cycleMultipliers: Record<number, number> = {

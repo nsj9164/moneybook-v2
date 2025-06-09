@@ -1,6 +1,6 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { categoryColorOptions } from "../constants/CategoryConstants";
-import { CategoryEntity } from "@/types/expense-types";
+import { CategoryEntity } from "@/types";
 
 interface TableRowProps {
   category: CategoryEntity;

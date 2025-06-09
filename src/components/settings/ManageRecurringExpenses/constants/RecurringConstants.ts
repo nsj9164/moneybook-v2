@@ -1,4 +1,4 @@
-import { RecurringInput } from "@/types/expense-types";
+import { RecurringInput } from "@/types";
 import { addMonths, format, startOfMonth } from "date-fns";
 
 const today = new Date();

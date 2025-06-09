@@ -1,4 +1,4 @@
-import { IExpense } from "@/types/expense-types";
+import { IExpense } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import { SplitAmountHandler } from "../types/handlers";
 

@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { expenseKeys } from "@/hooks/useFetchExpenses";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
-import { IExpense } from "@/types/expense-types";
+import { IExpense } from "@/types";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
 import { useEffect } from "react";

@@ -1,4 +1,4 @@
-import { PayMethodEntity } from "@/types/expense-types";
+import { PayMethodEntity } from "@/types";
 import { Pencil, Trash2 } from "lucide-react";
 
 interface TableRowProps {

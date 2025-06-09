@@ -1,4 +1,4 @@
-import { CategoryEntity } from "@/types/expense-types";
+import { CategoryEntity } from "@/types";
 
 interface RecurringFilterPanelProps {
   filters: { search: string; category: string; active: string };

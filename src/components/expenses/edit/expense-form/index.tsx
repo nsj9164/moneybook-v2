@@ -1,5 +1,5 @@
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { IExpense, UUID } from "@/types/expense-types";
+import { IExpense, UUID } from "@/types";
 import { parseCurrency } from "@/utils/format";
 import { CardForm } from "./card-form";
 import { TableForm } from "./table-form";

@@ -1,4 +1,4 @@
-import { UUID } from "@/types/expense-types";
+import { UUID } from "@/types";
 
 export function patchOrAddItem<T extends { id: number | UUID }>(
   list: T[],

@@ -7,7 +7,7 @@ import {
 } from "react";
 import { supabase } from "@/utils/supabase";
 import { User as SupabaseUser } from "@supabase/supabase-js";
-import { UUID } from "@/types/expense-types";
+import { UUID } from "@/types";
 
 interface User {
   id: UUID;

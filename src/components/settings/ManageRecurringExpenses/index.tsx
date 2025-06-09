@@ -18,11 +18,7 @@ import { useCycleOptions } from "./hooks/useCycleOptions";
 import { RecurringSummaryCard } from "./RecurringSummaryCard";
 import { RecurringFilterPanel } from "./RecurringFilterPanel";
 import { matchHangul } from "@/utils/matchHangul";
-import {
-  RecurringDisplay,
-  RecurringEntity,
-  RecurringInput,
-} from "@/types/expense-types";
+import { RecurringDisplay, RecurringEntity, RecurringInput } from "@/types";
 import { calcTotalMonthlyAmount } from "./monthlyAmountUtil";
 import { RecurringCardList } from "./RecurringCardList";
 import { useModalForm } from "../hooks/useModalForm";

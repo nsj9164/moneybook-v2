@@ -1,4 +1,4 @@
-import { IExpense } from "@/types/expense-types";
+import { IExpense } from "@/types";
 import { format, sub } from "date-fns";
 import { useMemo, useState } from "react";
 import { FilterKey } from "../types/filters";

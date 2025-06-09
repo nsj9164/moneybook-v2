@@ -10,7 +10,7 @@ import { ListNoFilteredData } from "@/components/expenses/list/ListNoFilteredDat
 import { ListNoData } from "@/components/expenses/list/ListNoData";
 import { allColumns } from "./types/filters";
 import { ListHeader } from "@/components/expenses/list/ListHeader";
-import { UUID } from "@/types/expense-types";
+import { UUID } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { ExpensesTable } from "@/components/expenses/table/Table";
 import { ListFooter } from "@/components/expenses/list/ListFooter";

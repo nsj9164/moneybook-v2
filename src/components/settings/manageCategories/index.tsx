@@ -1,4 +1,3 @@
-import { CategoryEntity, CategoryInput } from "@/types/expense-types";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { useAuth } from "@/contexts/AuthContext";
 import { deleteItem, insertItem, updateItem } from "@/utils/crud";
@@ -9,6 +8,7 @@ import { TableRow } from "./table/TableRow";
 import { TableHeader } from "./table/TableHeader";
 import GenericForm from "../common/GenericForm";
 import { FormType } from "../types/GenericFormTypes";
+import { CategoryEntity, CategoryInput } from "@/types";
 
 const ManageCategories = () => {
   const { userId } = useAuth();

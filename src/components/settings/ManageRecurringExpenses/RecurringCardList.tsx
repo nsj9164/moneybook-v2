@@ -1,4 +1,4 @@
-import { RecurringDisplay } from "@/types/expense-types";
+import { RecurringDisplay } from "@/types";
 import { RecurringCardItem } from "./RecurringCardItem";
 
 interface RecurringCardListProps {

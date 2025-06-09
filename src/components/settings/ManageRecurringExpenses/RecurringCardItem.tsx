@@ -1,4 +1,4 @@
-import { RecurringDisplay } from "@/types/expense-types";
+import { RecurringDisplay } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import { format } from "date-fns";
 import { Calendar, CreditCard, Pencil, Trash2 } from "lucide-react";

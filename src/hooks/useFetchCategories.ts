@@ -13,9 +13,7 @@ export const useFetchCategories = () => {
     const fetchData = async () => {
       const { data, error } = await supabase
         .from("categories")
-        .select(
-          `id, name, target_amount, transaction_type, emoji, color, default_yn`
-        )
+        .select(`id, name, transaction_type, emoji, color, default_yn, budget`)
         .eq("user_id", userId)
         .order("id");
 

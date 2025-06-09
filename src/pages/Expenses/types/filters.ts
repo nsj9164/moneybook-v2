@@ -1,5 +1,3 @@
-import { IExpense } from "@/types/expense-types";
-
 export interface ExpenseFiltersState {
   filterQuery: string;
   filterCategory: number;

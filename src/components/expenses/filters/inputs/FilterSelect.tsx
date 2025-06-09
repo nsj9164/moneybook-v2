@@ -1,11 +1,11 @@
-import { ICategory, IPayMethod } from "@/types/expense-types";
+import { CategoryEntity, PayMethodEntity } from "@/types";
 import { ChevronDown } from "lucide-react";
 
 interface FilterSelectProps {
   label: string;
   name: string;
   value: number;
-  options: ICategory[] | IPayMethod[];
+  options: CategoryEntity[] | PayMethodEntity[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 

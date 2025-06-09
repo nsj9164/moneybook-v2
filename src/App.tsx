@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Dashboard from "@/pages/Dashboard";
 import Expenses from "./pages/Expenses";
 import Statistics from "./pages/Statistics";
-import Budget from "./pages/Budget";
+import Budget from "./pages/budget";
 import Profile from "./pages/Profile";
 import MainLayout from "./layouts/MainLayout";
 import RequireAuth from "./contexts/RequireAuth";

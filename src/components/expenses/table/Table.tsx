@@ -1,5 +1,5 @@
 import { ExpenseColumns } from "@/pages/Expenses/types/filters";
-import { IExpense, UUID } from "@/types/expense-types";
+import { IExpense, UUID } from "@/types";
 import { useNavigate } from "react-router-dom";
 import { TableFooter } from "./TableFooter";
 import { TableHeader } from "./TableHeader";

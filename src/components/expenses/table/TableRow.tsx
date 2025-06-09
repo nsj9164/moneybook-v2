@@ -1,5 +1,5 @@
 import { ExpenseColumns } from "@/pages/Expenses/types/filters";
-import { IExpense, UUID } from "@/types/expense-types";
+import { IExpense, UUID } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import { Pencil } from "lucide-react";
 
