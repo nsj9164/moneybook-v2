@@ -1,36 +1,43 @@
-"use client";
-
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Plus } from "lucide-react";
-import { formatCurrency } from "@/utils/format";
 import AddBudgetModal from "@/components/budget/AddBudgetModal";
 import NotificationModal from "@/components/common/modal/NotificationModal";
 import { useNotification } from "@/hooks/useNotification";
 import { ContentHeader } from "@/components/common/layout/ContentHeader";
 import { UsageProgress } from "@/components/budget/sections/UsageProgress";
-import { CategoryItem } from "@/components/budget/sections/CategoryItem";
+import { CategoryItem } from "@/components/budget/sections/BudgetItem";
 import { Advice } from "@/components/budget/sections/Advice";
-import { SummaryCard } from "@/components/budget/SummaryCard";
 import { useCategoryStats } from "@/hooks/useCategoryStats";
 import { CardSection } from "@/components/common/layout/CardSection";
+import { Button } from "@/components/ui/Button";
+import { DateFilterControl } from "@/components/budget/DateFilterControl";
+import { SummarySection } from "@/components/budget/sections/SummarySection";
+import { useFirstExpenseYear } from "@/hooks/useFirstExpenseYear";
+import { useModalForm } from "@/components/settings/hooks/useModalForm";
+import { CategoryStatDisplay, CategoryStatInput } from "@/types";
+import { useSetRecoilState } from "recoil";
+import { budgetState } from "@/recoil/atoms";
+import { useAuth } from "@/contexts/AuthContext";
+import { updateItem } from "@/utils/crud";
+import { patchItem } from "@/utils/patchItem";
+import { BudgetItem } from "@/components/budget/BudgetItem";
 
 const Budget = () => {
-  const budgetCategories = useCategoryStats();
-  const [selectedYear, setSelectedYear] = useState("2024");
-  const [selectedMonth, setSelectedMonth] = useState("6");
+  const { userId } = useAuth();
+  const { budgetList, budgetNList } = useCategoryStats();
+  const currentYear = new Date().getFullYear();
+  const [selectedDate, setSelectedDate] = useState({
+    year: currentYear,
+    month: new Date().getMonth(),
+  });
   const [showDateSelector, setShowDateSelector] = useState(false);
   const [isAddBudgetModalOpen, setIsAddBudgetModalOpen] = useState(false);
   const { notification, showSuccess, hideNotification } = useNotification();
 
+  const setBudget = useSetRecoilState(budgetState);
   // 총 예산 및 지출 계산
-  const totalBudget = budgetCategories.reduce(
-    (sum, category) => sum + category.budget,
-    0
-  );
-  const totalSpent = budgetCategories.reduce(
-    (sum, category) => sum + category.spent,
-    0
-  );
+  const totalBudget = budgetList.reduce((sum, list) => sum + list.budget, 0);
+  const totalSpent = budgetList.reduce((sum, list) => sum + list.spent, 0);
   const remainingBudget = totalBudget - totalSpent;
   const budgetProgress = Math.round((totalSpent / totalBudget) * 100);
 
@@ -44,8 +51,44 @@ const Budget = () => {
   };
 
   // 년도 목록 생성 (현재 년도 기준 ±5년)
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 11 }, (_, i) => currentYear - 5 + i);
+
+  const { data: firstExpenseYear } = useFirstExpenseYear();
+  const years = useMemo(() => {
+    const startYear = firstExpenseYear ?? currentYear;
+    return Array.from(
+      { length: currentYear - startYear + 1 },
+      (_, i) => startYear + i
+    );
+  }, [firstExpenseYear, currentYear]);
+
+  const closeDateSelector = () => {
+    setShowDateSelector(!showDateSelector);
+  };
+
+  const handleChangeYear = (year: number) => {
+    setSelectedDate((prev) => ({ ...prev, year }));
+  };
+
+  const handleChangeMonth = (month: number) => {
+    setSelectedDate((prev) => ({ ...prev, month }));
+    setShowDateSelector(false);
+  };
+
+  // const { methods, isOpen, openModal, closeModal } =
+  //   useModalForm<CategoryStatInput>(() => ({ id: 0, budget: 0 }));
+
+  const handleSaveBudget = async (budgetItems: CategoryStatInput[]) => {
+    for (const item of budgetItems) {
+      await updateItem<CategoryStatDisplay>(
+        "categories",
+        item,
+        userId!,
+        (saved: CategoryStatDisplay) => {
+          setBudget((prev) => patchItem(prev, saved));
+        }
+      );
+    }
+  };
 
   return (
     <div className="h-full">
@@ -54,56 +97,33 @@ const Budget = () => {
         title="예산 계획"
         desc="카테고리별 예산을 설정하고 지출을 체계적으로 관리하세요."
       >
-        <button
-          type="button"
-          onClick={() => setIsAddBudgetModalOpen(true)}
-          className="inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700"
-        >
-          <Plus className="mr-2 -ml-1 h-4 w-4" />
-          예산 추가
-        </button>
+        <div className="flex items-center space-x-3">
+          <DateFilterControl
+            selectedDate={selectedDate}
+            showDateSelector={showDateSelector}
+            years={years}
+            closeDateSelector={closeDateSelector}
+            handleChangeYear={handleChangeYear}
+            handleChangeMonth={handleChangeMonth}
+          />
+
+          <Button variant="saveBtn" onClick={() => openModal()}>
+            <Plus className="mr-2 -ml-1 h-4 w-4" />
+            예산 추가
+          </Button>
+        </div>
       </ContentHeader>
 
       {/* 메인 콘텐츠 영역 */}
       <div className="p-6 space-y-6">
         {/* 기간 선택 및 요약 정보 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <SummaryCard
-            title={"총 예산"}
-            value={formatCurrency(totalBudget) ?? 0}
-            colorClass={"text-gray-900"}
-            footerLabel={"카테고리"}
-            footerValue={`${budgetCategories.length}개`}
-          />
-
-          <SummaryCard
-            title={"사용 금액"}
-            value={formatCurrency(totalSpent) ?? 0}
-            colorClass={"text-red-600"}
-            footerLabel={"예산 대비"}
-            footerValue={`${budgetProgress}%`}
-            progressClass={`${
-              budgetProgress > 100 ? "bg-red-500" : "bg-emerald-500"
-            }`}
-            progress={`${Math.min(budgetProgress, 100)}%`}
-          />
-
-          <SummaryCard
-            title={"남은 예산"}
-            value={formatCurrency(remainingBudget)}
-            colorClass={"text-emerald-600"}
-            footerLabel={"남은 일수"}
-            footerValue={"15일"}
-            progressClass={`${
-              budgetProgress > 100 ? "bg-red-500" : "bg-emerald-500"
-            }`}
-            progress={"50%"}
-          >
-            <p className="text-xs text-gray-500 mt-2">
-              하루 평균 {formatCurrency(remainingBudget / 15)} 사용 가능
-            </p>
-          </SummaryCard>
-        </div>
+        <SummarySection
+          totalBudget={totalBudget}
+          budgetLen={budgetList.length}
+          totalSpent={totalSpent}
+          budgetProgress={budgetProgress}
+          remainingBudget={remainingBudget}
+        />
 
         {/* 전체 예산 진행 상황 */}
         <UsageProgress
@@ -115,27 +135,22 @@ const Budget = () => {
         {/* 카테고리별 예산 */}
         <CardSection title={"카테고리별 예산"}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {budgetCategories.map((category) => (
-              <CategoryItem category={category} />
+            {budgetList.map((budget) => (
+              <BudgetItem key={budget.id} budgetNList={budgetNList} />
             ))}
           </div>
         </CardSection>
 
         {/* 예산 조언 */}
-        <Advice />
+        {/* <Advice /> */}
       </div>
 
       {/* 예산 추가 모달 */}
       <AddBudgetModal
-        isOpen={isAddBudgetModalOpen}
-        onClose={() => setIsAddBudgetModalOpen(false)}
-        onSave={handleAddBudget}
-        existingBudgets={budgetCategories.map((cat) => ({
-          id: cat.id.toString(),
-          categoryId: cat.id.toString(),
-          amount: cat.budget,
-          period: "monthly" as const,
-        }))}
+        isOpen={isOpen}
+        onClose={closeModal}
+        onSave={handleSaveBudget}
+        budgetNList={budgetNList}
       />
 
       {/* 알림 모달 */}

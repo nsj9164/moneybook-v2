@@ -1,35 +1,31 @@
 import { formatCurrency } from "@/utils/format";
 import { Edit2, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { CategoryStat } from "@/types";
+import { CategoryStatDisplay } from "@/types";
 
-export const CategoryItem = ({ category }: { category: CategoryStat }) => {
-  const progress = Math.round((category.spent / category.budget) * 100);
+export const CategoryItem = ({ budget }: { budget: CategoryStatDisplay }) => {
+  const progress = Math.round((budget.spent / budget.budget) * 100);
 
-  const diffAmount = category.budget - category.spent;
-  console.log();
+  const diffAmount = budget.budget - budget.spent;
   return (
     <div
-      key={category.id}
+      key={budget.id}
       className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow"
     >
       <div className="flex justify-between items-start">
         <div className="flex items-center">
           <div
             className="h-10 w-10 rounded-full ${category.color} flex items-center justify-center"
-            style={{ backgroundColor: category.color }}
+            style={{ backgroundColor: budget.color }}
           >
             <span className="text-white text-sm font-medium">
-              {category.emoji}
+              {budget.emoji}
             </span>
           </div>
           <div className="ml-4">
-            <h3 className="text-sm font-medium text-gray-900">
-              {category.name}
-            </h3>
+            <h3 className="text-sm font-medium text-gray-900">{budget.name}</h3>
             <p className="text-xs text-gray-500">
-              {formatCurrency(category.spent)} /{" "}
-              {formatCurrency(category.budget)}
+              {formatCurrency(budget.spent)} / {formatCurrency(budget.budget)}
             </p>
           </div>
         </div>

@@ -1,20 +1,34 @@
 import { formatCurrency } from "@/utils/format";
 import { SummaryCard } from "../SummaryCard";
 
-export const SummaryInfo = () => {
+interface SummarySectionProps {
+  totalBudget: number;
+  budgetLen: number;
+  totalSpent: number;
+  budgetProgress: number;
+  remainingBudget: number;
+}
+
+export const SummarySection = ({
+  totalBudget,
+  budgetLen,
+  totalSpent,
+  budgetProgress,
+  remainingBudget,
+}: SummarySectionProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <SummaryCard
         title={"총 예산"}
-        value={formatCurrency(totalBudget)}
+        value={formatCurrency(totalBudget) ?? 0}
         colorClass={"text-gray-900"}
         footerLabel={"카테고리"}
-        footerValue={`${budgetCategories.length}개`}
+        footerValue={`${budgetLen}개`}
       />
 
       <SummaryCard
         title={"사용 금액"}
-        value={formatCurrency(totalSpent)}
+        value={formatCurrency(totalSpent) ?? 0}
         colorClass={"text-red-600"}
         footerLabel={"예산 대비"}
         footerValue={`${budgetProgress}%`}

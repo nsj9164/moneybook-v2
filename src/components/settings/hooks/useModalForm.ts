@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   DefaultValues,
   FieldValues,
@@ -6,34 +6,30 @@ import {
   UseFormReturn,
 } from "react-hook-form";
 
-export function useModalForm<T extends FieldValues>(
-  initialValues: () => DefaultValues<T>
-): {
+interface UseModalFormResult<T extends FieldValues> {
   methods: UseFormReturn<T>;
   isOpen: boolean;
   isEditing: boolean;
   openModal: (data?: Partial<T>) => void;
   closeModal: () => void;
-} {
-  const methods = useForm<T>({
-    defaultValues: initialValues(),
-  });
+}
 
-  useEffect(() => {
-    methods.reset(initialValues());
-  }, [initialValues]);
-
+export function useModalForm<T extends FieldValues>(
+  defaultValues: DefaultValues<T>
+): UseModalFormResult<T> {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
+  const methods = useForm<T>({
+    defaultValues,
+  });
+
   const openModal = (data?: Partial<T>) => {
-    console.log("🎇🎇🎇🎇", data);
     if (data) {
-      methods.reset(data as T);
+      methods.reset({ ...defaultValues, ...data });
       setIsEditing(true);
     } else {
-      console.log("🎀🎀🎀🎀", initialValues());
-      methods.reset(initialValues());
+      methods.reset(defaultValues);
       setIsEditing(false);
     }
     setIsOpen(true);

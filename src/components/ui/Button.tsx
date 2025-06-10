@@ -10,9 +10,10 @@ const buttonVariants = cva(
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         outlineWhite:
           "inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50",
-        outlineGreen: "",
         settingItem:
           "flex items-center w-full px-3 py-2 text-sm font-medium rounded-md",
+        saveBtn:
+          "bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm rounded-lg",
       },
       size: {
         default: "h-10 px-4 py-2",

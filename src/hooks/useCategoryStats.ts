@@ -1,11 +1,11 @@
-import { categoryStatsState } from "@/recoil/atoms";
+import { budgetState } from "@/recoil/atoms";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 
 export const useCategoryStats = () => {
-  const [stats, setStats] = useRecoilState(categoryStatsState);
+  const [budget, setBudget] = useRecoilState(budgetState);
 
   useEffect(() => {
     const categoryStats = async () => {
@@ -17,12 +17,15 @@ export const useCategoryStats = () => {
 
       if (data) {
         const mappedData = formatKeyCase(data, "camel");
-        setStats(mappedData ?? []);
+        setBudget(mappedData ?? []);
       }
     };
 
     categoryStats();
   }, []);
 
-  return stats;
+  const budgetList = budget.filter((item) => item.budgetYn);
+  const budgetNList = budget.filter((item) => !item.budgetYn);
+
+  return { budgetList, budgetNList };
 };
