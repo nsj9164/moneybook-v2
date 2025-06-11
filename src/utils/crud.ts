@@ -47,11 +47,12 @@ export async function updateItem<T extends { id: number | string }>(
   if (!item.id) throw new Error("updateItem requires 'id' field");
 
   const snake = formatKeyCase(item, "snake");
+  const { id, ...updateData } = snake;
 
   const { data, error } = await supabase
     .from(table)
-    .update(snake)
-    .eq("id", item.id)
+    .update(updateData)
+    .eq("id", id)
     .eq("user_id", userId)
     .select();
 

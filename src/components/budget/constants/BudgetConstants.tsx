@@ -18,7 +18,7 @@ export const adviceStyleMap = {
 
 export type AdviceType = keyof typeof adviceStyleMap;
 
-export const initialBudget = {
-  id: Date.now(),
+export const initialBudget = () => ({
+  categoryId: "",
   budget: 0,
-};
+});

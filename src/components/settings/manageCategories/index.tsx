@@ -6,7 +6,7 @@ import { categoriesState } from "@/recoil/atoms";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
 import { TableRow } from "./table/TableRow";
 import { TableHeader } from "./table/TableHeader";
-import GenericForm from "../common/GenericForm";
+import GenericForm from "../common/form/GenericForm";
 import { FormType } from "../types/GenericFormTypes";
 import { CategoryEntity, CategoryInput } from "@/types";
 

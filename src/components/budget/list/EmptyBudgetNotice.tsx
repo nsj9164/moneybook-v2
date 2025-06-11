@@ -7,7 +7,11 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-export const EmptyState = () => {
+interface EmptyBudgetNoticeProps {
+  openModal: () => void;
+}
+
+export const EmptyBudgetNotice = ({ openModal }: EmptyBudgetNoticeProps) => {
   return (
     <motion.div
       key="empty-state"
@@ -61,7 +65,7 @@ export const EmptyState = () => {
       </div>
 
       <button
-        onClick={() => setIsAddBudgetModalOpen(true)}
+        onClick={openModal}
         className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-6 py-3 text-base font-medium text-white shadow-md hover:bg-emerald-700 transition-colors"
       >
         <Plus className="mr-2 h-5 w-5" />첫 예산 설정하기

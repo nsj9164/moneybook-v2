@@ -1,15 +1,26 @@
 import { formatCurrency } from "@/utils/format";
 import { Edit2, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { CategoryStatDisplay } from "@/types";
+import { BudgetDisplay, BudgetFormInput } from "@/types";
 
-export const CategoryItem = ({ budget }: { budget: CategoryStatDisplay }) => {
-  const progress = Math.round((budget.spent / budget.budget) * 100);
+interface BudgetCategoryItemProps {
+  budget: BudgetDisplay;
+  progress: number;
+  diffAmount: number;
+  openModal: () => void;
+  onDelete: (id: number) => void;
+}
 
-  const diffAmount = budget.budget - budget.spent;
+export const BudgetCategoryItem = ({
+  budget,
+  progress,
+  diffAmount,
+  openModal,
+  onDelete,
+}: BudgetCategoryItemProps) => {
   return (
     <div
-      key={budget.id}
+      key={budget.categoryId}
       className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow"
     >
       <div className="flex justify-between items-start">
@@ -30,10 +41,16 @@ export const CategoryItem = ({ budget }: { budget: CategoryStatDisplay }) => {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <button className="text-gray-400 hover:text-emerald-600">
+          <button
+            className="text-gray-400 hover:text-emerald-600"
+            onClick={openModal}
+          >
             <Edit2 className="h-4 w-4" />
           </button>
-          <button className="text-gray-400 hover:text-red-600">
+          <button
+            className="text-gray-400 hover:text-red-600"
+            onClick={() => onDelete(budget.categoryId)}
+          >
             <Trash2 className="h-4 w-4" />
           </button>
         </div>

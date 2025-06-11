@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   DefaultValues,
   FieldValues,
@@ -17,27 +17,24 @@ interface UseModalFormResult<T extends FieldValues> {
 export function useModalForm<T extends FieldValues>(
   defaultValues: DefaultValues<T>
 ): UseModalFormResult<T> {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-
   const methods = useForm<T>({
     defaultValues,
   });
+  const [isOpen, setIsOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
-  const openModal = (data?: Partial<T>) => {
-    if (data) {
-      methods.reset({ ...defaultValues, ...data });
-      setIsEditing(true);
-    } else {
-      methods.reset(defaultValues);
-      setIsEditing(false);
-    }
-    setIsOpen(true);
-  };
+  const openModal = useCallback(
+    (data?: Partial<T>) => {
+      methods.reset(data ? { ...defaultValues, ...data } : defaultValues);
+      setIsEditing(!!data);
+      setIsOpen(true);
+    },
+    [defaultValues, methods]
+  );
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsOpen(false);
-  };
+  }, []);
 
   return {
     methods,

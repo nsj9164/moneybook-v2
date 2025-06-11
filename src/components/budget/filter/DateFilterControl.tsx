@@ -5,7 +5,7 @@ interface DateFilterControlProps {
   selectedDate: { year: number; month: number };
   showDateSelector: boolean;
   years: number[];
-  closeDateSelector: () => void;
+  toggleDateSelector: () => void;
   handleChangeYear: (year: number) => void;
   handleChangeMonth: (month: number) => void;
 }
@@ -14,7 +14,7 @@ export const DateFilterControl = ({
   selectedDate,
   showDateSelector,
   years,
-  closeDateSelector,
+  toggleDateSelector,
   handleChangeYear,
   handleChangeMonth,
 }: DateFilterControlProps) => {
@@ -22,7 +22,7 @@ export const DateFilterControl = ({
     <div className="relative">
       <button
         className="flex items-center bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-        onClick={closeDateSelector}
+        onClick={toggleDateSelector}
       >
         <Calendar className="h-4 w-4 text-gray-500 mr-2" />
         {selectedDate.year}년 {selectedDate.month}월

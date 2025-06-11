@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { matchHangul } from "@/utils/matchHangul";
-import { GenericFormTable } from "../../common/table/GenericFormTable";
-import { formFieldConfigs, formMeta } from "../constants/formConfigs";
-import { FormMap, FormType } from "../types/GenericFormTypes";
+import { GenericFormTable } from "../../../common/table/GenericFormTable";
+import { formFieldConfigs, formMeta } from "../../constants/formConfigs";
+import { FormMap, FormType } from "../../types/GenericFormTypes";
 import { GenericFormHeader } from "./GenericFormHeader";
-import { usePagination } from "../utils/usePagination";
-import { PaginationFooter } from "./pagination/PaginationFooter";
-import { GenericFormModal } from "./Modal/GenericFormModal";
-import { GenericFormModalFields } from "./Modal/GenericFormModalFields";
+import { usePagination } from "../../utils/usePagination";
+import { PaginationFooter } from "../pagination/PaginationFooter";
+import { GenericFormModal } from "../modal/GenericFormModal";
+import { GenericFormModalFields } from "../modal/GenericFormModalFields";
 import { DefaultValues, FormProvider } from "react-hook-form";
-import { useModalForm } from "../hooks/useModalForm";
+import { useModalForm } from "../../hooks/useModalForm";
 
 type GenericFormHandler<T> = {
   openModal: (row?: T) => void;
@@ -38,11 +38,13 @@ function GenericForm<K extends FormType>({
 }: GenericFormProps<K>) {
   const { title, initial } = formMeta[formType];
   const fieldConfigs = formFieldConfigs[formType];
-  const initialData = formMeta[formType].initial() as DefaultValues<FormMap[K]>;
 
-  const { methods, isOpen, isEditing, openModal, closeModal } = useModalForm<
-    FormMap[K]
-  >(() => initialData);
+  const defaultValues = useMemo(
+    () => initial() as DefaultValues<FormMap[K]>,
+    [formType]
+  );
+  const { methods, isOpen, isEditing, openModal, closeModal } =
+    useModalForm<FormMap[K]>(defaultValues);
 
   const [searchQuery, setSearchQuery] = useState("");
 

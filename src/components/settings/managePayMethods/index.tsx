@@ -5,7 +5,7 @@ import { payMethodsState } from "@/recoil/atoms";
 import { deleteItem, insertItem, updateItem } from "@/utils/crud";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
 import { PayMethodEntity, PayMethodInput } from "@/types";
-import GenericForm from "../common/GenericForm";
+import GenericForm from "../common/form/GenericForm";
 import { FormType } from "../types/GenericFormTypes";
 import { TableRow } from "./table/TableRow";
 import { TableHeader } from "./table/TableHeader";

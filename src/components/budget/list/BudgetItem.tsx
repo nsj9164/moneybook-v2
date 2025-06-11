@@ -1,12 +1,21 @@
-import { CategoryStatDisplay } from "@/types";
+import { BudgetDisplay } from "@/types";
 import { useFormContext } from "react-hook-form";
 
 interface BudgetItemProps {
-  budgetNList: CategoryStatDisplay[];
+  index: number;
+  categories: BudgetDisplay[];
+  onRemove?: () => void;
 }
 
-export const BudgetItem = ({ budgetNList }: BudgetItemProps) => {
-  const { register } = useFormContext();
+export const BudgetItem = ({ index, categories }: BudgetItemProps) => {
+  const { register, watch } = useFormContext();
+  const currentCategoryId = watch(`items.${index}.categoryId`);
+  const isEditing = !!currentCategoryId;
+
+  const filteredCategories = categories.filter(
+    (cat) => !cat.budgetYn || cat.categoryId === currentCategoryId
+  );
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border border-gray-200 rounded-lg">
       <div>
@@ -14,13 +23,14 @@ export const BudgetItem = ({ budgetNList }: BudgetItemProps) => {
           카테고리
         </label>
         <select
-          {...register("id", { required: true })}
+          {...register(`items.${index}.categoryId`, { required: true })}
+          disabled={isEditing}
           className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
         >
           <option value="">선택하세요</option>
-          {budgetNList.map((budget) => (
-            <option key={budget.id} value={budget.id}>
-              {budget.name}
+          {filteredCategories.map((category) => (
+            <option key={category.categoryId} value={category.categoryId}>
+              {category.name}
             </option>
           ))}
         </select>
@@ -31,7 +41,7 @@ export const BudgetItem = ({ budgetNList }: BudgetItemProps) => {
           예산 금액
         </label>
         <input
-          {...register("budget", { required: true })}
+          {...register(`items.${index}.budget`, { required: true })}
           type="number"
           placeholder="0"
           className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"

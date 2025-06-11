@@ -1,8 +1,8 @@
-import { useCallback, useState } from "react";
-import { GenericFormHeader } from "../common/GenericFormHeader";
+import { useState } from "react";
+import { GenericFormHeader } from "../common/form/GenericFormHeader";
 import { PaginationFooter } from "../common/pagination/PaginationFooter";
 import { usePagination } from "../utils/usePagination";
-import { GenericFormModal } from "../common/Modal/GenericFormModal";
+import { GenericFormModal } from "../common/modal/GenericFormModal";
 import { deleteItem, insertItem, updateItem } from "@/utils/crud";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
@@ -31,14 +31,8 @@ const ManageRecurringExpenses = () => {
   const payMethods = useFetchPayMethods();
   const cycleOptions = useCycleOptions();
 
-  const initialValues = useCallback(() => {
-    console.log("🚨 초기값:", initialRecurrings);
-    return initialRecurrings;
-  }, []);
   const { methods, isOpen, isEditing, openModal, closeModal } =
-    useModalForm<RecurringEntity>(initialValues);
-
-  console.log("############", methods.getValues());
+    useModalForm<RecurringEntity>(initialRecurrings);
 
   const [filters, setFilters] = useState({
     search: "",

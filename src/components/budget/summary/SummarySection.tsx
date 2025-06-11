@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/utils/format";
-import { SummaryCard } from "../SummaryCard";
+import { SummaryCard } from "./SummaryCard";
 
 interface SummarySectionProps {
   totalBudget: number;
