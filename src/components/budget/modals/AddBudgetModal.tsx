@@ -3,44 +3,73 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BudgetItem } from "../list/BudgetItem";
 import { SubmitHandler, useFieldArray, useFormContext } from "react-hook-form";
 import { initialBudget } from "../constants/BudgetConstants";
-import { BudgetDisplay, BudgetFormInput, BudgetSubmitInput } from "@/types";
+import { BudgetEntity, UnBudgetDisplay } from "@/types";
+import { diffFields, filterEmptyFields } from "@/utils/form";
+import { useState, useEffect } from "react";
 
 interface AddBudgetModalProps {
   isOpen: boolean;
+  isEditing: boolean;
   onClose: () => void;
-  onSave: (budgetItems: BudgetSubmitInput[]) => void;
-  categories: BudgetDisplay[];
+  onSave: (budgetItems: BudgetEntity[]) => void;
+  unBudgets: UnBudgetDisplay[];
 }
 
 const AddBudgetModal = ({
   isOpen,
+  isEditing,
   onClose,
   onSave,
-  categories,
+  unBudgets,
 }: AddBudgetModalProps) => {
-  const { handleSubmit, control, reset } = useFormContext<{
-    items: BudgetFormInput[];
+  const { handleSubmit, control, reset, getValues } = useFormContext<{
+    items: BudgetEntity[];
   }>();
 
-  const { fields, append, remove } = useFieldArray({
-    control,
+  const { fields, append } = useFieldArray<{ items: BudgetEntity[] }>({
     name: "items",
+    control,
   });
-  console.log("#######", fields);
 
-  const onSubmit: SubmitHandler<{ items: BudgetFormInput[] }> = ({ items }) => {
-    const validItems: BudgetSubmitInput[] = items
-      .filter((item) => item.categoryId !== "" && item.budget > 0)
-      .map((item) => ({
-        id: Number(item.categoryId),
-        budget: Number(item.budget),
-        budgetYn: true,
-      }));
-    if (validItems.length > 0) {
-      onSave(validItems);
-      reset({ items: [initialBudget()] });
-      onClose();
+  const [currentData, setCurrentData] = useState<{
+    items: BudgetEntity[];
+  }>({
+    items: [],
+  });
+
+  useEffect(() => {
+    if (isEditing && isOpen)
+      setCurrentData(getValues() as { items: BudgetEntity[] });
+  }, [isEditing, isOpen]);
+
+  const onSubmit: SubmitHandler<{
+    items: BudgetEntity[];
+  }> = async ({ items }) => {
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+
+      if (isEditing && typeof item.budgetId === "number") {
+        const prev = currentData.items[i];
+        const diffed = diffFields(prev, item);
+
+        if (Object.keys(diffed).length === 0) {
+          console.log(`변경 사항 없음 (index ${i})`);
+          continue;
+        }
+
+        const saveData = {
+          ...diffed,
+          id: item.budgetId,
+          budgetId: item.budgetId,
+        };
+        await onSave([saveData]);
+      } else {
+        const saveData = filterEmptyFields(item);
+        await onSave([saveData]);
+      }
     }
+
+    onClose();
   };
 
   return (
@@ -81,7 +110,7 @@ const AddBudgetModal = ({
                       <BudgetItem
                         key={field.categoryId}
                         index={index}
-                        categories={categories}
+                        unBudgets={unBudgets}
                       />
                     ))}
                   </div>

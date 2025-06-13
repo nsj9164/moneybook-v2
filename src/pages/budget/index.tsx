@@ -1,22 +1,20 @@
-import { useMemo, useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import AddBudgetModal from "@/components/budget/modals/AddBudgetModal";
 import NotificationModal from "@/components/common/modal/NotificationModal";
 import { useNotification } from "@/hooks/useNotification";
 import { ContentHeader } from "@/components/common/layout/ContentHeader";
 import { UsageProgress } from "@/components/budget/progress/UsageProgress";
-import { useBudgetCategories } from "@/hooks/useBudgetCategories";
 import { CardSection } from "@/components/common/layout/CardSection";
 import { Button } from "@/components/ui/Button";
 import { DateFilterControl } from "@/components/budget/filter/DateFilterControl";
 import { SummarySection } from "@/components/budget/summary/SummarySection";
-import { useFirstExpenseYear } from "@/hooks/useFirstExpenseYear";
 import { useModalFormArray } from "@/components/settings/hooks/useModalFormArray";
-import { BudgetFormInput, BudgetSubmitInput } from "@/types";
+import { BudgetEntity } from "@/types";
 import { useSetRecoilState } from "recoil";
 import { budgetState } from "@/recoil/atoms";
 import { useAuth } from "@/contexts/AuthContext";
-import { updateItem } from "@/utils/crud";
+import { deleteItem, insertItem, updateItem } from "@/utils/crud";
 import { patchItem } from "@/utils/patchItem";
 import { initialBudget } from "@/components/budget/constants/BudgetConstants";
 import { AnimatePresence } from "framer-motion";
@@ -24,9 +22,9 @@ import { EmptyBudgetNotice } from "@/components/budget/list/EmptyBudgetNotice";
 import { motion } from "framer-motion";
 import { BudgetCategoryItem } from "@/components/budget/list/BudgetCategoryItem";
 import { FormProvider } from "react-hook-form";
-import { endOfMonth, format, startOfMonth } from "date-fns";
 import { useBudgetDateFilter } from "./hook/useBudgetDateFilter";
 import { EmptyFilterBudgetNotice } from "@/components/budget/list/EmptyFilterBudgetNotice";
+import { useBudgetData } from "@/hooks/budget/useBudgetData";
 
 const Budget = () => {
   const { userId } = useAuth();
@@ -34,80 +32,66 @@ const Budget = () => {
   const {
     firstExpenseYear,
     selectedDate,
-    startDate,
-    endDate,
     years,
     handleChangeYear,
     handleChangeMonth,
   } = useBudgetDateFilter();
-  console.log("#################", firstExpenseYear);
+
+  const { budgets, unBudgets, refetchAll } = useBudgetData({
+    selectedDate,
+  });
+  console.log("🎈", selectedDate, "🎈", budgets, "🎈", unBudgets);
+
   const [showDateSelector, setShowDateSelector] = useState(false);
   const toggleDateSelector = () => setShowDateSelector(!showDateSelector);
-
-  const { categories, loading, refetch } = useBudgetCategories({
-    startDate,
-    endDate,
-  });
-  const budgetedCategories = categories.filter((item) => item.budgetYn);
 
   const { notification, showSuccess, hideNotification } = useNotification();
 
   const setBudget = useSetRecoilState(budgetState);
   // 총 예산 및 지출 계산
-  const totalBudget = budgetedCategories.reduce(
-    (sum, list) => sum + list.budget,
-    0
-  );
-  const totalSpent = budgetedCategories.reduce(
-    (sum, list) => sum + list.spent,
-    0
-  );
+  const totalBudget = budgets.reduce((sum, list) => sum + list.amount, 0);
+  const totalSpent = budgets.reduce((sum, list) => sum + list.spent, 0);
   const remainingBudget = totalBudget - totalSpent;
   const budgetProgress = Math.round((totalSpent / totalBudget) * 100);
 
-  const { methods, isOpen, openModal, closeModal } =
-    useModalFormArray<BudgetFormInput>(initialBudget());
+  const { methods, isOpen, isEditing, openModal, closeModal } =
+    useModalFormArray<BudgetEntity>(initialBudget());
 
-  const handleSaveBudget = async (budgetItems: BudgetSubmitInput[]) => {
+  const handleSaveBudget = async (budgetItems: BudgetEntity[]) => {
     for (const item of budgetItems) {
-      await updateItem<BudgetSubmitInput>(
-        "categories",
-        item,
-        userId!,
-        (saved: BudgetSubmitInput) => {
+      const isNew = typeof item.budgetId === "string";
+
+      const saveItem = {
+        ...item,
+        id: item.budgetId,
+        year: selectedDate.year,
+        month: selectedDate.month,
+      };
+
+      if (isNew) {
+        await insertItem("budgets", saveItem, userId!, (saved) => {
           setBudget((prev) => patchItem(prev, saved));
-        }
-      );
+        });
+      } else {
+        await updateItem("budgets", saveItem, userId!, (saved) => {
+          setBudget((prev) => patchItem(prev, saved));
+        });
+      }
     }
 
-    await refetch();
+    await refetchAll();
   };
 
   const handleDelBudget = async (id: number) => {
-    const deleteItem = {
-      id,
-      budget: 0,
-      budgetYn: false,
-    };
-    console.log(deleteItem);
-    await updateItem<BudgetSubmitInput>(
-      "categories",
-      deleteItem,
-      userId!,
-      (saved: BudgetSubmitInput) => {
-        setBudget((prev) => patchItem(prev, saved));
-      }
-    );
+    await deleteItem("budgets", id, () => {
+      setBudget((prev) => prev.filter((item) => item.id !== id));
+    });
 
-    await refetch();
+    await refetchAll();
   };
 
-  const handleClickAdd = () => {
-    openModal();
-  };
-
-  const handleClickEdit = ({ categoryId, budget }: BudgetFormInput) => {
-    openModal([{ categoryId, budget }]);
+  const handleClickEdit = (budget: BudgetEntity) => {
+    openModal(budget);
   };
 
   return (
@@ -127,7 +111,7 @@ const Budget = () => {
             handleChangeMonth={handleChangeMonth}
           />
 
-          <Button variant="saveBtn" onClick={handleClickAdd}>
+          <Button variant="saveBtn" onClick={() => openModal()}>
             <Plus className="mr-2 -ml-1 h-4 w-4" />
             예산 추가
           </Button>
@@ -137,7 +121,7 @@ const Budget = () => {
       {/* 메인 콘텐츠 영역 */}
       <div className="p-6 space-y-6">
         <AnimatePresence mode="wait">
-          {budgetedCategories.length > 0 ? (
+          {budgets.length > 0 ? (
             <motion.div
               key="budget-content"
               initial={{ opacity: 0 }}
@@ -149,7 +133,7 @@ const Budget = () => {
               {/* 기간 선택 및 요약 정보 */}
               <SummarySection
                 totalBudget={totalBudget}
-                budgetLen={budgetedCategories.length}
+                budgetLen={budgets.length}
                 totalSpent={totalSpent}
                 budgetProgress={budgetProgress}
                 remainingBudget={remainingBudget}
@@ -165,19 +149,19 @@ const Budget = () => {
               {/* 카테고리별 예산 */}
               <CardSection title={"카테고리별 예산"}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {budgetedCategories.map((category) => {
+                  {budgets.map((budget) => {
                     const progress = Math.round(
-                      (category.spent / category.budget) * 100
+                      (budget.spent / budget.amount) * 100
                     );
-                    const diffAmount = category.budget - category.spent;
+                    const diffAmount = budget.amount - budget.spent;
 
                     return (
                       <BudgetCategoryItem
-                        key={category.categoryId}
-                        budget={category}
+                        key={budget.categoryId}
+                        budget={budget}
                         progress={progress}
                         diffAmount={diffAmount}
-                        openModal={() => handleClickEdit(category)}
+                        openModal={() => handleClickEdit(budget)}
                         onDelete={handleDelBudget}
                       />
                     );
@@ -191,12 +175,12 @@ const Budget = () => {
           ) : typeof firstExpenseYear === "number" &&
             !isNaN(firstExpenseYear) ? (
             <EmptyFilterBudgetNotice
-              openModal={handleClickAdd}
+              openModal={() => openModal()}
               toggleDateSelector={toggleDateSelector}
               selectedDate={selectedDate}
             />
           ) : (
-            <EmptyBudgetNotice openModal={handleClickAdd} />
+            <EmptyBudgetNotice openModal={() => openModal()} />
           )}
         </AnimatePresence>
       </div>
@@ -205,9 +189,10 @@ const Budget = () => {
       <FormProvider {...methods}>
         <AddBudgetModal
           isOpen={isOpen}
+          isEditing={isEditing}
           onClose={closeModal}
           onSave={handleSaveBudget}
-          categories={categories}
+          unBudgets={unBudgets}
         />
       </FormProvider>
 

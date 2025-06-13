@@ -24,7 +24,8 @@ export async function insertItem<T extends object>(
   onSuccess?: (row: T) => void
 ) {
   const snakeItem = formatKeyCase(item, "snake");
-  const insertData = { ...snakeItem, user_id: userId };
+  const { id, ...rest } = snakeItem;
+  const insertData = { ...rest, user_id: userId };
 
   const { data, error } = await supabase
     .from(table)
@@ -46,8 +47,8 @@ export async function updateItem<T extends { id: number | string }>(
 ) {
   if (!item.id) throw new Error("updateItem requires 'id' field");
 
-  const snake = formatKeyCase(item, "snake");
-  const { id, ...updateData } = snake;
+  const snakeItem = formatKeyCase(item, "snake");
+  const { id, ...updateData } = snakeItem;
 
   const { data, error } = await supabase
     .from(table)

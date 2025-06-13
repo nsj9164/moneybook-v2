@@ -1,7 +1,7 @@
 import { formatCurrency } from "@/utils/format";
 import { Edit2, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { BudgetDisplay, BudgetFormInput } from "@/types";
+import { BudgetDisplay } from "@/types";
 
 interface BudgetCategoryItemProps {
   budget: BudgetDisplay;
@@ -36,7 +36,7 @@ export const BudgetCategoryItem = ({
           <div className="ml-4">
             <h3 className="text-sm font-medium text-gray-900">{budget.name}</h3>
             <p className="text-xs text-gray-500">
-              {formatCurrency(budget.spent)} / {formatCurrency(budget.budget)}
+              {formatCurrency(budget.spent)} / {formatCurrency(budget.amount)}
             </p>
           </div>
         </div>

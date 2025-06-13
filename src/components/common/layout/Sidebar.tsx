@@ -57,7 +57,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         </nav>
       </div>
 
-      <div className="p-4 border-t border-gray-200">
+      {/* <div className="p-4 border-t border-gray-200">
         <div className="bg-emerald-50 rounded-lg p-3">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -75,7 +75,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

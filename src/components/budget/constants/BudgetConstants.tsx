@@ -1,3 +1,6 @@
+import { BudgetEntity, BudgetId } from "@/types";
+import { nanoid } from "nanoid";
+
 export const adviceStyleMap = {
   normal: {
     textColor: "text-emerald-600",
@@ -18,7 +21,12 @@ export const adviceStyleMap = {
 
 export type AdviceType = keyof typeof adviceStyleMap;
 
-export const initialBudget = () => ({
-  categoryId: "",
-  budget: 0,
+export const createTempBudgetId = (): BudgetId => `temp_${nanoid()}`;
+
+export const initialBudget = (): BudgetEntity => ({
+  budgetId: createTempBudgetId(),
+  categoryId: undefined,
+  year: new Date().getFullYear(),
+  month: new Date().getMonth(),
+  amount: 0,
 });

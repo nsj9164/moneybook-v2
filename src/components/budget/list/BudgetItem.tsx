@@ -1,20 +1,18 @@
-import { BudgetDisplay } from "@/types";
+import { UnBudgetDisplay } from "@/types";
 import { useFormContext } from "react-hook-form";
 
 interface BudgetItemProps {
   index: number;
-  categories: BudgetDisplay[];
+  unBudgets: UnBudgetDisplay[];
   onRemove?: () => void;
 }
 
-export const BudgetItem = ({ index, categories }: BudgetItemProps) => {
+export const BudgetItem = ({ index, unBudgets }: BudgetItemProps) => {
+  console.log("############", unBudgets);
   const { register, watch } = useFormContext();
-  const currentCategoryId = watch(`items.${index}.categoryId`);
-  const isEditing = !!currentCategoryId;
-
-  const filteredCategories = categories.filter(
-    (cat) => !cat.budgetYn || cat.categoryId === currentCategoryId
-  );
+  // const currentCategoryId = watch(`items.${index}.categoryId`);
+  // const isEditing = !!currentCategoryId;
+  const allItems = watch("items");
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border border-gray-200 rounded-lg">
@@ -23,14 +21,17 @@ export const BudgetItem = ({ index, categories }: BudgetItemProps) => {
           카테고리
         </label>
         <select
-          {...register(`items.${index}.categoryId`, { required: true })}
-          disabled={isEditing}
+          {...register(`items.${index}.categoryId`, {
+            required: true,
+            valueAsNumber: true,
+          })}
+          // disabled={isEditing}
           className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
         >
-          <option value="">선택하세요</option>
-          {filteredCategories.map((category) => (
-            <option key={category.categoryId} value={category.categoryId}>
-              {category.name}
+          <option value={-1}>선택하세요</option>
+          {unBudgets.map((budget) => (
+            <option key={budget.categoryId} value={budget.categoryId}>
+              {budget.emoji} {budget.name}
             </option>
           ))}
         </select>
@@ -41,7 +42,9 @@ export const BudgetItem = ({ index, categories }: BudgetItemProps) => {
           예산 금액
         </label>
         <input
-          {...register(`items.${index}.budget`, { required: true })}
+          {...register(`items.${index}.amount`, {
+            required: true,
+          })}
           type="number"
           placeholder="0"
           className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"

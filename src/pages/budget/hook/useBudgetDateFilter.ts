@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { startOfMonth, endOfMonth, format } from "date-fns";
 import { useFirstExpenseYear } from "@/hooks/useFirstExpenseYear";
 
 export const useBudgetDateFilter = () => {
@@ -8,21 +7,6 @@ export const useBudgetDateFilter = () => {
     year: currentYear,
     month: new Date().getMonth(),
   });
-
-  const selectedJsDate = useMemo(
-    () => new Date(selectedDate.year, selectedDate.month),
-    [selectedDate]
-  );
-
-  const startDate = useMemo(
-    () => format(startOfMonth(selectedJsDate), "yyyy-MM-dd"),
-    [selectedJsDate]
-  );
-
-  const endDate = useMemo(
-    () => format(endOfMonth(selectedJsDate), "yyyy-MM-dd"),
-    [selectedJsDate]
-  );
 
   const { data: firstExpenseYear } = useFirstExpenseYear();
   const years = useMemo(() => {
@@ -39,8 +23,6 @@ export const useBudgetDateFilter = () => {
   return {
     firstExpenseYear,
     selectedDate,
-    startDate,
-    endDate,
     years,
     handleChangeYear,
     handleChangeMonth,

@@ -1,20 +1,25 @@
-export interface BudgetFormInput {
-  categoryId: string;
-  budget: number;
-}
-
-export interface BudgetSubmitInput {
+export type BudgetId = number | `temp_${string}`;
+export interface BudgetEntity {
   id: number;
-  budget: number;
-  budgetYn: boolean;
+  budgetId: BudgetId;
+  categoryId: number | undefined;
+  year: number;
+  month: number;
+  amount: number;
+  copiedFromId?: number;
 }
 
-export interface BudgetDisplay {
+export interface UnBudgetDisplay {
   categoryId: number;
-  budget: number;
   name: string;
   emoji: string;
   color: string;
+}
+
+export interface BudgetDisplay extends UnBudgetDisplay {
+  budgetId: number;
+  year: number;
+  month: number;
+  amount: number;
   spent: number;
-  budgetYn: boolean;
 }
