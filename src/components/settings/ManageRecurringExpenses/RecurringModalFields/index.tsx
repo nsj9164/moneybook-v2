@@ -40,7 +40,6 @@ export const RecurringModalFields = ({
   }, [watch("billingStartDate"), watch("paymentDay")]);
 
   const value = watch("isActive");
-  console.log("*********", value);
 
   return (
     <>

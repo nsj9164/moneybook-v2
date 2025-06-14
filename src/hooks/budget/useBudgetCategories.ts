@@ -4,6 +4,7 @@ import { supabase } from "@/utils/supabase";
 import { useRecoilState } from "recoil";
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { BudgetEntity } from "@/types";
 
 interface BudgetCategoriesOptions {
   selectedDate: { year: number; month: number };
@@ -36,7 +37,14 @@ export const useBudgetCategories = ({
     }
 
     if (data) {
-      setBudgets(formatKeyCase(data, "camel"));
+      const camelData = formatKeyCase(data, "camel").map(
+        (item: BudgetEntity) => ({
+          ...item,
+          id: item.budgetId,
+        })
+      );
+
+      setBudgets(camelData);
     }
     setLoading(false);
   }, [selectedDate, userId, setBudgets]);

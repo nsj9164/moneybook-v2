@@ -45,8 +45,17 @@ const AddBudgetModal = ({
   const onSubmit: SubmitHandler<{
     items: BudgetEntity[];
   }> = async ({ items }) => {
+    const toSave: BudgetEntity[] = [];
+
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
+
+      const baseFields = {
+        categoryId: item.categoryId,
+        year: item.year,
+        month: item.month,
+        amount: item.amount,
+      };
 
       if (isEditing && typeof item.budgetId === "number") {
         const prev = currentData.items[i];
@@ -57,16 +66,21 @@ const AddBudgetModal = ({
           continue;
         }
 
-        const saveData = {
+        toSave.push({
+          ...baseFields,
           ...diffed,
-          id: item.budgetId,
+          id: item.id,
           budgetId: item.budgetId,
-        };
-        await onSave([saveData]);
+        });
       } else {
-        const saveData = filterEmptyFields(item);
-        await onSave([saveData]);
+        toSave.push({ ...baseFields, id: item.id });
       }
+    }
+
+    if (toSave.length > 0) {
+      await onSave(toSave);
+    } else {
+      console.log("변경 사항 없음, 저장 생략됨!");
     }
 
     onClose();
@@ -108,7 +122,7 @@ const AddBudgetModal = ({
                   <div className="space-y-4">
                     {fields.map((field, index) => (
                       <BudgetItem
-                        key={field.categoryId}
+                        key={field.id}
                         index={index}
                         unBudgets={unBudgets}
                       />

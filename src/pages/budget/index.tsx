@@ -40,7 +40,6 @@ const Budget = () => {
   const { budgets, unBudgets, refetchAll } = useBudgetData({
     selectedDate,
   });
-  console.log("🎈", selectedDate, "🎈", budgets, "🎈", unBudgets);
 
   const [showDateSelector, setShowDateSelector] = useState(false);
   const toggleDateSelector = () => setShowDateSelector(!showDateSelector);
@@ -58,6 +57,7 @@ const Budget = () => {
     useModalFormArray<BudgetEntity>(initialBudget());
 
   const handleSaveBudget = async (budgetItems: BudgetEntity[]) => {
+    console.log("▪▪▪▪▪", budgetItems);
     for (const item of budgetItems) {
       const isNew = typeof item.budgetId === "string";
 
@@ -89,11 +89,6 @@ const Budget = () => {
 
     await refetchAll();
   };
-
-  const handleClickEdit = (budget: BudgetEntity) => {
-    openModal(budget);
-  };
-
   return (
     <div className="h-full">
       {/* 페이지 헤더 */}
@@ -157,11 +152,11 @@ const Budget = () => {
 
                     return (
                       <BudgetCategoryItem
-                        key={budget.categoryId}
+                        key={budget.id}
                         budget={budget}
                         progress={progress}
                         diffAmount={diffAmount}
-                        openModal={() => handleClickEdit(budget)}
+                        openModal={() => openModal(budget)}
                         onDelete={handleDelBudget}
                       />
                     );

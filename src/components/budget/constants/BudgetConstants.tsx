@@ -24,7 +24,7 @@ export type AdviceType = keyof typeof adviceStyleMap;
 export const createTempBudgetId = (): BudgetId => `temp_${nanoid()}`;
 
 export const initialBudget = (): BudgetEntity => ({
-  budgetId: createTempBudgetId(),
+  id: createTempBudgetId(),
   categoryId: undefined,
   year: new Date().getFullYear(),
   month: new Date().getMonth(),

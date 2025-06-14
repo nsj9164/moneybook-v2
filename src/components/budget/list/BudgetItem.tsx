@@ -4,15 +4,25 @@ import { useFormContext } from "react-hook-form";
 interface BudgetItemProps {
   index: number;
   unBudgets: UnBudgetDisplay[];
-  onRemove?: () => void;
 }
 
 export const BudgetItem = ({ index, unBudgets }: BudgetItemProps) => {
-  console.log("############", unBudgets);
   const { register, watch } = useFormContext();
-  // const currentCategoryId = watch(`items.${index}.categoryId`);
-  // const isEditing = !!currentCategoryId;
-  const allItems = watch("items");
+
+  const currentItem = watch(`items.${index}`);
+  const selectedId = currentItem?.categoryId;
+
+  const isFixedCategory =
+    selectedId !== undefined &&
+    !unBudgets.some((b) => b.categoryId === selectedId);
+
+  const selectedCategory = {
+    categoryId: selectedId,
+    name: currentItem.name,
+    emoji: currentItem.emoji,
+  };
+
+  const categoryOptions = isFixedCategory ? [selectedCategory] : unBudgets;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border border-gray-200 rounded-lg">
@@ -25,13 +35,13 @@ export const BudgetItem = ({ index, unBudgets }: BudgetItemProps) => {
             required: true,
             valueAsNumber: true,
           })}
-          // disabled={isEditing}
+          disabled={isFixedCategory}
           className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
         >
           <option value={-1}>선택하세요</option>
-          {unBudgets.map((budget) => (
-            <option key={budget.categoryId} value={budget.categoryId}>
-              {budget.emoji} {budget.name}
+          {categoryOptions.map((category) => (
+            <option key={category.categoryId} value={category.categoryId}>
+              {category.emoji} {category.name}
             </option>
           ))}
         </select>
