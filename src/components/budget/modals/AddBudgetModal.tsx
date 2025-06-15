@@ -4,8 +4,8 @@ import { BudgetItem } from "../list/BudgetItem";
 import { SubmitHandler, useFieldArray, useFormContext } from "react-hook-form";
 import { initialBudget } from "../constants/BudgetConstants";
 import { BudgetEntity, UnBudgetDisplay } from "@/types";
-import { diffFields, filterEmptyFields } from "@/utils/form";
-import { useState, useEffect } from "react";
+import { diffFields } from "@/utils/form";
+import { useRef, useLayoutEffect } from "react";
 
 interface AddBudgetModalProps {
   isOpen: boolean;
@@ -22,7 +22,7 @@ const AddBudgetModal = ({
   onSave,
   unBudgets,
 }: AddBudgetModalProps) => {
-  const { handleSubmit, control, reset, getValues } = useFormContext<{
+  const { handleSubmit, control, getValues } = useFormContext<{
     items: BudgetEntity[];
   }>();
 
@@ -31,24 +31,26 @@ const AddBudgetModal = ({
     control,
   });
 
-  const [currentData, setCurrentData] = useState<{
-    items: BudgetEntity[];
-  }>({
-    items: [],
-  });
+  const prevDataRef = useRef<{ items: BudgetEntity[] }>({ items: [] });
 
-  useEffect(() => {
-    if (isEditing && isOpen)
-      setCurrentData(getValues() as { items: BudgetEntity[] });
-  }, [isEditing, isOpen]);
+  useLayoutEffect(() => {
+    if (isOpen && isEditing) {
+      const snapshot = getValues();
+      prevDataRef.current = {
+        items: snapshot.items.map((item) => ({ ...item })),
+      };
+    }
+  }, [isOpen, isEditing]);
 
   const onSubmit: SubmitHandler<{
     items: BudgetEntity[];
   }> = async ({ items }) => {
+    const prevItems = prevDataRef.current.items;
     const toSave: BudgetEntity[] = [];
 
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
+      const prev = prevItems[i];
 
       const baseFields = {
         categoryId: item.categoryId,
@@ -58,7 +60,6 @@ const AddBudgetModal = ({
       };
 
       if (isEditing && typeof item.budgetId === "number") {
-        const prev = currentData.items[i];
         const diffed = diffFields(prev, item);
 
         if (Object.keys(diffed).length === 0) {

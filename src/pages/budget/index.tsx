@@ -59,21 +59,22 @@ const Budget = () => {
   const handleSaveBudget = async (budgetItems: BudgetEntity[]) => {
     console.log("▪▪▪▪▪", budgetItems);
     for (const item of budgetItems) {
-      const isNew = typeof item.budgetId === "string";
+      const isNew = typeof item.id === "string";
 
-      const saveItem = {
+      const commonFields = {
         ...item,
-        id: item.budgetId,
         year: selectedDate.year,
         month: selectedDate.month,
       };
 
       if (isNew) {
-        await insertItem("budgets", saveItem, userId!, (saved) => {
+        await insertItem("budgets", commonFields, userId!, (saved) => {
           setBudget((prev) => patchItem(prev, saved));
         });
       } else {
-        await updateItem("budgets", saveItem, userId!, (saved) => {
+        const updateFields = { ...commonFields, id: item.budgetId };
+        delete updateFields.budgetId;
+        await updateItem("budgets", updateFields, userId!, (saved) => {
           setBudget((prev) => patchItem(prev, saved));
         });
       }
