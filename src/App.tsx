@@ -1,15 +1,15 @@
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "@/pages/Dashboard";
-import Expenses from "./pages/Expenses";
-import Statistics from "./pages/Statistics";
-import Budget from "./pages/budget";
-import Profile from "./pages/Profile";
+import Dashboard from "@/features/dashboard/pages/DashboardPage";
 import MainLayout from "./layouts/MainLayout";
 import RequireAuth from "./contexts/RequireAuth";
-import Login from "./pages/Login";
-import { AuthCallback } from "./pages/AuthCallback";
-import Settings from "./pages/settings";
-import ExpenseFormPage from "./components/expenses/edit";
+import Expenses from "./features/expenses/pages/ExpensesPage";
+import ExpenseFormPage from "./features/expenses/components/edit";
+import Budget from "./features/budget/pages/BudgetPage";
+import Settings from "./features/settings/pages/SettingsPage";
+import Login from "./features/auth/pages/LoginPage";
+import { AuthCallback } from "./features/auth/pages/AuthCallback";
+import Statistics from "./features/statistics/pages/Statistics";
+import Profile from "./features/profile/pages/Profile";
 
 function App() {
   return (

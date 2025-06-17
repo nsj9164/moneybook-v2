@@ -1,6 +1,6 @@
 import { BrandLogo } from "@/components/ui-elements/BrandLogo";
-import { LoginForm } from "@/components/auth/LoginForm";
 import { TermsNotice } from "@/components/ui-elements/TermsNotice";
+import { LoginForm } from "@/features/auth/components/LoginForm";
 
 export function AuthSection() {
   return (
