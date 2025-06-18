@@ -1,4 +1,4 @@
-export type UUID = string;
+import { UUID } from "@/types/ids";
 
 export interface IExpense {
   id: UUID;

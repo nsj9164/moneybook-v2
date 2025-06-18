@@ -6,7 +6,7 @@ import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { useExpenseFilters } from "../hooks/useExpenseFilters";
 import { allColumns } from "../types/filters";
-import { UUID } from "@/types";
+import { UUID } from "@/types/ids";
 import { Button } from "@/components/ui/Button";
 import { ListHeader } from "../components/list/ListHeader";
 import { FilterPanel } from "../components/filters/FilterPanel";

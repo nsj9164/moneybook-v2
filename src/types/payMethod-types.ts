@@ -1,5 +1,7 @@
+import { EntityId } from "./ids";
+
 export interface PayMethodEntity {
-  id: number;
+  id: EntityId;
   name: string;
   billingStartDay?: number;
   billingEndDay?: number;
@@ -7,5 +9,3 @@ export interface PayMethodEntity {
   emoji: string;
   defaultYn: boolean;
 }
-
-export type PayMethodInput = Partial<Omit<PayMethodEntity, "id">>;

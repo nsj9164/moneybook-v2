@@ -1,4 +1,4 @@
-import { UUID } from "@/types";
+import { UUID } from "@/types/ids";
 import { formatKeyCase } from "./caseConverter";
 import { supabase } from "./supabase";
 

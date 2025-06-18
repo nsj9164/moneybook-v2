@@ -1,3 +1,4 @@
+import { createTempEntityId } from "@/types/ids";
 import {
   categoryColorOptions,
   categoryEmojiOptions,
@@ -14,7 +15,7 @@ export const formMeta: {
   [FormType.Categories]: {
     title: "카테고리",
     initial: () => ({
-      id: Date.now(),
+      id: createTempEntityId(),
       name: "",
       color: categoryColorOptions[0].value,
       emoji: categoryEmojiOptions[0],
@@ -28,7 +29,7 @@ export const formMeta: {
   [FormType.PayMethods]: {
     title: "결제수단",
     initial: () => ({
-      id: Date.now(),
+      id: createTempEntityId(),
       name: "",
       emoji: payMethodEmojiOptions[0],
       defaultYn: false,

@@ -1,7 +1,7 @@
-import { UUID } from "./expense-types";
+import { EntityId, UUID } from "@/types/ids";
 
 export interface CategoryEntity {
-  id: number;
+  id: EntityId;
   name: string;
   budget: number;
   transactionType: number;
@@ -10,5 +10,3 @@ export interface CategoryEntity {
   defaultYn: boolean;
   userId: UUID;
 }
-
-export type CategoryInput = Partial<Omit<CategoryEntity, "id">>;

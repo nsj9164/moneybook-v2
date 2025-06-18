@@ -1,5 +1,7 @@
+import { EntityId } from "./ids";
+
 export interface RecurringEntity {
-  id: number;
+  id: EntityId;
   name: string;
   amount: number;
   cycle: number;
@@ -21,5 +23,3 @@ export interface RecurringDisplay extends RecurringEntity {
   paymentMethodEmoji?: string;
   cycleLabel?: string;
 }
-
-export type RecurringInput = Partial<Omit<RecurringEntity, "id">>;

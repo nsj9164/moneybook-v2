@@ -1,3 +1,4 @@
+import { CategoryEntity, PayMethodEntity } from "@/types";
 import { FieldValues, Path } from "react-hook-form";
 
 export enum FormType {
@@ -5,28 +6,9 @@ export enum FormType {
   PayMethods = "payMethods",
 }
 
-export interface CategoryForm {
-  id: number;
-  name: string;
-  color: string;
-  emoji: string;
-  defaultYn: boolean;
-  budget: number;
-  transactionType: number;
-  userId: string;
-}
-
-export interface PayMethodForm {
-  id: number;
-  name: string;
-  emoji: string;
-  defaultYn: boolean;
-  typeId: number;
-}
-
 export type FormMap = {
-  [FormType.Categories]: CategoryForm;
-  [FormType.PayMethods]: PayMethodForm;
+  [FormType.Categories]: CategoryEntity;
+  [FormType.PayMethods]: PayMethodEntity;
 };
 
 export type FieldConfig<K extends FieldValues = FieldValues> =

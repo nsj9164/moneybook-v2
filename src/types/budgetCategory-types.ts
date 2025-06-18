@@ -1,6 +1,7 @@
-export type BudgetId = number | `temp_${string}`;
+import { EntityId } from "./ids";
+
 export interface BudgetEntity {
-  id: BudgetId;
+  id: EntityId;
   budgetId?: number;
   categoryId: number | undefined;
   year: number;
@@ -17,7 +18,7 @@ export interface UnBudgetDisplay {
 }
 
 export interface BudgetDisplay extends UnBudgetDisplay {
-  id: BudgetId;
+  id: EntityId;
   year: number;
   month: number;
   amount: number;
