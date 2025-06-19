@@ -5,7 +5,7 @@ interface SummaryCardProps {
   footerLabel: string;
   footerValue: string;
   progressClass?: string;
-  progress?: string;
+  progress?: number;
   children?: React.ReactNode;
 }
 export const SummaryCard = ({

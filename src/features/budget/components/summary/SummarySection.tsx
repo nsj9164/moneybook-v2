@@ -1,21 +1,27 @@
 import { formatCurrency } from "@/utils/format";
 import { SummaryCard } from "./SummaryCard";
+import { BudgetSummary } from "../../types/budget";
 
 interface SummarySectionProps {
-  totalBudget: number;
-  budgetLen: number;
-  totalSpent: number;
-  budgetProgress: number;
-  remainingBudget: number;
+  summary: BudgetSummary;
+  budgetsLen: number;
 }
 
 export const SummarySection = ({
-  totalBudget,
-  budgetLen,
-  totalSpent,
-  budgetProgress,
-  remainingBudget,
+  summary,
+  budgetsLen,
 }: SummarySectionProps) => {
+  const {
+    totalBudget,
+    totalSpent,
+    remainingBudget,
+    budgetProgress,
+    remainingDay,
+    remainingPercent,
+    averagePerDay,
+    isCurrentMonth,
+    isPastMonth,
+  } = summary;
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <SummaryCard
@@ -23,7 +29,7 @@ export const SummarySection = ({
         value={formatCurrency(totalBudget) ?? 0}
         colorClass={"text-gray-900"}
         footerLabel={"카테고리"}
-        footerValue={`${budgetLen}개`}
+        footerValue={`${budgetsLen}개`}
       />
 
       <SummaryCard
@@ -33,9 +39,9 @@ export const SummarySection = ({
         footerLabel={"예산 대비"}
         footerValue={`${budgetProgress}%`}
         progressClass={`${
-          budgetProgress > 100 ? "bg-red-500" : "bg-emerald-500"
+          budgetProgress > 80 ? "bg-red-500" : "bg-emerald-500"
         }`}
-        progress={`${Math.min(budgetProgress, 100)}%`}
+        progress={Math.min(budgetProgress, 100)}
       />
 
       <SummaryCard
@@ -43,14 +49,14 @@ export const SummarySection = ({
         value={formatCurrency(remainingBudget)}
         colorClass={"text-emerald-600"}
         footerLabel={"남은 일수"}
-        footerValue={"15일"}
+        footerValue={`${remainingDay}일`}
         progressClass={`${
-          budgetProgress > 100 ? "bg-red-500" : "bg-emerald-500"
+          remainingPercent > 80 ? "bg-red-500" : "bg-emerald-500"
         }`}
-        progress={"50%"}
+        progress={Math.min(remainingPercent, 100)}
       >
         <p className="text-xs text-gray-500 mt-2">
-          하루 평균 {formatCurrency(remainingBudget / 15)} 사용 가능
+          하루 평균 {formatCurrency(averagePerDay)} 사용 가능
         </p>
       </SummaryCard>
     </div>

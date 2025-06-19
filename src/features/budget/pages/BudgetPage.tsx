@@ -89,6 +89,7 @@ const Budget = () => {
                 budgets={budgets}
                 openModal={openModal}
                 onDelete={handleDelBudget}
+                selectedDate={selectedDate}
               />
             </motion.div>
           ) : typeof firstExpenseYear === "number" &&
