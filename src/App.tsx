@@ -9,7 +9,7 @@ import Settings from "./features/settings/pages/SettingsPage";
 import Login from "./features/auth/pages/LoginPage";
 import { AuthCallback } from "./features/auth/pages/AuthCallback";
 import Statistics from "./features/statistics/pages/Statistics";
-import Profile from "./features/profile/pages/Profile";
+import Profile from "./features/profile/pages/ProfilePage";
 
 function App() {
   return (
