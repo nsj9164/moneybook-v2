@@ -6,6 +6,6 @@ export interface IUserProfile {
   name?: string;
   profileImage?: string;
   note?: string;
-  provider: string;
-  created_at?: Date;
+  provider: "kakao" | "google";
+  createdAt: Date;
 }

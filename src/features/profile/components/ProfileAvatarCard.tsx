@@ -3,17 +3,18 @@ import { ko } from "date-fns/locale";
 import { Camera, LogOut, User } from "lucide-react";
 
 interface ProfileAvatarCardProps {
-  profile: {
-    image: string;
-    name: string;
-    email: string;
-    createdAt: Date;
-  };
+  image: string;
+  name: string;
+  email: string;
+  createdAt: Date;
   logout: () => void;
 }
 
 export const ProfileAvatarCard = ({
-  profile,
+  image,
+  name,
+  email,
+  createdAt,
   logout,
 }: ProfileAvatarCardProps) => {
   return (
@@ -21,7 +22,7 @@ export const ProfileAvatarCard = ({
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 flex flex-col items-center">
         <div className="relative">
           <img
-            src={profile.image || "/placeholder.svg"}
+            src={image || "/placeholder.svg"}
             alt="프로필 이미지"
             className="h-32 w-32 rounded-full object-cover"
           />
@@ -36,10 +37,8 @@ export const ProfileAvatarCard = ({
             </label>
           </div>
         </div>
-        <h2 className="mt-6 text-xl font-semibold text-gray-900">
-          {profile.name}
-        </h2>
-        <p className="text-sm text-gray-500">{profile.email}</p>
+        <h2 className="mt-6 text-xl font-semibold text-gray-900">{name}</h2>
+        <p className="text-sm text-gray-500">{email}</p>
 
         {/* 소셜 로그인 표시 */}
         <div className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -53,7 +52,7 @@ export const ProfileAvatarCard = ({
               <div>
                 <p className="text-sm font-medium text-gray-500">가입일</p>
                 <p className="text-sm text-gray-900">
-                  {format(profile.createdAt, "PPP", { locale: ko })}
+                  {format(createdAt, "PPP", { locale: ko })}
                 </p>
               </div>
             </div>
