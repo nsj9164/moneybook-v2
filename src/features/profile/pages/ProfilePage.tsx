@@ -12,6 +12,7 @@ const Profile = () => {
     userId,
     user && user.provider ? user.provider : undefined
   );
+
   if (!profile) return null;
 
   return (
@@ -34,7 +35,7 @@ const Profile = () => {
           {/* 프로필 정보 및 통계 */}
           <div className="lg:col-span-2">
             {/* 프로필 정보 */}
-            <ProfileInfoSection />
+            <ProfileInfoSection profile={profile} />
 
             {/* 통계 요약 */}
             <ProfileStats />

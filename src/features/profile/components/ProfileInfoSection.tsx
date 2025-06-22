@@ -1,4 +1,6 @@
-export const ProfileInfoSection = () => {
+import { IUserProfile } from "../types/UserProfile";
+
+export const ProfileInfoSection = ({ profile }: IUserProfile) => {
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-6">프로필 정보</h3>
@@ -8,7 +10,7 @@ export const ProfileInfoSection = () => {
             이름
           </label>
           <p className="mt-2 text-sm text-gray-900 p-3 bg-gray-50 rounded-lg">
-            {profileData.name}
+            {profile.name}
           </p>
         </div>
         <div>
@@ -16,7 +18,7 @@ export const ProfileInfoSection = () => {
             이메일
           </label>
           <p className="mt-2 text-sm text-gray-900 p-3 bg-gray-50 rounded-lg">
-            {profileData.email}
+            {profile.email}
           </p>
         </div>
         <div>
@@ -24,7 +26,7 @@ export const ProfileInfoSection = () => {
             전화번호
           </label>
           <p className="mt-2 text-sm text-gray-900 p-3 bg-gray-50 rounded-lg">
-            {profileData.phone}
+            {profile.phone}
           </p>
         </div>
         <div>
@@ -32,7 +34,7 @@ export const ProfileInfoSection = () => {
             가입일
           </label>
           <p className="mt-2 text-sm text-gray-900 p-3 bg-gray-50 rounded-lg">
-            {profileData.joinDate}
+            {profile.createdAt}
           </p>
         </div>
         <div className="md:col-span-2">
@@ -40,7 +42,7 @@ export const ProfileInfoSection = () => {
             자기소개
           </label>
           <p className="mt-2 text-sm text-gray-900 p-3 bg-gray-50 rounded-lg">
-            {profileData.bio}
+            {profile.note}
           </p>
         </div>
       </div>

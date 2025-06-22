@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { IUserProfile } from "../types/UserProfile";
 import { supabase } from "@/utils/supabase";
 import { UUID } from "@/types/ids";
+import { formatKeyCase } from "@/utils/caseConverter";
 
 export const useUserProfile = (userId: UUID | null, provider?: string) => {
   const [profile, setProfile] = useState<IUserProfile | null>(null);
@@ -22,7 +23,8 @@ export const useUserProfile = (userId: UUID | null, provider?: string) => {
         console.error("user profile loading failed:", error.message);
         setProfile(null);
       } else {
-        setProfile(data);
+        const mappedData = formatKeyCase(data, "camel");
+        setProfile(mappedData ?? []);
       }
 
       setLoading(false);
