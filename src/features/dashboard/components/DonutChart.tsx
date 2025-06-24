@@ -1,45 +1,5 @@
-import { formatCurrency } from "@/utils/format";
-
-interface CategoryChartProps {
-  data: {
-    name: string;
-    value: number;
-    color: string;
-  }[];
-}
-
-const CategoryChart = ({ data }: CategoryChartProps) => {
-  const total = data.reduce((sum, item) => sum + item.value, 0);
-
-  return (
-    <div className="rounded-lg border bg-white shadow-sm">
-      <div className="p-4">
-        <h2 className="text-base font-semibold">카테고리별 지출</h2>
-        <p className="text-sm text-gray-500">이번 달 지출 분석</p>
-
-        <div className="mt-4 flex flex-col md:flex-row items-center gap-8">
-          <div className="relative h-52 w-52">
-            <DonutChart data={data} />
-          </div>
-          <div className="grid gap-2">
-            {data.map((category) => (
-              <div key={category.name} className="flex items-center gap-2">
-                <div className={`h-3 w-3 rounded-full ${category.color}`} />
-                <div className="flex-1 text-sm">{category.name}</div>
-                <div className="font-medium">
-                  {formatCurrency(category.value)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 // 도넛 차트 컴포넌트
-function DonutChart({
+export function DonutChart({
   data,
 }: {
   data: { name: string; value: number; color: string }[];
@@ -73,11 +33,11 @@ function DonutChart({
 
         // 원호 경로 생성
         const pathData = `
-          M 50 50
-          L ${startX} ${startY}
-          A 40 40 0 ${largeArcFlag} 1 ${endX} ${endY}
-          Z
-        `;
+            M 50 50
+            L ${startX} ${startY}
+            A 40 40 0 ${largeArcFlag} 1 ${endX} ${endY}
+            Z
+          `;
 
         cumulativePercentage += percentage;
 
@@ -92,7 +52,7 @@ function DonutChart({
       <circle cx="50" cy="50" r="30" fill="white" />
       <text
         x="50"
-        y="50"
+        y="45"
         textAnchor="middle"
         dominantBaseline="middle"
         fontSize="10"
@@ -100,8 +60,16 @@ function DonutChart({
       >
         {Math.floor(total / 10000).toLocaleString()}만 원
       </text>
+      <text
+        x="50"
+        y="60"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize="8"
+        fill="#6b7280"
+      >
+        총 지출
+      </text>
     </svg>
   );
 }
-
-export default CategoryChart;

@@ -17,11 +17,10 @@ import {
   Bell,
   MoreHorizontal,
 } from "lucide-react";
-import { formatCurrency } from "@/utils/format";
 import { motion } from "framer-motion";
-import { useFetchExpenses } from "@/hooks/useFetchExpenses";
-import { useFetchCategories } from "@/hooks/useFetchCategories";
-import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
+import { formatCurrency } from "@/utils/format";
+import { DashboardHeader } from "../components/DashboardHeader";
+import { SectionTitle } from "../components/SectionTitle";
 
 // 샘플 데이터
 const monthlyExpense = 1250000;
@@ -105,9 +104,6 @@ const monthlyTrend = [
 ];
 
 const Dashboard = () => {
-  const expenses = useFetchExpenses();
-  const categories = useFetchCategories();
-  const payMethods = useFetchPayMethods();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedMonth, setSelectedMonth] = useState("6");
   const [showMonthSelector, setShowMonthSelector] = useState(false);
@@ -141,235 +137,17 @@ const Dashboard = () => {
   return (
     <div className="h-full">
       {/* 페이지 헤더 */}
-      <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200">
-        <div className="flex items-center space-x-4">
-          <h1 className="text-2xl font-bold text-gray-900">재정 대시보드</h1>
-          <div className="relative">
-            <button
-              className="flex items-center bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-              onClick={() => setShowMonthSelector(!showMonthSelector)}
-            >
-              <Calendar className="h-4 w-4 text-gray-500 mr-2" />
-              2023년 {selectedMonth}월
-              <ChevronDown className="h-4 w-4 text-gray-500 ml-2" />
-            </button>
-
-            {showMonthSelector && (
-              <div className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 p-3 z-10 w-64">
-                <div className="grid grid-cols-3 gap-2">
-                  {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-                    <button
-                      key={month}
-                      className={`px-3 py-2 text-sm rounded-md ${
-                        selectedMonth === month.toString()
-                          ? "bg-emerald-100 text-emerald-700 font-medium"
-                          : "hover:bg-gray-50"
-                      }`}
-                      onClick={() => {
-                        setSelectedMonth(month.toString());
-                        setShowMonthSelector(false);
-                      }}
-                    >
-                      {month}월
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center space-x-3">
-          <button className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors">
-            <Search className="h-5 w-5" />
-          </button>
-          <button className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors">
-            <Bell className="h-5 w-5" />
-          </button>
-          <button className="flex items-center space-x-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-4 py-2 rounded-lg transition-colors">
-            <Plus className="h-4 w-4" />
-            <span className="font-medium">지출 추가</span>
-          </button>
-        </div>
-      </div>
+      {/* <DashboardHeader /> */}
 
       {/* 메인 콘텐츠 영역 */}
       <div className="p-6 space-y-8">
         {/* 섹션 제목 */}
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-800">재정 개요</h2>
-          <button className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center">
-            <span>상세 보기</span>
-            <ArrowRight className="ml-1 h-4 w-4" />
-          </button>
-        </div>
+        <SectionTitle title={"상세 보기"} />
 
         {/* 주요 재정 지표 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* 이번 달 총 지출 */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-medium text-gray-500">
-                  이번 달 총 지출
-                </p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-2">
-                  {formatCurrency(monthlyExpense)}
-                </h3>
-              </div>
-              <div
-                className={`flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                  isIncrease
-                    ? "bg-red-100 text-red-800"
-                    : "bg-emerald-100 text-emerald-800"
-                }`}
-              >
-                {isIncrease ? (
-                  <ArrowUpRight className="h-3 w-3 mr-1" />
-                ) : (
-                  <ArrowDownRight className="h-3 w-3 mr-1" />
-                )}
-                {Math.abs(monthlyChangeRate).toFixed(1)}%
-              </div>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">
-              전월 대비 {isIncrease ? "증가" : "감소"}
-            </p>
-
-            <div className="mt-4">
-              <div className="flex justify-between items-center mb-1.5">
-                <span className="text-xs font-medium text-gray-500">
-                  목표 대비
-                </span>
-                <span className="text-xs font-medium text-gray-700">
-                  {Math.round(budgetAchievementRate)}%
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className={`h-2 rounded-full ${
-                    budgetAchievementRate > 100
-                      ? "bg-red-500"
-                      : "bg-emerald-500"
-                  }`}
-                  style={{ width: `${Math.min(budgetAchievementRate, 100)}%` }}
-                ></div>
-              </div>
-              <p className="text-xs text-gray-500 mt-1.5">
-                목표: {formatCurrency(monthlyGoal)}
-              </p>
-            </div>
-          </div>
-
-          {/* 이번 달 총 수입 */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-medium text-gray-500">
-                  이번 달 총 수입
-                </p>
-                <h3 className="text-2xl font-bold text-blue-600 mt-2">
-                  {formatCurrency(monthlyIncome)}
-                </h3>
-              </div>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">급여, 부수입 포함</p>
-
-            <div className="mt-4">
-              <div className="flex justify-between items-center mb-1.5">
-                <span className="text-xs font-medium text-gray-500">
-                  지출 비율
-                </span>
-                <span className="text-xs font-medium text-gray-700">
-                  {Math.round((monthlyExpense / monthlyIncome) * 100)}%
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="h-2 rounded-full bg-blue-500"
-                  style={{
-                    width: `${Math.min(
-                      (monthlyExpense / monthlyIncome) * 100,
-                      100
-                    )}%`,
-                  }}
-                ></div>
-              </div>
-            </div>
-          </div>
-
-          {/* 이번 달 저축 */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-medium text-gray-500">
-                  이번 달 저축
-                </p>
-                <h3 className="text-2xl font-bold text-emerald-600 mt-2">
-                  {formatCurrency(savingsAmount)}
-                </h3>
-              </div>
-              <div className="flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-                {savingsRate.toFixed(1)}%
-              </div>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">수입 대비 저축률</p>
-
-            <div className="mt-4 flex items-center">
-              <div className="flex-1">
-                <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-xs font-medium text-gray-500">
-                    목표 달성률
-                  </span>
-                  <span className="text-xs font-medium text-gray-700">75%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="h-2 rounded-full bg-emerald-500"
-                    style={{ width: "75%" }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 고정 지출 */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-medium text-gray-500">고정 지출</p>
-                <h3 className="text-2xl font-bold text-purple-600 mt-2">
-                  {formatCurrency(555000)}
-                </h3>
-              </div>
-              <div className="flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                {Math.round((555000 / monthlyExpense) * 100)}%
-              </div>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">총 지출 대비 비율</p>
-
-            <div className="mt-4">
-              <div className="flex justify-between text-xs text-gray-600">
-                <span>월세: {formatCurrency(500000)}</span>
-                <span>통신비: {formatCurrency(55000)}</span>
-              </div>
-              <div className="mt-3">
-                <button className="text-xs text-purple-600 font-medium hover:text-purple-700 flex items-center">
-                  고정 지출 관리
-                  <ArrowRight className="ml-1 h-3 w-3" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* 섹션 제목 */}
-        <div className="flex items-center justify-between pt-4">
-          <h2 className="text-lg font-semibold text-gray-800">지출 분석</h2>
-          <button className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center">
-            <span>상세 보기</span>
-            <ArrowRight className="ml-1 h-4 w-4" />
-          </button>
-        </div>
+        <SectionTitle title={"상세 보기"} divClass={"pt-4"} />
 
         {/* 지출 분석 및 차트 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -489,94 +267,90 @@ const Dashboard = () => {
         </div>
 
         {/* 섹션 제목 */}
-        <div className="flex items-center justify-between pt-4">
-          <h2 className="text-lg font-semibold text-gray-800">거래 내역</h2>
-          <button className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center">
-            <span>모든 거래 보기</span>
-            <ArrowRight className="ml-1 h-4 w-4" />
-          </button>
-        </div>
+        <SectionTitle title={"모든 거래 보기"} divClass={"pt-4"} />
 
         {/* 최근 거래 및 인사이트 */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-2">
-          <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="font-semibold text-gray-800">최근 거래 내역</h3>
-            <div className="flex items-center space-x-3">
-              <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
-                <Filter className="h-4 w-4" />
-              </button>
-              <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
-                <Download className="h-4 w-4" />
-              </button>
-              <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
-                <MoreHorizontal className="h-4 w-4" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* 최근 거래 내역 */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-2">
+            <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="font-semibold text-gray-800">최근 거래 내역</h3>
+              <div className="flex items-center space-x-3">
+                <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
+                  <Filter className="h-4 w-4" />
+                </button>
+                <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
+                  <Download className="h-4 w-4" />
+                </button>
+                <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
+                  <MoreHorizontal className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="divide-y divide-gray-100">
+              {recentTransactions.map((transaction) => (
+                <div
+                  key={transaction.id}
+                  className="p-5 hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div
+                        className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                          transaction.category === "식비"
+                            ? "bg-rose-100"
+                            : transaction.category === "교통비"
+                            ? "bg-blue-100"
+                            : transaction.category === "쇼핑"
+                            ? "bg-emerald-100"
+                            : transaction.category === "여가"
+                            ? "bg-purple-100"
+                            : "bg-amber-100"
+                        }`}
+                      >
+                        <span
+                          className={`text-sm ${
+                            transaction.category === "식비"
+                              ? "text-rose-600"
+                              : transaction.category === "교통비"
+                              ? "text-blue-600"
+                              : transaction.category === "쇼핑"
+                              ? "text-emerald-600"
+                              : transaction.category === "여가"
+                              ? "text-purple-600"
+                              : "text-amber-600"
+                          }`}
+                        >
+                          {transaction.category.charAt(0)}
+                        </span>
+                      </div>
+                      <div className="ml-3">
+                        <p className="text-sm font-medium text-gray-900">
+                          {transaction.description}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {transaction.date} · {transaction.paymentMethod}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {formatCurrency(transaction.amount)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="px-5 py-4 border-t border-gray-200">
+              <button className="w-full text-center text-sm text-emerald-600 font-medium hover:text-emerald-700">
+                모든 거래 보기
               </button>
             </div>
           </div>
 
-          <div className="divide-y divide-gray-100">
-            {expenses.map((expense) => (
-              <div
-                key={expense.id}
-                className="p-5 hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div
-                      className={`h-10 w-10 rounded-full flex items-center justify-center`}
-                      style={{
-                        backgroundColor: categories.find(
-                          (c) => c.id === expense.categoryId
-                        )?.color,
-                      }}
-                    >
-                      <span
-                        className={`text-sm`}
-                        style={{
-                          backgroundColor: categories.find(
-                            (c) => c.id === expense.categoryId
-                          )?.color,
-                        }}
-                      >
-                        {
-                          categories.find((c) => c.id === expense.categoryId)
-                            ?.emoji
-                        }
-                      </span>
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-900">
-                        {expense.itemName}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {expense.date} ·{" "}
-                        {
-                          payMethods.find(
-                            (p) => p.id === expense.paymentMethodId
-                          )?.name
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-sm font-medium text-gray-900">
-                    {formatCurrency(expense.amount)}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="px-5 py-4 border-t border-gray-200">
-            <button className="w-full text-center text-sm text-emerald-600 font-medium hover:text-emerald-700">
-              모든 거래 보기
-            </button>
-          </div>
-        </div>
-        {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-6"> */}
-        {/* 최근 거래 내역 */}
-
-        {/* 인사이트 및 팁 */}
-        {/* <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-1">
+          {/* 인사이트 및 팁 */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-1">
             <div className="px-5 py-4 border-b border-gray-200">
               <h3 className="font-semibold text-gray-800">인사이트</h3>
             </div>
@@ -640,8 +414,8 @@ const Dashboard = () => {
                 </button>
               </div>
             </div>
-          </div> */}
-        {/* </div> */}
+          </div>
+        </div>
       </div>
     </div>
   );
