@@ -1,6 +1,3 @@
-import { formatCurrency } from "@/utils/format";
-import { ExternalLink, PieChart } from "lucide-react";
-import { DonutChart } from "./DonutChart";
 import { ExpenseCard } from "./ExpenseCard";
 import { FixedExpenseCard } from "./FixedExpenseCard";
 import { IncomeCard } from "./IncomeCard";

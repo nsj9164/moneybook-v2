@@ -21,6 +21,10 @@ import { motion } from "framer-motion";
 import { formatCurrency } from "@/utils/format";
 import { DashboardHeader } from "../components/DashboardHeader";
 import { SectionTitle } from "../components/SectionTitle";
+import { OverviewCards } from "../components/OverviewCards";
+import { AnalysisSection } from "../components/overview/AnalysisSection";
+import { RecentTransactions } from "../components/transactions/RecentTransactions";
+import { InsightsPanel } from "../components/insights/InsightsPanel";
 
 // 샘플 데이터
 const monthlyExpense = 1250000;
@@ -142,359 +146,35 @@ const Dashboard = () => {
       {/* 메인 콘텐츠 영역 */}
       <div className="p-6 space-y-8">
         {/* 섹션 제목 */}
-        <SectionTitle title={"상세 보기"} />
+        <SectionTitle title={"재정 개요"} />
 
         {/* 주요 재정 지표 카드 */}
+        {/* <OverviewCards /> */}
 
         {/* 섹션 제목 */}
-        <SectionTitle title={"상세 보기"} divClass={"pt-4"} />
+        <SectionTitle title={"지출 분석"} divClass={"pt-4"} />
 
         {/* 지출 분석 및 차트 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* 카테고리별 지출 */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-1">
-            <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
-              <h3 className="font-semibold text-gray-800">카테고리별 지출</h3>
-              <button className="text-xs text-emerald-600 font-medium hover:text-emerald-700 flex items-center">
-                자세히 보기
-                <ExternalLink className="ml-1 h-3 w-3" />
-              </button>
-            </div>
-
-            <div className="p-5">
-              <div className="flex flex-col items-center mb-6">
-                <div className="relative h-48 w-48">
-                  <DonutChart data={categoryData} />
-                </div>
-              </div>
-
-              <div className="space-y-3.5">
-                {categoryData.map((category) => (
-                  <div key={category.name} className="flex items-center">
-                    <div
-                      className={`h-3 w-3 rounded-full ${category.color} mr-3`}
-                    />
-                    <div className="flex-1 text-sm font-medium text-gray-700">
-                      {category.name}
-                    </div>
-                    <div className="text-sm font-medium text-gray-900">
-                      {formatCurrency(category.value)}
-                    </div>
-                    <div className="ml-2 text-xs text-gray-500 w-10 text-right">
-                      {category.percentage}%
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-5 pt-4 border-t border-gray-100">
-                <button className="w-full text-center text-sm text-emerald-600 font-medium hover:text-emerald-700 flex items-center justify-center">
-                  <PieChart className="mr-1.5 h-4 w-4" />
-                  예산 설정하기
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* 지출 추이 */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-2">
-            <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
-              <h3 className="font-semibold text-gray-800">지출 추이</h3>
-              <div className="flex items-center space-x-2">
-                <button className="text-xs bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-md font-medium">
-                  월간
-                </button>
-                <button className="text-xs text-gray-500 px-3 py-1.5 rounded-md hover:bg-gray-50">
-                  주간
-                </button>
-              </div>
-            </div>
-
-            <div className="p-5">
-              <div className="h-64">
-                {/* 월간 지출 추이 차트 */}
-                <div className="h-full flex items-end space-x-2">
-                  {monthlyTrend.map((item, index) => {
-                    const heightPercentage =
-                      (item.expense / maxMonthlyExpense) * 100;
-                    const isCurrentMonth = item.month === `${selectedMonth}월`;
-
-                    return (
-                      <div
-                        key={item.month}
-                        className="flex-1 flex flex-col items-center"
-                      >
-                        <motion.div
-                          initial={{ height: 0 }}
-                          animate={{ height: `${heightPercentage * 0.8}%` }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                          className={`w-full rounded-t-sm ${
-                            isCurrentMonth ? "bg-emerald-500" : "bg-emerald-200"
-                          }`}
-                        />
-                        <div className="mt-2 text-xs font-medium text-gray-600">
-                          {item.month}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {formatCurrency(item.expense).replace("₩", "")}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="mt-5 pt-4 border-t border-gray-100">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      평균 월 지출
-                    </p>
-                    <p className="text-xs text-gray-500">최근 6개월</p>
-                  </div>
-                  <div className="text-lg font-bold text-emerald-600">
-                    {formatCurrency(
-                      monthlyTrend.reduce(
-                        (sum, month) => sum + month.expense,
-                        0
-                      ) / monthlyTrend.length
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AnalysisSection />
 
         {/* 섹션 제목 */}
-        <SectionTitle title={"모든 거래 보기"} divClass={"pt-4"} />
+        <SectionTitle
+          title={"거래 내역 및 인사이트"}
+          btnTxt={"모든 거래 보기"}
+          divClass={"pt-4"}
+        />
 
         {/* 최근 거래 및 인사이트 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 최근 거래 내역 */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-2">
-            <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
-              <h3 className="font-semibold text-gray-800">최근 거래 내역</h3>
-              <div className="flex items-center space-x-3">
-                <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
-                  <Filter className="h-4 w-4" />
-                </button>
-                <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
-                  <Download className="h-4 w-4" />
-                </button>
-                <button className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors">
-                  <MoreHorizontal className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            <div className="divide-y divide-gray-100">
-              {recentTransactions.map((transaction) => (
-                <div
-                  key={transaction.id}
-                  className="p-5 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div
-                        className={`h-10 w-10 rounded-full flex items-center justify-center ${
-                          transaction.category === "식비"
-                            ? "bg-rose-100"
-                            : transaction.category === "교통비"
-                            ? "bg-blue-100"
-                            : transaction.category === "쇼핑"
-                            ? "bg-emerald-100"
-                            : transaction.category === "여가"
-                            ? "bg-purple-100"
-                            : "bg-amber-100"
-                        }`}
-                      >
-                        <span
-                          className={`text-sm ${
-                            transaction.category === "식비"
-                              ? "text-rose-600"
-                              : transaction.category === "교통비"
-                              ? "text-blue-600"
-                              : transaction.category === "쇼핑"
-                              ? "text-emerald-600"
-                              : transaction.category === "여가"
-                              ? "text-purple-600"
-                              : "text-amber-600"
-                          }`}
-                        >
-                          {transaction.category.charAt(0)}
-                        </span>
-                      </div>
-                      <div className="ml-3">
-                        <p className="text-sm font-medium text-gray-900">
-                          {transaction.description}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {transaction.date} · {transaction.paymentMethod}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-sm font-medium text-gray-900">
-                      {formatCurrency(transaction.amount)}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="px-5 py-4 border-t border-gray-200">
-              <button className="w-full text-center text-sm text-emerald-600 font-medium hover:text-emerald-700">
-                모든 거래 보기
-              </button>
-            </div>
-          </div>
+          <RecentTransactions />
 
           {/* 인사이트 및 팁 */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm lg:col-span-1">
-            <div className="px-5 py-4 border-b border-gray-200">
-              <h3 className="font-semibold text-gray-800">인사이트</h3>
-            </div>
-
-            <div className="p-5 space-y-4">
-              <div className="bg-blue-50 rounded-lg p-4">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <TrendingUp className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-blue-800">
-                      지출 패턴
-                    </h3>
-                    <p className="mt-1 text-xs text-blue-700">
-                      주말에 지출이 35% 증가했습니다. 주로 여가 활동에 지출이
-                      집중되어 있습니다.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-amber-50 rounded-lg p-4">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <AlertCircle className="h-5 w-5 text-amber-600" />
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-amber-800">
-                      예산 알림
-                    </h3>
-                    <p className="mt-1 text-xs text-amber-700">
-                      식비 카테고리가 예산의 90%를 사용했습니다. 이번 달 지출을
-                      조절하는 것이 좋겠습니다.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-emerald-50 rounded-lg p-4">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <CreditCard className="h-5 w-5 text-emerald-600" />
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-emerald-800">
-                      절약 팁
-                    </h3>
-                    <p className="mt-1 text-xs text-emerald-700">
-                      정기 구독 서비스를 검토해보세요. 현재 5개의 구독 서비스에
-                      월 45,000원을 지출하고 있습니다.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-5 pt-4 border-t border-gray-100">
-                <button className="w-full text-center text-sm text-emerald-600 font-medium hover:text-emerald-700 flex items-center justify-center">
-                  <Plus className="mr-1.5 h-4 w-4" />
-                  맞춤 인사이트 더 보기
-                </button>
-              </div>
-            </div>
-          </div>
+          <InsightsPanel />
         </div>
       </div>
     </div>
   );
 };
-
-// 도넛 차트 컴포넌트
-function DonutChart({
-  data,
-}: {
-  data: { name: string; value: number; color: string }[];
-}) {
-  const total = data.reduce((sum, item) => sum + item.value, 0);
-  let cumulativePercentage = 0;
-
-  return (
-    <svg viewBox="0 0 100 100" className="h-full w-full">
-      <circle
-        cx="50"
-        cy="50"
-        r="40"
-        fill="transparent"
-        stroke="#e2e8f0"
-        strokeWidth="20"
-      />
-      {data.map((item, index) => {
-        const percentage = (item.value / total) * 100;
-        const startAngle = cumulativePercentage * 3.6; // 3.6 = 360 / 100
-        const endAngle = (cumulativePercentage + percentage) * 3.6;
-
-        // SVG 원호를 그리기 위한 계산
-        const startX = 50 + 40 * Math.cos((startAngle - 90) * (Math.PI / 180));
-        const startY = 50 + 40 * Math.sin((startAngle - 90) * (Math.PI / 180));
-        const endX = 50 + 40 * Math.cos((endAngle - 90) * (Math.PI / 180));
-        const endY = 50 + 40 * Math.sin((endAngle - 90) * (Math.PI / 180));
-
-        // 큰 원호인지 작은 원호인지 결정 (180도 이상이면 큰 원호)
-        const largeArcFlag = percentage > 50 ? 1 : 0;
-
-        // 원호 경로 생성
-        const pathData = `
-          M 50 50
-          L ${startX} ${startY}
-          A 40 40 0 ${largeArcFlag} 1 ${endX} ${endY}
-          Z
-        `;
-
-        cumulativePercentage += percentage;
-
-        return (
-          <path
-            key={index}
-            d={pathData}
-            fill={item.color.replace("bg-", "").replace("500", "500")}
-          />
-        );
-      })}
-      <circle cx="50" cy="50" r="30" fill="white" />
-      <text
-        x="50"
-        y="45"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize="10"
-        fontWeight="bold"
-      >
-        {Math.floor(total / 10000).toLocaleString()}만 원
-      </text>
-      <text
-        x="50"
-        y="60"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize="8"
-        fill="#6b7280"
-      >
-        총 지출
-      </text>
-    </svg>
-  );
-}
 
 export default Dashboard;
