@@ -1,27 +1,5 @@
 import { useState } from "react";
-import {
-  ArrowUpRight,
-  ArrowDownRight,
-  Calendar,
-  ChevronDown,
-  Plus,
-  CreditCard,
-  PieChart,
-  TrendingUp,
-  Filter,
-  Download,
-  ExternalLink,
-  AlertCircle,
-  ArrowRight,
-  Search,
-  Bell,
-  MoreHorizontal,
-} from "lucide-react";
-import { motion } from "framer-motion";
-import { formatCurrency } from "@/utils/format";
-import { DashboardHeader } from "../components/DashboardHeader";
 import { SectionTitle } from "../components/SectionTitle";
-import { OverviewCards } from "../components/OverviewCards";
 import { AnalysisSection } from "../components/overview/AnalysisSection";
 import { RecentTransactions } from "../components/transactions/RecentTransactions";
 import { InsightsPanel } from "../components/insights/InsightsPanel";

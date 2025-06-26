@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import NotificationModal from "@/components/common/modal/NotificationModal";
 import { useNotification } from "@/hooks/useNotification";
-import { ContentHeader } from "@/components/common/layout/ContentHeader";
 import { Button } from "@/components/ui/Button";
 import { BudgetEntity } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,6 +18,7 @@ import { EmptyFilterBudgetNotice } from "../components/list/EmptyFilterBudgetNot
 import { EmptyBudgetNotice } from "../components/list/EmptyBudgetNotice";
 import AddBudgetModal from "../components/modals/AddBudgetModal";
 import { useModalFormArray } from "@/hooks/useModalFormArray";
+import { PageHeader } from "@/components/common/layout/ContentHeader";
 
 const Budget = () => {
   const { userId } = useAuth();
@@ -52,9 +52,9 @@ const Budget = () => {
   return (
     <div className="h-full">
       {/* 페이지 헤더 */}
-      <ContentHeader
+      <PageHeader
         title="예산 계획"
-        desc="카테고리별 예산을 설정하고 지출을 체계적으로 관리하세요."
+        description="카테고리별 예산을 설정하고 지출을 체계적으로 관리하세요."
       >
         <div className="flex items-center space-x-3">
           <DateFilterControl
@@ -71,7 +71,7 @@ const Budget = () => {
             예산 추가
           </Button>
         </div>
-      </ContentHeader>
+      </PageHeader>
 
       {/* 메인 콘텐츠 영역 */}
       <div className="p-6 space-y-6">

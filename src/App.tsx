@@ -8,7 +8,7 @@ import Budget from "./features/budget/pages/BudgetPage";
 import Settings from "./features/settings/pages/SettingsPage";
 import Login from "./features/auth/pages/LoginPage";
 import { AuthCallback } from "./features/auth/pages/AuthCallback";
-import Statistics from "./features/statistics/pages/Statistics";
+import Statistics from "./features/statistics/pages/StatisticsPage";
 import Profile from "./features/profile/pages/ProfilePage";
 
 function App() {
