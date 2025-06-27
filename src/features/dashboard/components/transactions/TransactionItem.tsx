@@ -1,10 +1,10 @@
 import { formatCurrency } from "@/utils/format";
 
 interface TransactionItemProps {
-    transaction: 
+  transaction: ReactNode;
 }
 
-export const TransactionItem = ({transaction} : TransactionItemProps) => {
+export const TransactionItem = ({ transaction }: TransactionItemProps) => {
   return (
     <div
       key={transaction.id}

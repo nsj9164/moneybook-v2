@@ -1,4 +1,4 @@
-import { CategoryBreakdown } from "./CategoryBreakdown";
+import { CategoryBreakdown } from "./spendingPatterns/CategoryBreakdown";
 import { WeekdayBreakdown } from "./WeekdayBreakdown";
 
 export const SpendingByCategory = () => {

@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/utils/format";
-import { StatisticsCard } from "./StatisticsCard";
+import { StatisticsCard } from "../StatisticsCard";
 import { motion } from "framer-motion";
 
 export const CategoryBreakdown = () => {
