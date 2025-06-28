@@ -16,6 +16,8 @@ import {
 import { formatCurrency } from "@/utils/format";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useFetchDashboardSummary } from "../hooks/useFetchDashboardSummary";
+import { useAuth } from "@/contexts/AuthContext";
 
 // 샘플 데이터
 const monthlyExpense = 1250000;
@@ -88,6 +90,13 @@ const recentTransactions = [
 ];
 
 const Dashboard = () => {
+  const { userId } = useAuth();
+  const summaryData = useFetchDashboardSummary({
+    userId: userId!,
+    targetDate: new Date("2025-06-28"),
+  });
+  console.log("???????????????", summaryData);
+
   const [selectedMonth, setSelectedMonth] = useState("6");
   const [showMonthSelector, setShowMonthSelector] = useState(false);
 

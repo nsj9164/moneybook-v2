@@ -16,10 +16,10 @@ import { PageHeader } from "@/components/common/layout/ContentHeader";
 import { MonthSelector } from "../components/header/MonthSelector";
 import { PeriodTabs } from "../components/header/PeriodTabs";
 import { ExportButton } from "../components/header/ExportButton";
-import { StaticsSummarySection } from "../components/StaticsSummarySection";
 import { StatisticsCard } from "../components/StatisticsCard";
 import { SpendingByCategory } from "../components/SpendingByCategory";
-import { IncomeExpenseByMonth } from "../components/IncomeExpenseByMonth";
+import { StatisticsSummarySection } from "../components/summary/StatisticsSummarySection";
+import { IncomeExpenseByMonth } from "../components/incomeExpense/IncomeExpenseByMonth";
 
 // 샘플 데이터
 const monthlyData = [
@@ -99,13 +99,13 @@ const Statistics = () => {
       {/* 메인 콘텐츠 영역 */}
       <div className="p-6 space-y-6">
         {/* 통계 요약 카드 */}
-        <StaticsSummarySection />
+        <StatisticsSummarySection />
 
         {/* 월별 수입/지출 추이 */}
-        <IncomeExpenseByMonth />
+        {/* <IncomeExpenseByMonth /> */}
 
         {/* 카테고리별 지출 분석 */}
-        <SpendingByCategory />
+        {/* <SpendingByCategory /> */}
 
         {/* 시간대별 지출 패턴 */}
       </div>
