@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { formatCurrency } from "@/utils/format";
-import { PageHeader } from "@/components/common/layout/ContentHeader";
+import { PageHeader } from "@/components/common/layout/PageHeader";
 import { MonthSelector } from "../components/header/MonthSelector";
 import { PeriodTabs } from "../components/header/PeriodTabs";
 import { ExportButton } from "../components/header/ExportButton";

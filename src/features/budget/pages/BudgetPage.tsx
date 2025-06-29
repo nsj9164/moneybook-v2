@@ -18,7 +18,7 @@ import { EmptyFilterBudgetNotice } from "../components/list/EmptyFilterBudgetNot
 import { EmptyBudgetNotice } from "../components/list/EmptyBudgetNotice";
 import AddBudgetModal from "../components/modals/AddBudgetModal";
 import { useModalFormArray } from "@/hooks/useModalFormArray";
-import { PageHeader } from "@/components/common/layout/ContentHeader";
+import { PageHeader } from "@/components/common/layout/PageHeader";
 
 const Budget = () => {
   const { userId } = useAuth();
