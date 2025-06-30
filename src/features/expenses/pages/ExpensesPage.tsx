@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Download, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useFetchExpenses } from "@/hooks/useFetchExpenses";
-import { useFetchCategories } from "@/hooks/useFetchCategories";
+import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { useExpenseFilters } from "../hooks/useExpenseFilters";
 import { allColumns } from "../types/filters";

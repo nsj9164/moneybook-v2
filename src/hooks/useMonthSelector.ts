@@ -7,11 +7,9 @@ export const useMonthSelector = () => {
     month: now.getMonth(),
   });
 
-  const [showMonthSelector, setShowMonthSelector] = useState(false);
+  const [showDateSelector, setShowDateSelector] = useState(false);
 
-  const controlMonthSelector = () => {
-    setShowMonthSelector(!showMonthSelector);
-  };
+  const toggleDateSelector = () => setShowDateSelector(!showDateSelector);
 
   return { monthSelector, showMonthSelector, controlMonthSelector };
 };

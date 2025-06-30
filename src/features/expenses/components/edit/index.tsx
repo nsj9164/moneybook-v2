@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { useFetchCategories } from "@/hooks/useFetchCategories";
+import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
 import { expenseKeys } from "@/hooks/useFetchExpenses";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { IExpense } from "@/types";

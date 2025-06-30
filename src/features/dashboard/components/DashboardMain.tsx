@@ -4,26 +4,41 @@ import {
   ArrowRight,
   ArrowUpRight,
   BarChart3,
+  Plus,
   TrendingUp,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { DashboardHeader } from "./DashboardHeader";
-import { useState } from "react";
-import { useMonthSelector } from "@/hooks/useMonthSelector";
+import { formatCurrency } from "@/utils/format";
+import { Button } from "@/components/ui/Button";
+import { PageHeader } from "@/components/common/layout/PageHeader";
+import { DateFilterControl } from "@/components/monthSelector/DateFilterControl";
+import { useDateFilter } from "@/hooks/useDateFilter";
 
 export const DashboardMain = () => {
-  const { monthSelector, showMonthSelector, controlMonthSelector } =
-    useMonthSelector();
+  const {
+    firstExpenseYear,
+    selectedDate,
+    years,
+    showDateSelector,
+    toggleDateSelector,
+    handleChangeYear,
+    handleChangeMonth,
+  } = useDateFilter();
 
   return (
     <div className="h-full">
       {/* 페이지 헤더 */}
-      <DashboardHeader
-        monthSelector={monthSelector}
-        showMonthSelector={showMonthSelector}
-        controlMonthSelector={controlMonthSelector}
-      />
+      <PageHeader title="대시보드" description="한눈에 보는 나의 재정 현황">
+        <DateFilterControl
+          selectedDate={selectedDate}
+          showDateSelector={showDateSelector}
+          years={years}
+          toggleDateSelector={toggleDateSelector}
+          handleChangeYear={handleChangeYear}
+          handleChangeMonth={handleChangeMonth}
+        />
+      </PageHeader>
 
       {/* 메인 콘텐츠 영역 */}
       <div className="p-6 space-y-6">

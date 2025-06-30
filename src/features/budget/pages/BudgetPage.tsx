@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Plus } from "lucide-react";
 import NotificationModal from "@/components/common/modal/NotificationModal";
 import { useNotification } from "@/hooks/useNotification";
@@ -8,11 +7,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 import { FormProvider } from "react-hook-form";
-import { useBudgetDateFilter } from "../hooks/useBudgetDateFilter";
+import { useDateFilter } from "../../../hooks/useDateFilter";
 import { useBudgetHandlers } from "../hooks/useBudgetHandlers";
 import { useBudgetData } from "../hooks/useBudgetData";
 import { initialBudget } from "../constants/BudgetConstants";
-import { DateFilterControl } from "../components/filter/DateFilterControl";
+import { DateFilterControl } from "../../../components/monthSelector/DateFilterControl";
 import { BudgetOverview } from "../components/summary/BudgetOverview";
 import { EmptyFilterBudgetNotice } from "../components/list/EmptyFilterBudgetNotice";
 import { EmptyBudgetNotice } from "../components/list/EmptyBudgetNotice";
@@ -27,16 +26,15 @@ const Budget = () => {
     firstExpenseYear,
     selectedDate,
     years,
+    showDateSelector,
+    toggleDateSelector,
     handleChangeYear,
     handleChangeMonth,
-  } = useBudgetDateFilter();
+  } = useDateFilter();
 
   const { budgets, unBudgets, refetchAll } = useBudgetData({
     selectedDate,
   });
-
-  const [showDateSelector, setShowDateSelector] = useState(false);
-  const toggleDateSelector = () => setShowDateSelector(!showDateSelector);
 
   const { notification, showSuccess, hideNotification } = useNotification();
 

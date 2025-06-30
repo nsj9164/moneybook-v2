@@ -1,23 +1,7 @@
 import { useState } from "react";
-import {
-  ArrowUpRight,
-  ArrowDownRight,
-  Calendar,
-  ChevronDown,
-  Plus,
-  PieChart,
-  TrendingUp,
-  AlertCircle,
-  ArrowRight,
-  DollarSign,
-  Target,
-  BarChart3,
-} from "lucide-react";
-import { formatCurrency } from "@/utils/format";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { useFetchDashboardSummary } from "../hooks/useFetchDashboardSummary";
 import { useAuth } from "@/contexts/AuthContext";
+import { DashboardOnboarding } from "../components/DashboardOnboarding";
 
 // 샘플 데이터
 const monthlyExpense = 1250000;
@@ -95,10 +79,6 @@ const Dashboard = () => {
     userId: userId!,
     targetDate: new Date("2025-06-28"),
   });
-  console.log("???????????????", summaryData);
-
-  const [selectedMonth, setSelectedMonth] = useState("6");
-  const [showMonthSelector, setShowMonthSelector] = useState(false);
 
   // 데이터 존재 여부 확인 (실제로는 props나 context에서 가져올 것)
   const [hasData, setHasData] = useState(true); // 테스트용 상태
@@ -119,9 +99,11 @@ const Dashboard = () => {
     ...monthlyTrend.map((month) => month.expense)
   );
 
-  return (
-    {hasData ? (<DashboardMain />) : (<DashboardOnboarding />)}
-  )
+  return <DashboardOnboarding />;
+
+  // return (
+  //   {hasData ? (<DashboardMain />) : (<DashboardOnboarding />)}
+  // )
 };
 
 export default Dashboard;

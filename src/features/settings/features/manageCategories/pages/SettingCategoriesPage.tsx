@@ -1,4 +1,4 @@
-import { useFetchCategories } from "@/hooks/useFetchCategories";
+import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
 import { useAuth } from "@/contexts/AuthContext";
 import { deleteItem, insertItem, updateItem } from "@/utils/crud";
 import { useSetRecoilState } from "recoil";

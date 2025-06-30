@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { deleteItem, insertItem, updateItem } from "@/utils/crud";
-import { useFetchCategories } from "@/hooks/useFetchCategories";
+import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
 import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { useFetchRecurringExpenses } from "@/hooks/useFetchRecurringExpenses";
 import { useSetRecoilState } from "recoil";
