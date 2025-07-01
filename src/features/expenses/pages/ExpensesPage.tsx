@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Download, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useFetchExpenses } from "@/hooks/useFetchExpenses";
 import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
-import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { useExpenseFilters } from "../hooks/useExpenseFilters";
 import { allColumns } from "../types/filters";
 import { UUID } from "@/types/ids";
@@ -17,6 +15,8 @@ import { ExpensesTable } from "../components/table/Table";
 import { ListNoFilteredData } from "../components/list/ListNoFilteredData";
 import { ListFooter } from "../components/list/ListFooter";
 import { ColumnSettingsModal } from "../components/modals/ColumnSettingsModal";
+import { useFetchExpenses } from "@/hooks/fetchData/useFetchExpenses";
+import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
 
 const Expenses = () => {
   const expenses = useFetchExpenses();

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/common/layout/PageHeader";
 import { DateFilterControl } from "@/components/monthSelector/DateFilterControl";
 import { useDateFilter } from "@/hooks/useDateFilter";
+import { OverviewCard } from "./overview/OverviewCard";
 
 export const DashboardMain = () => {
   const {
@@ -45,136 +46,82 @@ export const DashboardMain = () => {
         {/* 핵심 지표 카드 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* 이번 달 지출 */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <OverviewCard
             transition={{ duration: 0.5 }}
-            className="bg-white rounded-xl border border-gray-200 shadow-sm p-6"
+            title="이번 달 지출"
+            amount={monthlyExpense}
+            icon={ArrowUpRight}
+            percent={Math.abs(monthlyChangeRate).toFixed(1)}
+            iconBgColor="bg-red-50"
+            iconColor="text-red-600"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-500">
-                  이번 달 지출
-                </p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-2">
-                  {formatCurrency(monthlyExpense)}
-                </h3>
-                <div className="flex items-center mt-2">
-                  {isIncrease ? (
-                    <ArrowUpRight className="h-4 w-4 text-red-500 mr-1" />
-                  ) : (
-                    <ArrowDownRight className="h-4 w-4 text-emerald-500 mr-1" />
-                  )}
-                  <span
-                    className={`text-sm font-medium ${
-                      isIncrease ? "text-red-600" : "text-emerald-600"
-                    }`}
-                  >
-                    {Math.abs(monthlyChangeRate).toFixed(1)}%
-                  </span>
-                  <span className="text-sm text-gray-500 ml-1">전월 대비</span>
-                </div>
-              </div>
-              <div className="bg-red-50 rounded-full p-3">
-                <ArrowUpRight className="h-6 w-6 text-red-600" />
-              </div>
-            </div>
-          </motion.div>
+            {isIncrease ? (
+              <ArrowUpRight className="h-4 w-4 text-red-500 mr-1" />
+            ) : (
+              <ArrowDownRight className="h-4 w-4 text-emerald-500 mr-1" />
+            )}
+            <span
+              className={`text-sm font-medium ${
+                isIncrease ? "text-red-600" : "text-emerald-600"
+              }`}
+            ></span>
+            <span className="text-sm text-gray-500 ml-1">전월 대비</span>
+          </OverviewCard>
 
           {/* 이번 달 수입 */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <OverviewCard
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-white rounded-xl border border-gray-200 shadow-sm p-6"
+            title="이번 달 수입"
+            amount={monthlyIncome}
+            icon={DollarSign}
+            iconBgColor="bg-emerald-50"
+            iconColor="text-emerald-600"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-500">
-                  이번 달 수입
-                </p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-2">
-                  {formatCurrency(monthlyIncome)}
-                </h3>
-                <div className="flex items-center mt-2">
-                  <ArrowUpRight className="h-4 w-4 text-emerald-500 mr-1" />
-                  <span className="text-sm font-medium text-emerald-600">
-                    5.2%
-                  </span>
-                  <span className="text-sm text-gray-500 ml-1">전월 대비</span>
-                </div>
-              </div>
-              <div className="bg-emerald-50 rounded-full p-3">
-                <DollarSign className="h-6 w-6 text-emerald-600" />
-              </div>
-            </div>
-          </motion.div>
+            <ArrowUpRight className="h-4 w-4 text-emerald-500 mr-1" />
+            <span className="text-sm font-medium text-emerald-600">5.2%</span>
+            <span className="text-sm text-gray-500 ml-1">전월 대비</span>
+          </OverviewCard>
 
           {/* 저축 금액 */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <OverviewCard
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white rounded-xl border border-gray-200 shadow-sm p-6"
+            amount={savingsAmount}
+            percent={savingsRate.toFixed(1)}
+            icon={PieChart}
+            iconBgColor="bg-blue-50"
+            iconColor="text-blue-600"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-500">저축 금액</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-2">
-                  {formatCurrency(savingsAmount)}
-                </h3>
-                <div className="flex items-center mt-2">
-                  <span className="text-sm font-medium text-blue-600">
-                    {savingsRate.toFixed(1)}%
-                  </span>
-                  <span className="text-sm text-gray-500 ml-1">저축률</span>
-                </div>
-              </div>
-              <div className="bg-blue-50 rounded-full p-3">
-                <PieChart className="h-6 w-6 text-blue-600" />
-              </div>
-            </div>
-          </motion.div>
+            <span className="text-sm font-medium text-blue-600">
+              {savingsRate.toFixed(1)}%
+            </span>
+            <span className="text-sm text-gray-500 ml-1">저축률</span>
+          </OverviewCard>
 
           {/* 예산 달성률 */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <OverviewCard
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-white rounded-xl border border-gray-200 shadow-sm p-6"
+            title="예산 달성률"
+            amount={budgetAchievementRate.toFixed(1)}
+            percent={formatCurrency(monthlyGoal)}
+            icon={Target}
+            iconBgColor="bg-purple-50"
+            iconColor="text-purple-600"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-500">예산 달성률</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-2">
-                  {budgetAchievementRate.toFixed(1)}%
-                </h3>
-                <div className="flex items-center mt-2">
-                  <span className="text-sm text-gray-500">
-                    목표: {formatCurrency(monthlyGoal)}
-                  </span>
-                </div>
+            <span className="text-sm text-gray-500">
+              목표: {formatCurrency(monthlyGoal)}
+            </span>
 
-                {/* <div className="flex items-center mt-2">
-                  <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
-                    <div
-                      className={`h-2 rounded-full ${
-                        budgetAchievementRate > 100
-                          ? "bg-red-500"
-                          : "bg-emerald-500"
-                      }`}
-                      style={{
-                        width: `${Math.min(budgetAchievementRate, 100)}%`,
-                      }}
-                    ></div>
-                  </div>
-                </div> */}
-              </div>
-              <div className="bg-purple-50 rounded-full p-3">
-                <Target className="h-6 w-6 text-purple-600" />
-              </div>
+            <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
+              <div
+                className={`h-2 rounded-full ${
+                  budgetAchievementRate > 100 ? "bg-red-500" : "bg-emerald-500"
+                }`}
+                style={{
+                  width: `${Math.min(budgetAchievementRate, 100)}%`,
+                }}
+              ></div>
             </div>
-          </motion.div>
+          </OverviewCard>
         </div>
 
         {/* 요약 차트 섹션 */}

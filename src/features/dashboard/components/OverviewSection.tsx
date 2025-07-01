@@ -1,15 +1,15 @@
-import { ExpenseCard } from "./ExpenseCard";
-import { FixedExpenseCard } from "./FixedExpenseCard";
-import { IncomeCard } from "./IncomeCard";
-import { SavingsCard } from "./SavingsCard";
+import { ExpenseCard } from "./overview/ExpenseCard";
+import { FixedExpenseCard } from "./overview/FixedExpenseCard";
+import { IncomeCard } from "./overview/IncomeCard";
+import { SavingsCard } from "./overview/SavingsCard";
 
-interface ContentCardProps {
+interface OverviewSectionProps {
   divClass: string;
   title: string;
   monthlyAmount: number;
 }
 
-export const OverviewCards = ({}: ContentCardProps) => {
+export const OverviewSection = ({}: OverviewSectionProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {/* 이번 달 총 지출 */}

@@ -1,14 +1,14 @@
-import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSetRecoilState } from "recoil";
 import { payMethodsState } from "@/recoil/atoms";
 import { deleteItem, insertItem, updateItem } from "@/utils/crud";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
-import { PayMethodEntity, PayMethodInput } from "@/types";
+import { PayMethodEntity } from "@/types";
 import GenericForm from "@/features/settings/components/common/form/GenericForm";
 import { FormType } from "@/features/settings/types/GenericFormTypes";
 import { TableHeader } from "../components/TableHeader";
 import { TableRow } from "../components/TableRow";
+import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
 
 const ManagePayMethods = () => {
   const { userId } = useAuth();
@@ -21,14 +21,12 @@ const ManagePayMethods = () => {
     });
   };
 
-  const handleSavePayMethod = async (
-    payMethod: Partial<PayMethodInput> | Partial<PayMethodEntity>
-  ) => {
+  const handleSavePayMethod = async (payMethod: Partial<PayMethodEntity>) => {
     const isEditing = "id" in payMethod && typeof payMethod.id === "number";
 
     const saveFn = isEditing
       ? updateItem<PayMethodEntity>
-      : insertItem<PayMethodInput>;
+      : insertItem<PayMethodEntity>;
     await saveFn("payment_methods", payMethod, userId!, (saved) => {
       setPayMethods((prev) => patchOrAddItem(prev, saved));
     });

@@ -1,5 +1,5 @@
+import { useFetchCommonCodes } from "@/hooks/fetchData/useFetchCommonCodes";
 import { useMemo } from "react";
-import { useFetchCommonCodes } from "@/hooks/useFetchCommonCodes";
 import { CommonCode } from "../types/common";
 
 interface Option {

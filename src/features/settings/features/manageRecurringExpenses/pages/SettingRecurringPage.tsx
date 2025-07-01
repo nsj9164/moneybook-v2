@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { deleteItem, insertItem, updateItem } from "@/utils/crud";
 import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
-import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
-import { useFetchRecurringExpenses } from "@/hooks/useFetchRecurringExpenses";
 import { useSetRecoilState } from "recoil";
 import { recurringState } from "@/recoil/atoms";
 import { patchOrAddItem } from "@/utils/patchOrAddItem";
@@ -12,7 +10,7 @@ import { RecurringModalFields } from "../components/modal/RecurringModalFields";
 import { FormProvider } from "react-hook-form";
 import { useCycleOptions } from "../hooks/useCycleOptions";
 import { matchHangul } from "@/utils/matchHangul";
-import { RecurringDisplay, RecurringEntity, RecurringInput } from "@/types";
+import { RecurringDisplay, RecurringEntity } from "@/types";
 import { calcTotalMonthlyAmount } from "../utils/monthlyAmountUtil";
 import { RecurringFilterPanel } from "../components/filters/RecurringFilterPanel";
 import { useModalForm } from "@/hooks/useModalForm";
@@ -22,6 +20,8 @@ import { RecurringSummaryCard } from "../components/cards/RecurringSummaryCard";
 import { RecurringCardList } from "../components/cards/RecurringCardList";
 import { PaginationFooter } from "@/features/settings/components/common/pagination/PaginationFooter";
 import { GenericFormModal } from "@/features/settings/components/common/modal/GenericFormModal";
+import { useFetchRecurringExpenses } from "@/hooks/fetchData/useFetchRecurringExpenses";
+import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
 
 const ManageRecurringExpenses = () => {
   const { userId } = useAuth();
@@ -80,13 +80,11 @@ const ManageRecurringExpenses = () => {
     }
   };
 
-  const handleSaveRecurring = async (
-    recurring: Partial<RecurringEntity> | RecurringInput
-  ) => {
+  const handleSaveRecurring = async (recurring: Partial<RecurringEntity>) => {
     const saveFn =
       isEditing && "id" in recurring
         ? updateItem<RecurringEntity>
-        : insertItem<RecurringInput>;
+        : insertItem<RecurringEntity>;
     await saveFn("recurring_expenses", recurring as any, userId!, (saved) => {
       if (!("id" in saved)) throw new Error("id 데이터가 누락되었습니다.");
 

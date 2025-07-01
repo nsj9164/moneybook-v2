@@ -1,7 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
-import { expenseKeys } from "@/hooks/useFetchExpenses";
-import { useFetchPayMethods } from "@/hooks/useFetchPayMethods";
 import { IExpense } from "@/types";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
@@ -12,6 +10,8 @@ import { newExpensesState } from "@/recoil/atoms";
 import { EditHeader } from "./EditHeader";
 import { EditSummary } from "./EditSummary";
 import { ExpenseForm } from "./expense-form";
+import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
+import { expenseKeys } from "@/hooks/fetchData/useFetchExpenses";
 
 const ExpenseFormPage = () => {
   const categories = useFetchCategories();

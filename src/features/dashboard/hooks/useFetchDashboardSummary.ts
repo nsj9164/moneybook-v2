@@ -4,13 +4,13 @@ import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
 
 interface DashboardSummaryProps {
-  userId: UUID;
   targetDate: Date;
+  userId: UUID;
 }
 
 export const useFetchDashboardSummary = ({
-  userId,
   targetDate,
+  userId,
 }: DashboardSummaryProps) => {
   const [summaryData, setSummaryData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,8 +19,8 @@ export const useFetchDashboardSummary = ({
     const fetchSummaryData = async () => {
       setLoading(true);
       const { data, error } = await supabase.rpc("get_dashboard_summary", {
-        user_id: userId,
-        target_date: targetDate,
+        input_target_date: targetDate,
+        input_user_id: userId,
       });
 
       if (error || !data) console.log("Fetch Dashboard Summary Error:", error);
@@ -33,6 +33,10 @@ export const useFetchDashboardSummary = ({
 
     fetchSummaryData();
   }, []);
+
+  const monthlyExpenseRate = summaryData.budget;
+
+  const monthlyBudgetRate = monthly;
 
   return summaryData;
 };
