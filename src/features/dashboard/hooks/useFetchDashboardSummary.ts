@@ -2,6 +2,7 @@ import { UUID } from "@/types/ids";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
+import { IDashboardSummary } from "../types/DashboardSummary";
 
 interface DashboardSummaryProps {
   targetDate: Date;
@@ -12,7 +13,9 @@ export const useFetchDashboardSummary = ({
   targetDate,
   userId,
 }: DashboardSummaryProps) => {
-  const [summaryData, setSummaryData] = useState(null);
+  const [summaryData, setSummaryData] = useState<IDashboardSummary | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -34,9 +37,35 @@ export const useFetchDashboardSummary = ({
     fetchSummaryData();
   }, []);
 
-  const monthlyExpenseRate = summaryData.budget;
+  const expense = summaryData?.thisMonth.expense ?? 0;
+  const lastExpense = summaryData?.lastMonth.expense ?? 0;
+  const income = summaryData?.thisMonth.income ?? 0;
+  const lastIncome = summaryData?.lastMonth.income ?? 0;
+  const budget = summaryData?.budget.goal ?? 0;
 
-  const monthlyBudgetRate = monthly;
+  const monthlyExpenseRate =
+    lastExpense > 0 ? ((expense - lastExpense) / lastExpense) * 100 : 0;
+  const isExpenseIncrease = expense > lastExpense;
 
-  return summaryData;
+  const monthlyIncomeRate =
+    lastIncome > 0 ? ((income - lastIncome) / lastIncome) * 100 : 0;
+  const isIncomeIncrease = income > lastIncome;
+
+  const budgetRate = budget > 0 ? (expense / budget) * 100 : 0;
+
+  return {
+    loading,
+    expense,
+    lastExpense,
+    income,
+    lastIncome,
+    monthlyExpenseRate,
+    isExpenseIncrease,
+    monthlyIncomeRate,
+    isIncomeIncrease,
+    budget,
+    budgetRate,
+    topCategories: summaryData?.topCategories ?? [],
+    last6Months: summaryData?.last6Months ?? [],
+  };
 };
