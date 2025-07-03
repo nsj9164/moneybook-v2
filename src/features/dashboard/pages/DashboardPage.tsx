@@ -1,6 +1,8 @@
-import { useState } from "react";
 import { useFetchDashboardSummary } from "../hooks/useFetchDashboardSummary";
 import { useAuth } from "@/contexts/AuthContext";
+import { useDateFilter } from "@/hooks/useDateFilter";
+import { DashboardMain } from "../components/DashboardMain";
+import { DashboardOnboarding } from "../components/DashboardOnboarding";
 
 const Dashboard = () => {
   const { userId } = useAuth();
@@ -10,10 +12,13 @@ const Dashboard = () => {
   });
   console.log("#############", summaryData);
 
-  // 데이터 존재 여부 확인
-  const [hasData, setHasData] = useState(true);
+  const { firstExpenseYear } = useDateFilter();
 
-  return hasData ? <DashboardMain /> : <DashboardOnboarding />;
+  return firstExpenseYear ? (
+    <DashboardMain summaryData={summaryData} />
+  ) : (
+    <DashboardOnboarding />
+  );
 };
 
 export default Dashboard;

@@ -8,51 +8,36 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
   return (
     <div
       key={transaction.id}
-      className="p-5 hover:bg-gray-50 transition-colors"
+      className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <div
-            className={`h-10 w-10 rounded-full flex items-center justify-center ${
-              transaction.category === "식비"
-                ? "bg-rose-100"
-                : transaction.category === "교통비"
-                ? "bg-blue-100"
-                : transaction.category === "쇼핑"
-                ? "bg-emerald-100"
-                : transaction.category === "여가"
-                ? "bg-purple-100"
-                : "bg-amber-100"
-            }`}
-          >
-            <span
-              className={`text-sm ${
-                transaction.category === "식비"
-                  ? "text-rose-600"
-                  : transaction.category === "교통비"
-                  ? "text-blue-600"
-                  : transaction.category === "쇼핑"
-                  ? "text-emerald-600"
-                  : transaction.category === "여가"
-                  ? "text-purple-600"
-                  : "text-amber-600"
-              }`}
-            >
-              {transaction.category.charAt(0)}
-            </span>
-          </div>
-          <div className="ml-3">
-            <p className="text-sm font-medium text-gray-900">
-              {transaction.description}
-            </p>
-            <p className="text-xs text-gray-500">
-              {transaction.date} · {transaction.paymentMethod}
-            </p>
-          </div>
+      <div className="flex items-center">
+        <div
+          className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
+            transaction.type === "income" ? "bg-emerald-100" : "bg-red-100"
+          }`}
+        >
+          {transaction.type === "income" ? (
+            <ArrowDownRight className="h-5 w-5 text-emerald-600" />
+          ) : (
+            <ArrowUpRight className="h-5 w-5 text-red-600" />
+          )}
         </div>
-        <div className="text-sm font-medium text-gray-900">
+        <div>
+          <p className="font-medium text-gray-900">{transaction.description}</p>
+          <p className="text-sm text-gray-500">
+            {transaction.category} • {transaction.date}
+          </p>
+        </div>
+      </div>
+      <div className="text-right">
+        <p
+          className={`font-medium ${
+            transaction.type === "income" ? "text-emerald-600" : "text-gray-900"
+          }`}
+        >
+          {transaction.type === "income" ? "+" : ""}
           {formatCurrency(transaction.amount)}
-        </div>
+        </p>
       </div>
     </div>
   );

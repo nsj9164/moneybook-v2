@@ -6,8 +6,7 @@ import { ReactNode } from "react";
 interface OverviewCardProps {
   transition: { duration: number; delay?: number };
   title: string;
-  amount: number;
-  percent: number;
+  amount: number | string;
   icon: LucideIcon;
   iconBgColor: string;
   iconColor: string;
@@ -18,7 +17,6 @@ export const OverviewCard = ({
   transition,
   title,
   amount,
-  percent,
   icon: Icon,
   iconBgColor,
   iconColor,
@@ -34,9 +32,7 @@ export const OverviewCard = ({
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-500">{title}</p>
-          <h3 className="text-2xl font-bold text-gray-900 mt-2">
-            {formatCurrency(amount)}
-          </h3>
+          <h3 className="text-2xl font-bold text-gray-900 mt-2">{amount}</h3>
           <div className="flex items-center mt-2">
             {/* <span className="text-sm text-gray-500">{percent}</span> */}
             {children}
