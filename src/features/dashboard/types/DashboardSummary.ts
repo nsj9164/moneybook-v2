@@ -13,14 +13,12 @@ export interface DashboardSummary {
 
 export interface ExpenseSummary {
   expense: number;
-  lastExpense: number;
   monthlyExpenseRate: number;
   isExpenseIncrease: boolean;
 }
 
 export interface IncomeSummary {
   income: number;
-  lastIncome: number;
   monthlyIncomeRate: number;
   isIncomeIncrease: boolean;
 }
@@ -35,15 +33,26 @@ export interface BudgetSummary {
   budgetRate: number;
 }
 
+export type TopCategory = {
+  category: string;
+  color: string;
+  amount: number;
+  percent: number;
+};
+export type LastSixMonth = { month: string; total: number };
+
 export interface TrendSummary {
-  topCategories: { category: string; amount: number }[];
-  lastSixMonths: { month: string; total: number }[];
+  topCategories: TopCategory[];
+  lastSixMonths: LastSixMonth[];
 }
 
 export interface DashboardSummaryResponse
   extends ExpenseSummary,
     IncomeSummary,
+    SavingSummary,
     BudgetSummary,
     TrendSummary {
   loading: boolean;
+  lastExpense: number;
+  lastIncome: number;
 }

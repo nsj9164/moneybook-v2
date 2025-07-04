@@ -9,6 +9,19 @@ export const OverviewSection = ({
 }: {
   summaryData: DashboardSummaryResponse;
 }) => {
+  const {
+    expense,
+    monthlyExpenseRate,
+    isExpenseIncrease,
+    income,
+    monthlyIncomeRate,
+    isIncomeIncrease,
+    saving,
+    savingRate,
+    budget,
+    budgetRate,
+  } = summaryData;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {/* 이번 달 지출 */}
@@ -21,7 +34,6 @@ export const OverviewSection = ({
       {/* 이번 달 수입 */}
       <IncomeCard
         income={income}
-        lastIncome={lastIncome}
         monthlyIncomeRate={monthlyIncomeRate}
         isIncomeIncrease={isIncomeIncrease}
       />
@@ -30,7 +42,7 @@ export const OverviewSection = ({
       <SavingsCard saving={saving} savingRate={savingRate} />
 
       {/* 예산 달성률 */}
-      <BudgetCard />
+      <BudgetCard budget={budget} budgetRate={budgetRate} />
     </div>
   );
 };

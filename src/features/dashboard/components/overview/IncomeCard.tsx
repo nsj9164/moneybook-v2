@@ -4,7 +4,6 @@ import { OverviewCard } from "./OverviewCard";
 
 export const IncomeCard = ({
   income,
-  lastIncome,
   monthlyIncomeRate,
   isIncomeIncrease,
 }: IncomeSummary) => {

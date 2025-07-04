@@ -1,19 +1,43 @@
 import { formatCurrency } from "@/utils/format";
-import { SixMonthAnalysisItem } from "./\bSixMonthAnalysisItem";
+import { SixMonthAnalysisItem } from "./SixMonthAnalysisItem";
 import { CategoryAnalysisItem } from "./CategoryAnalysisItem";
 import { DashboardSectionCard } from "../../layout/DashboardSectionCard";
+import { TrendSummary } from "../../types/DashboardSummary";
 
-export const AnalysisSection = () => {
+type AnalysisSectionProps = TrendSummary & { selectedMonth: number };
+
+export const AnalysisSection = ({
+  topCategories,
+  lastSixMonths,
+  selectedMonth,
+}: AnalysisSectionProps) => {
+  const { sum, max } = lastSixMonths.reduce(
+    (acc, month) => {
+      acc.sum += month.total;
+      acc.max = Math.max(acc.max, month.total);
+      return acc;
+    },
+    { sum: 0, max: -Infinity }
+  );
+
+  const average = sum / lastSixMonths.length;
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* 카테고리별 지출 차트 */}
       <DashboardSectionCard
         title="카테고리별 지출"
         linkTo="/statistics"
-        linkTex="자세히 보기"
+        linkText="자세히 보기"
       >
-        {categoryData.map((category, index) => (
-          <CategoryAnalysisItem />
+        {topCategories.map(({ category, color, amount, percent }, index) => (
+          <CategoryAnalysisItem
+            key={category}
+            category={category}
+            color={color}
+            amount={amount}
+            percent={percent}
+            index={index}
+          />
         ))}
       </DashboardSectionCard>
 
@@ -23,19 +47,23 @@ export const AnalysisSection = () => {
         initialX={20}
         delay={0.5}
         linkTo="/statistics"
-        linkTex="자세히 보기"
+        linkText="자세히 보기"
       >
-        {monthlyTrend.map((month, index) => {
-          <SixMonthAnalysisItem />;
-        })}
+        {lastSixMonths.map(({ month, total }, index) => (
+          <SixMonthAnalysisItem
+            key={month}
+            month={month}
+            total={total}
+            max={max}
+            index={index}
+            selectedMonth={selectedMonth}
+          />
+        ))}
         <div className="mt-4 pt-4 border-t border-gray-100">
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-500">평균 월 지출</span>
             <span className="font-medium text-gray-900">
-              {formatCurrency(
-                monthlyTrend.reduce((sum, month) => sum + month.expense, 0) /
-                  monthlyTrend.length
-              )}
+              {formatCurrency(average)}
             </span>
           </div>
         </div>

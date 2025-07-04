@@ -12,7 +12,6 @@ interface DashboardMainProps {
 
 export const DashboardMain = ({ summaryData }: DashboardMainProps) => {
   const {
-    firstExpenseYear,
     selectedDate,
     years,
     showDateSelector,
@@ -20,6 +19,8 @@ export const DashboardMain = ({ summaryData }: DashboardMainProps) => {
     handleChangeYear,
     handleChangeMonth,
   } = useDateFilter();
+
+  const { topCategories, lastSixMonths } = summaryData;
 
   return (
     <div className="h-full">
@@ -41,7 +42,11 @@ export const DashboardMain = ({ summaryData }: DashboardMainProps) => {
         <OverviewSection summaryData={summaryData} />
 
         {/* 요약 차트 섹션 */}
-        <AnalysisSection />
+        <AnalysisSection
+          topCategories={topCategories}
+          lastSixMonths={lastSixMonths}
+          selectedMonth={selectedDate.month}
+        />
 
         {/* 하단 섹션: 최근 거래 & 인사이트 */}
         <TransactionSection />
