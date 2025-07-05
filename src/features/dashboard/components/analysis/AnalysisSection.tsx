@@ -2,9 +2,13 @@ import { formatCurrency } from "@/utils/format";
 import { SixMonthAnalysisItem } from "./SixMonthAnalysisItem";
 import { CategoryAnalysisItem } from "./CategoryAnalysisItem";
 import { DashboardSectionCard } from "../../layout/DashboardSectionCard";
-import { TrendSummary } from "../../types/DashboardSummary";
+import { LastSixMonth, TopCategory } from "../../types/DashboardSummary";
 
-type AnalysisSectionProps = TrendSummary & { selectedMonth: number };
+interface AnalysisSectionProps {
+  topCategories: TopCategory[];
+  lastSixMonths: LastSixMonth[];
+  selectedMonth: number;
+}
 
 export const AnalysisSection = ({
   topCategories,

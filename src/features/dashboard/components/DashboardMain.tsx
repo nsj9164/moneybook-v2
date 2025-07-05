@@ -4,13 +4,21 @@ import { useDateFilter } from "@/hooks/useDateFilter";
 import { OverviewSection } from "./overview/OverviewSection";
 import { AnalysisSection } from "./analysis/AnalysisSection";
 import { TransactionSection } from "./transactions/TransactionSection";
-import { DashboardSummaryResponse } from "../types/DashboardSummary";
+import { IExpense } from "@/types";
+import { DateFilterState } from "@/types/useDateFilter";
+import { DashboardSummaryState } from "../types/DashboardSummaryState";
 
 interface DashboardMainProps {
-  summaryData: DashboardSummaryResponse;
+  summaryData: DashboardSummaryState;
+  recentExpenses: IExpense[];
+  dateFilter: DateFilterState;
 }
 
-export const DashboardMain = ({ summaryData }: DashboardMainProps) => {
+export const DashboardMain = ({
+  summaryData,
+  recentExpenses,
+  dateFilter,
+}: DashboardMainProps) => {
   const {
     selectedDate,
     years,
@@ -20,7 +28,7 @@ export const DashboardMain = ({ summaryData }: DashboardMainProps) => {
     handleChangeMonth,
   } = useDateFilter();
 
-  const { topCategories, lastSixMonths } = summaryData;
+  const { topCategories, lastSixMonths } = summaryData.trendSummary;
 
   return (
     <div className="h-full">
@@ -49,7 +57,7 @@ export const DashboardMain = ({ summaryData }: DashboardMainProps) => {
         />
 
         {/* 하단 섹션: 최근 거래 & 인사이트 */}
-        <TransactionSection />
+        <TransactionSection recentExpenses={recentExpenses} />
       </div>
     </div>
   );

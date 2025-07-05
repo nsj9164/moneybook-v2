@@ -3,19 +3,27 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useDateFilter } from "@/hooks/useDateFilter";
 import { DashboardMain } from "../components/DashboardMain";
 import { DashboardOnboarding } from "../components/DashboardOnboarding";
+import { useFetchRecentExpenses } from "../hooks/useFetchRecentExpenses";
 
 const Dashboard = () => {
+  const { firstExpenseYear, ...dateFilter } = useDateFilter();
+  const { year, month } = dateFilter.selectedDate;
+  const targetDate = new Date(year, month - 1, 1);
+
   const { userId } = useAuth();
   const summaryData = useFetchDashboardSummary({
-    targetDate: new Date("2025-06-28"),
+    targetDate: targetDate,
     userId: userId!,
   });
+  const recentExpenses = useFetchRecentExpenses(targetDate, userId!);
   console.log("#############", summaryData);
 
-  const { firstExpenseYear } = useDateFilter();
-
   return firstExpenseYear ? (
-    <DashboardMain summaryData={summaryData} />
+    <DashboardMain
+      summaryData={summaryData}
+      recentExpenses={recentExpenses}
+      dateFilter={dateFilter}
+    />
   ) : (
     <DashboardOnboarding />
   );

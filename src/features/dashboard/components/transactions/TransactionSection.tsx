@@ -3,8 +3,15 @@ import { Link } from "react-router-dom";
 import { TransactionItem } from "./TransactionItem";
 import { AlertCircle, ArrowRight, BarChart3, TrendingUp } from "lucide-react";
 import { DashboardSectionCard } from "../../layout/DashboardSectionCard";
+import { IExpense } from "@/types";
 
-export const TransactionSection = ({ delay = 0.6 }) => {
+interface TransactionSectionProps {
+  recentExpenses: IExpense[];
+}
+
+export const TransactionSection = ({
+  recentExpenses,
+}: TransactionSectionProps) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* 최근 거래 */}
@@ -16,8 +23,8 @@ export const TransactionSection = ({ delay = 0.6 }) => {
         linkText="전체 보기"
         className="lg:col-span-2"
       >
-        {recentTransactions.map((transaction) => (
-          <TransactionItem />
+        {recentExpenses.map((expense) => (
+          <TransactionItem expense={expense} />
         ))}
       </DashboardSectionCard>
 

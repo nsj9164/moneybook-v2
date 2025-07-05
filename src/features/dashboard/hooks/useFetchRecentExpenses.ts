@@ -1,19 +1,19 @@
-import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/utils/supabase";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { useEffect, useState } from "react";
+import { startOfMonth } from "date-fns";
+import { UUID } from "@/types/ids";
 
-export const useFetchRecentExpenses = (targetDate: Date, limit = 5) => {
+export const useFetchRecentExpenses = (
+  targetDate: Date,
+  userId: UUID,
+  limit = 5
+) => {
   const [recentExpenses, setRecentExpenses] = useState([]);
-  const { userId } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
-      const startOfMonth = new Date(
-        targetDate.getFullYear(),
-        targetDate.getMonth(),
-        1
-      );
+      const start = startOfMonth(targetDate);
 
       const { data, error } = await supabase
         .from("expenses")
@@ -23,16 +23,12 @@ export const useFetchRecentExpenses = (targetDate: Date, limit = 5) => {
             "date",
             "item_name",
             "amount",
-            "actual_amount",
-            "note",
-            "category_id",
-            "payment_method_id",
-            "categories(name, color)",
-            "payment_methods(name)",
+            "transaction_type",
+            "categories(name)",
           ].join(",")
         )
         .eq("user_id", userId)
-        .gte("date", startOfMonth.toISOString())
+        .gte("date", start.toISOString())
         .order("date", { ascending: false })
         .limit(limit);
 

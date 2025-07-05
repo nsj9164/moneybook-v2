@@ -56,19 +56,34 @@ export const useFetchDashboardSummary = ({
 
   return {
     loading,
-    expense,
     lastExpense,
-    income,
     lastIncome,
-    monthlyExpenseRate,
-    isExpenseIncrease,
-    monthlyIncomeRate,
-    isIncomeIncrease,
-    saving,
-    savingRate,
-    budget,
-    budgetRate,
-    topCategories: summaryData?.topCategories ?? [],
-    last6Months: summaryData?.last6Months ?? [],
+
+    expenseSummary: {
+      expense,
+      monthlyExpenseRate,
+      isExpenseIncrease,
+    },
+
+    incomeSummary: {
+      income,
+      monthlyIncomeRate,
+      isIncomeIncrease,
+    },
+
+    savingSummary: {
+      saving,
+      savingRate,
+    },
+
+    budgetSummary: {
+      budget,
+      budgetRate,
+    },
+
+    trendSummary: {
+      topCategories: summaryData?.topCategories ?? [],
+      lastSixMonths: summaryData?.lastSixMonths ?? [],
+    },
   };
 };

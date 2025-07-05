@@ -7,6 +7,7 @@ export interface IExpense {
   amount: number;
   actualAmount: number;
   note: string;
+  transactionType: number;
   paymentMethodId: number;
   categoryId: number;
   recurringExpenseId?: number;
