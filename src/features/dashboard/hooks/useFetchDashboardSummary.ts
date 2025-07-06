@@ -13,6 +13,7 @@ export const useFetchDashboardSummary = ({
   targetDate,
   userId,
 }: DashboardSummaryProps) => {
+  console.log("??????????????", targetDate, userId);
   const [summaryData, setSummaryData] = useState<DashboardSummary | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -30,10 +31,11 @@ export const useFetchDashboardSummary = ({
         const mappedData = formatKeyCase(data, "camel");
         setSummaryData(mappedData ?? []);
       }
+      setLoading(false);
     };
 
     fetchSummaryData();
-  }, []);
+  }, [targetDate, userId]);
 
   const expense = summaryData?.thisMonth.expense ?? 0;
   const lastExpense = summaryData?.lastMonth.expense ?? 0;

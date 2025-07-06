@@ -1,4 +1,4 @@
-export type DateFilterState = {
+export interface DateFilterState {
   selectedDate: {
     year: number;
     month: number;
@@ -8,4 +8,4 @@ export type DateFilterState = {
   toggleDateSelector: () => void;
   handleChangeYear: (year: number) => void;
   handleChangeMonth: (month: number) => void;
-};
+}

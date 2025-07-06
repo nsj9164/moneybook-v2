@@ -1,34 +1,32 @@
-import { useState, useMemo } from "react";
 import { useFirstExpenseYear } from "@/features/budget/hooks/useFirstExpenseYear";
+import { useState } from "react";
 
 export const useDateFilter = () => {
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth();
+  const { data: firstExpenseYear } = useFirstExpenseYear();
+
+  const now = new Date();
   const [selectedDate, setSelectedDate] = useState({
-    year: currentYear,
-    month: currentMonth,
+    year: now.getFullYear(),
+    month: now.getMonth() + 1,
   });
 
   const [showDateSelector, setShowDateSelector] = useState(false);
 
-  const toggleDateSelector = () => setShowDateSelector(!showDateSelector);
+  const toggleDateSelector = () => {
+    setShowDateSelector((prev) => !prev);
+  };
 
-  const { data: firstExpenseYear } = useFirstExpenseYear();
-  const years = useMemo(() => {
-    const start = firstExpenseYear ?? currentYear;
-    return Array.from({ length: currentYear - start + 1 }, (_, i) => start + i);
-  }, [firstExpenseYear, currentYear]);
-
-  const handleChangeYear = (year: number) =>
+  const handleChangeYear = (year: number) => {
     setSelectedDate((prev) => ({ ...prev, year }));
+  };
 
-  const handleChangeMonth = (month: number) =>
+  const handleChangeMonth = (month: number) => {
     setSelectedDate((prev) => ({ ...prev, month }));
+  };
 
   return {
     firstExpenseYear,
     selectedDate,
-    years,
     showDateSelector,
     toggleDateSelector,
     handleChangeYear,

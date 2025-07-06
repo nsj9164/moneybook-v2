@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useFirstExpenseYear = () => {
   const { userId } = useAuth();
+
   return useQuery<number | null>({
     queryKey: ["firstExpenseYear", userId],
     queryFn: async () => {
@@ -13,11 +14,13 @@ export const useFirstExpenseYear = () => {
         .eq("user_id", userId)
         .order("date", { ascending: true })
         .limit(1)
-        .single();
+        .maybeSingle();
 
-      if (error) throw error;
-      return data.date ? new Date(data.date).getFullYear() : null;
+      if (error) throw new Error(error.message);
+
+      return data?.date ? new Date(data.date).getFullYear() : null;
     },
+    enabled: !!userId, // userId가 준비되지 않았으면 실행하지 않음
     staleTime: 1000 * 60 * 10,
   });
 };

@@ -1,34 +1,50 @@
-import { TopCategory, LastSixMonth } from "./DashboardSummary";
+export interface TopCategory {
+  category: string;
+  color: string;
+  amount: number;
+  percent: number;
+}
+
+export interface LastSixMonth {
+  month: string;
+  total: number;
+}
+
+export interface ExpenseSummary {
+  expense: number;
+  monthlyExpenseRate: number;
+  isExpenseIncrease: boolean;
+}
+
+export interface IncomeSummary {
+  income: number;
+  monthlyIncomeRate: number;
+  isIncomeIncrease: boolean;
+}
+
+export interface SavingSummary {
+  saving: number;
+  savingRate: number;
+}
+
+export interface BudgetSummary {
+  budget: number;
+  budgetRate: number;
+}
+
+export interface TrendSummary {
+  topCategories: TopCategory[];
+  lastSixMonths: LastSixMonth[];
+}
 
 export interface DashboardSummaryState {
   loading: boolean;
   lastExpense: number;
   lastIncome: number;
 
-  expenseSummary: {
-    expense: number;
-    monthlyExpenseRate: number;
-    isExpenseIncrease: boolean;
-  };
-
-  incomeSummary: {
-    income: number;
-    monthlyIncomeRate: number;
-    isIncomeIncrease: boolean;
-  };
-
-  savingSummary: {
-    saving: number;
-    savingRate: number;
-  };
-
-  budgetSummary: {
-    budget: number;
-    budgetRate: number;
-  };
-
-  trendSummary: {
-    topCategories: TopCategory[];
-    lastSixMonths: LastSixMonth[];
-  };
+  expenseSummary: ExpenseSummary;
+  incomeSummary: IncomeSummary;
+  savingSummary: SavingSummary;
+  budgetSummary: BudgetSummary;
+  trendSummary: TrendSummary;
 }

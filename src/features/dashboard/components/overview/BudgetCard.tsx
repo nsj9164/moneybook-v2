@@ -1,6 +1,6 @@
 import { formatCurrency } from "@/utils/format";
 import { OverviewCard } from "./OverviewCard";
-import { BudgetSummary } from "../../types/DashboardSummary";
+import { BudgetSummary } from "../../types/DashboardSummaryState";
 import { Target } from "lucide-react";
 
 export const BudgetCard = ({ budget, budgetRate }: BudgetSummary) => {
@@ -8,7 +8,7 @@ export const BudgetCard = ({ budget, budgetRate }: BudgetSummary) => {
     <OverviewCard
       transition={{ duration: 0.5, delay: 0.3 }}
       title="예산 달성률"
-      amount={`${budgetRate.toFixed(1)}%`}
+      amount={`${budgetRate}%`}
       icon={Target}
       iconBgColor="bg-purple-50"
       iconColor="text-purple-600"

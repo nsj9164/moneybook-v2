@@ -1,6 +1,6 @@
 import { PieChart } from "lucide-react";
-import { SavingSummary } from "../../types/DashboardSummary";
 import { OverviewCard } from "./OverviewCard";
+import { SavingSummary } from "../../types/DashboardSummaryState";
 
 export const SavingsCard = ({ saving, savingRate }: SavingSummary) => {
   return (
@@ -12,9 +12,7 @@ export const SavingsCard = ({ saving, savingRate }: SavingSummary) => {
       iconBgColor="bg-blue-50"
       iconColor="text-blue-600"
     >
-      <span className="text-sm font-medium text-blue-600">
-        {savingRate.toFixed(1)}%
-      </span>
+      <span className="text-sm font-medium text-blue-600">{savingRate}%</span>
       <span className="text-sm text-gray-500 ml-1">저축률</span>
     </OverviewCard>
   );

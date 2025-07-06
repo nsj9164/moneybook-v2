@@ -4,6 +4,7 @@ import { useDateFilter } from "@/hooks/useDateFilter";
 import { DashboardMain } from "../components/DashboardMain";
 import { DashboardOnboarding } from "../components/DashboardOnboarding";
 import { useFetchRecentExpenses } from "../hooks/useFetchRecentExpenses";
+import { DashboardNoData } from "../components/DashboardNoData";
 
 const Dashboard = () => {
   const { firstExpenseYear, ...dateFilter } = useDateFilter();
@@ -16,16 +17,37 @@ const Dashboard = () => {
     userId: userId!,
   });
   const recentExpenses = useFetchRecentExpenses(targetDate, userId!);
-  console.log("#############", summaryData);
 
-  return firstExpenseYear ? (
+  const hasDataThisMonth = summaryData.expenseSummary.expense > 0;
+  console.log(
+    "#############",
+    firstExpenseYear,
+    !firstExpenseYear,
+    summaryData.expenseSummary.expense,
+    hasDataThisMonth
+  );
+
+  if (!firstExpenseYear) {
+    return <DashboardOnboarding />;
+  }
+
+  if (!hasDataThisMonth) {
+    const noDataProps = {
+      selectedMonth: dateFilter.selectedDate.month,
+      showDateSelector: dateFilter.showDateSelector,
+      toggleDateSelector: dateFilter.toggleDateSelector,
+      handleChangeMonth: dateFilter.handleChangeMonth,
+    };
+
+    return <DashboardNoData {...noDataProps} />;
+  }
+
+  return (
     <DashboardMain
       summaryData={summaryData}
       recentExpenses={recentExpenses}
       dateFilter={dateFilter}
     />
-  ) : (
-    <DashboardOnboarding />
   );
 };
 

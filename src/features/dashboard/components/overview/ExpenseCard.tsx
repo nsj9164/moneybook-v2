@@ -1,6 +1,6 @@
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { OverviewCard } from "./OverviewCard";
-import { ExpenseSummary } from "../../types/DashboardSummary";
+import { ExpenseSummary } from "../../types/DashboardSummaryState";
 
 export const ExpenseCard = ({
   expense,
@@ -26,7 +26,7 @@ export const ExpenseCard = ({
           isExpenseIncrease ? "text-red-600" : "text-emerald-600"
         }`}
       >
-        {Math.abs(monthlyExpenseRate).toFixed(1)}%
+        {Math.abs(monthlyExpenseRate)}%
       </span>
       <span className="text-sm text-gray-500 ml-1">전월 대비</span>
     </OverviewCard>

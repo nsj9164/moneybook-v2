@@ -26,7 +26,7 @@ export const DashboardMain = ({
     toggleDateSelector,
     handleChangeYear,
     handleChangeMonth,
-  } = useDateFilter();
+  } = dateFilter;
 
   const { topCategories, lastSixMonths } = summaryData.trendSummary;
 
