@@ -5,11 +5,17 @@ import { DashboardMain } from "../components/DashboardMain";
 import { DashboardOnboarding } from "../components/DashboardOnboarding";
 import { useFetchRecentExpenses } from "../hooks/useFetchRecentExpenses";
 import { DashboardNoData } from "../components/DashboardNoData";
+import { useMemo } from "react";
+import { format } from "date-fns";
 
 const Dashboard = () => {
   const { firstExpenseYear, ...dateFilter } = useDateFilter();
-  const { year, month } = dateFilter.selectedDate;
-  const targetDate = new Date(year, month - 1, 1);
+  const { selectedDate } = dateFilter;
+  const { year, month } = selectedDate;
+  const targetDate = useMemo(
+    () => format(new Date(year, month - 1, 1), "yyyy-MM-dd"),
+    [year, month]
+  );
 
   const { userId } = useAuth();
   const summaryData = useFetchDashboardSummary({
@@ -19,13 +25,6 @@ const Dashboard = () => {
   const recentExpenses = useFetchRecentExpenses(targetDate, userId!);
 
   const hasDataThisMonth = summaryData.expenseSummary.expense > 0;
-  console.log(
-    "#############",
-    firstExpenseYear,
-    !firstExpenseYear,
-    summaryData.expenseSummary.expense,
-    hasDataThisMonth
-  );
 
   if (!firstExpenseYear) {
     return <DashboardOnboarding />;

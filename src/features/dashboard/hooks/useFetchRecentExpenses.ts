@@ -5,7 +5,7 @@ import { startOfMonth } from "date-fns";
 import { UUID } from "@/types/ids";
 
 export const useFetchRecentExpenses = (
-  targetDate: Date,
+  targetDate: string,
   userId: UUID,
   limit = 5
 ) => {

@@ -88,7 +88,7 @@ export const DashboardNoData = ({
             2023년 {selectedMonth}월 데이터가 없습니다
           </h2>
           <p className="text-gray-600 mb-8 max-w-md mx-auto">
-            이번 달에 등록된 거래 내역이 없어요. 첫 거래를 추가하여 가계부
+            이번 달에 등록된 거래 내역이 없어요. <br />첫 거래를 추가하여 가계부
             관리를 시작해보세요.
           </p>
 

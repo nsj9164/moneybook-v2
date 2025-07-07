@@ -5,8 +5,9 @@ export const useDateFilter = () => {
   const { data: firstExpenseYear } = useFirstExpenseYear();
 
   const now = new Date();
+  const currentYear = now.getFullYear();
   const [selectedDate, setSelectedDate] = useState({
-    year: now.getFullYear(),
+    year: currentYear,
     month: now.getMonth() + 1,
   });
 
@@ -24,9 +25,18 @@ export const useDateFilter = () => {
     setSelectedDate((prev) => ({ ...prev, month }));
   };
 
+  const years =
+    firstExpenseYear != null
+      ? Array.from(
+          { length: currentYear - firstExpenseYear + 1 },
+          (_, i) => firstExpenseYear + i
+        )
+      : [];
+
   return {
     firstExpenseYear,
     selectedDate,
+    years,
     showDateSelector,
     toggleDateSelector,
     handleChangeYear,

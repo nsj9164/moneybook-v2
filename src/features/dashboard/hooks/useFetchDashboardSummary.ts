@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { DashboardSummary } from "../types/DashboardSummary";
 
 interface DashboardSummaryProps {
-  targetDate: Date;
+  targetDate: string;
   userId: UUID;
 }
 
@@ -36,7 +36,7 @@ export const useFetchDashboardSummary = ({
 
     fetchSummaryData();
   }, [targetDate, userId]);
-
+  console.log("..........", summaryData);
   const expense = summaryData?.thisMonth.expense ?? 0;
   const lastExpense = summaryData?.lastMonth.expense ?? 0;
   const income = summaryData?.thisMonth.income ?? 0;
