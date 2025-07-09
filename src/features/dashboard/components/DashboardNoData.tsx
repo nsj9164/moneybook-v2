@@ -8,14 +8,30 @@ import {
   Target,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { actionCards } from "../constants/noDataActions";
 
 interface DashboardNoDataProps {
-  selectedMonth: number;
-  showDateSelector: boolean;
-  toggleDateSelector: () => void;
+  selectedDate: { year: number; month: number };
+  handleChangeYear: (year: number) => void;
   handleChangeMonth: (month: number) => void;
 }
-export const DashboardNoData = ({ selectedMonth }: DashboardNoDataProps) => {
+export const DashboardNoData = ({
+  selectedDate,
+  handleChangeYear,
+  handleChangeMonth,
+}: DashboardNoDataProps) => {
+  const { year, month } = selectedDate;
+  const isJanuary = month === 1;
+
+  const handleChangeDate = () => {
+    if (isJanuary) {
+      handleChangeYear(year - 1);
+      handleChangeMonth(12);
+      return;
+    }
+
+    handleChangeMonth(month - 1);
+  };
   return (
     <div className="p-6">
       {/* 빈 상태 메시지 */}
@@ -26,7 +42,7 @@ export const DashboardNoData = ({ selectedMonth }: DashboardNoDataProps) => {
           </div>
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          2023년 {selectedMonth}월 데이터가 없습니다
+          {year}년 {month}월 데이터가 없습니다
         </h2>
         <p className="text-gray-600 mb-8 max-w-md mx-auto">
           이번 달에 등록된 거래 내역이 없어요. <br />첫 거래를 추가하여 가계부
@@ -43,85 +59,44 @@ export const DashboardNoData = ({ selectedMonth }: DashboardNoDataProps) => {
             이번 달 첫 거래 추가하기
           </Link>
           <button
-            //   onClick={() => handleMonthChange("6")}
+            onClick={handleChangeDate}
             className="inline-flex items-center border border-gray-300 bg-white px-6 py-3 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             <ChevronLeft className="mr-2 h-4 w-4" />
-            지난 달 데이터 보기 (6월)
+            지난 달 데이터 보기 ({month - 1}월)
           </button>
         </div>
       </div>
 
       {/* 빠른 액션 카드들 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow"
-        >
-          <Link to="/expenses/add" className="block">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  지출 추가
-                </h3>
-                <p className="text-sm text-gray-600">
-                  오늘의 지출을 빠르게 기록하세요
-                </p>
-              </div>
-              <div className="bg-emerald-100 rounded-lg p-3">
-                <Plus className="h-6 w-6 text-emerald-600" />
-              </div>
-            </div>
-          </Link>
-        </motion.div>
+        {actionCards.map((card) => {
+          const Icon = card.icon;
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow"
-        >
-          <Link to="/budget" className="block">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  예산 설정
-                </h3>
-                <p className="text-sm text-gray-600">
-                  이번 달 예산을 계획해보세요
-                </p>
-              </div>
-              <div className="bg-blue-100 rounded-lg p-3">
-                <Target className="h-6 w-6 text-blue-600" />
-              </div>
-            </div>
-          </Link>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow"
-        >
-          <Link to="/statistics" className="block">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  지출 통계
-                </h3>
-                <p className="text-sm text-gray-600">
-                  이전 달 데이터를 분석해보세요
-                </p>
-              </div>
-              <div className="bg-purple-100 rounded-lg p-3">
-                <BarChart3 className="h-6 w-6 text-purple-600" />
-              </div>
-            </div>
-          </Link>
-        </motion.div>
+          return (
+            <motion.div
+              key={card.to}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: card.delay }}
+              className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow"
+            >
+              <Link to={card.to} className="block">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      {card.title}
+                    </h3>
+                    <p className="text-sm text-gray-600">{card.description}</p>
+                  </div>
+                  <div className={`${card.iconBg} rounded-lg p-3`}>
+                    <Icon className={`h-6 w-6 ${card.iconColor}`} />
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* 도움말 섹션 */}

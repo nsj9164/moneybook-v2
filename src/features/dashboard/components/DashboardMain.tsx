@@ -20,7 +20,7 @@ export const DashboardMain = ({
   selectedMonth,
 }: DashboardMainProps) => {
   const { topCategories, lastSixMonths } = summaryData.trendSummary;
-
+  console.log("############", lastSixMonths);
   return (
     <div className="p-6 space-y-6">
       {/* 핵심 지표 카드 */}

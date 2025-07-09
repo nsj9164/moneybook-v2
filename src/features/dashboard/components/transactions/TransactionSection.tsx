@@ -24,12 +24,12 @@ export const TransactionSection = ({
         className="lg:col-span-2"
       >
         {recentExpenses.map((expense) => (
-          <TransactionItem expense={expense} />
+          <TransactionItem key={expense.id} expense={expense} />
         ))}
       </DashboardSectionCard>
 
       {/* 인사이트 */}
-      <DashboardSectionCard title="최근 거래" initialX={20} delay={0.7}>
+      <DashboardSectionCard title="인사이트" initialX={20} delay={0.7}>
         {/* 예산 알림 */}
         <div className="bg-amber-50 rounded-lg p-4">
           <div className="flex items-start">

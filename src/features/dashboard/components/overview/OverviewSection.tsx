@@ -1,13 +1,23 @@
-import { DashboardSummaryResponse } from "../../types/DashboardSummary";
+import {
+  BudgetSummary,
+  ExpenseSummary,
+  IncomeSummary,
+  SavingSummary,
+} from "../../types/DashboardSummaryState";
 import { BudgetCard } from "./BudgetCard";
 import { ExpenseCard } from "./ExpenseCard";
 import { IncomeCard } from "./IncomeCard";
 import { SavingsCard } from "./SavingsCard";
 
+type OverviewSectionProps = ExpenseSummary &
+  IncomeSummary &
+  SavingSummary &
+  BudgetSummary;
+
 export const OverviewSection = ({
   summaryData,
 }: {
-  summaryData: DashboardSummaryResponse;
+  summaryData: OverviewSectionProps;
 }) => {
   const {
     expense,
@@ -21,6 +31,8 @@ export const OverviewSection = ({
     budget,
     budgetRate,
   } = summaryData;
+
+  console.log("##############", expense);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

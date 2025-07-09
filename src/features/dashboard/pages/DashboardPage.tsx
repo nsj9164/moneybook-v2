@@ -69,9 +69,8 @@ const Dashboard = () => {
 
       {!hasDataThisMonth ? (
         <DashboardNoData
-          selectedMonth={selectedDate.month}
-          showDateSelector={showDateSelector}
-          toggleDateSelector={toggleDateSelector}
+          selectedDate={selectedDate}
+          handleChangeYear={handleChangeYear}
           handleChangeMonth={handleChangeMonth}
         />
       ) : (
