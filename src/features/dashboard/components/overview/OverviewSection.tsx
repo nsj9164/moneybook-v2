@@ -9,52 +9,32 @@ import { ExpenseCard } from "./ExpenseCard";
 import { IncomeCard } from "./IncomeCard";
 import { SavingsCard } from "./SavingsCard";
 
-type OverviewSectionProps = ExpenseSummary &
-  IncomeSummary &
-  SavingSummary &
-  BudgetSummary;
+interface OverviewSectionProps {
+  expenseSummary: ExpenseSummary;
+  incomeSummary: IncomeSummary;
+  savingSummary: SavingSummary;
+  budgetSummary: BudgetSummary;
+}
 
 export const OverviewSection = ({
-  summaryData,
-}: {
-  summaryData: OverviewSectionProps;
-}) => {
-  const {
-    expense,
-    monthlyExpenseRate,
-    isExpenseIncrease,
-    income,
-    monthlyIncomeRate,
-    isIncomeIncrease,
-    saving,
-    savingRate,
-    budget,
-    budgetRate,
-  } = summaryData;
-
-  console.log("##############", expense);
-
+  expenseSummary,
+  incomeSummary,
+  savingSummary,
+  budgetSummary,
+}: OverviewSectionProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {/* 이번 달 지출 */}
-      <ExpenseCard
-        expense={expense}
-        monthlyExpenseRate={monthlyExpenseRate}
-        isExpenseIncrease={isExpenseIncrease}
-      />
+      <ExpenseCard expenseSummary={expenseSummary} />
 
       {/* 이번 달 수입 */}
-      <IncomeCard
-        income={income}
-        monthlyIncomeRate={monthlyIncomeRate}
-        isIncomeIncrease={isIncomeIncrease}
-      />
+      <IncomeCard incomeSummary={incomeSummary} />
 
       {/* 저축 금액 */}
-      <SavingsCard saving={saving} savingRate={savingRate} />
+      <SavingsCard savingSummary={savingSummary} />
 
       {/* 예산 달성률 */}
-      <BudgetCard budget={budget} budgetRate={budgetRate} />
+      <BudgetCard budgetSummary={budgetSummary} />
     </div>
   );
 };

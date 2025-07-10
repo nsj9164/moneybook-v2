@@ -38,10 +38,6 @@ export interface TrendSummary {
 }
 
 export interface DashboardSummaryState {
-  loading: boolean;
-  lastExpense: number;
-  lastIncome: number;
-
   expenseSummary: ExpenseSummary;
   incomeSummary: IncomeSummary;
   savingSummary: SavingSummary;

@@ -28,8 +28,8 @@ export const EmptyFilterBudgetNotice = ({
         {selectedDate.year}년 {selectedDate.month}월 예산 데이터가 없어요
       </h2>
       <p className="text-gray-500 text-center max-w-md mb-6">
-        선택하신 기간에 설정된 예산이 없습니다. 새로운 예산을 추가하거나 다른
-        기간을 선택해보세요.
+        선택하신 기간에 설정된 예산이 없습니다. <br />
+        새로운 예산을 추가하거나 다른 기간을 선택해보세요.
       </p>
 
       <div className="flex flex-wrap gap-4 justify-center mb-8">
@@ -58,8 +58,9 @@ export const EmptyFilterBudgetNotice = ({
               이전 예산 복사하기
             </h3>
             <p className="mt-1 text-xs text-blue-700">
-              이전 달의 예산을 복사하여 빠르게 설정할 수도 있습니다. 필요한
-              부분만 수정하면 됩니다.
+              이전 달의 예산을 복사하여 빠르게 설정할 수도 있습니다.
+              <br />
+              필요한 부분만 수정하면 됩니다.
             </p>
             <button className="mt-2 text-xs text-blue-600 font-medium hover:text-blue-700 flex items-center">
               이전 예산 불러오기

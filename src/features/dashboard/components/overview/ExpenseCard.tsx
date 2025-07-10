@@ -1,17 +1,20 @@
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { OverviewCard } from "./OverviewCard";
 import { ExpenseSummary } from "../../types/DashboardSummaryState";
+import { formatCurrency } from "@/utils/format";
 
 export const ExpenseCard = ({
-  expense,
-  monthlyExpenseRate,
-  isExpenseIncrease,
-}: ExpenseSummary) => {
+  expenseSummary,
+}: {
+  expenseSummary: ExpenseSummary;
+}) => {
+  const { expense, monthlyExpenseRate, isExpenseIncrease } = expenseSummary;
+  const roundedRate = Math.round(Math.abs(monthlyExpenseRate));
   return (
     <OverviewCard
       transition={{ duration: 0.5 }}
       title="이번 달 지출"
-      amount={expense}
+      amount={formatCurrency(expense)}
       icon={ArrowUpRight}
       iconBgColor="bg-red-50"
       iconColor="text-red-600"
@@ -26,7 +29,7 @@ export const ExpenseCard = ({
           isExpenseIncrease ? "text-red-600" : "text-emerald-600"
         }`}
       >
-        {Math.abs(monthlyExpenseRate)}%
+        {Math.abs(roundedRate)}%
       </span>
       <span className="text-sm text-gray-500 ml-1">전월 대비</span>
     </OverviewCard>

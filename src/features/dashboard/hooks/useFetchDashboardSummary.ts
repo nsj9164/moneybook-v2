@@ -13,7 +13,6 @@ export const useFetchDashboardSummary = ({
   targetDate,
   userId,
 }: DashboardSummaryProps) => {
-  console.log("??????????????", targetDate, userId);
   const [summaryData, setSummaryData] = useState<DashboardSummary | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -25,18 +24,21 @@ export const useFetchDashboardSummary = ({
         input_user_id: userId,
       });
 
-      if (error || !data) console.log("Fetch Dashboard Summary Error:", error);
-
-      if (data) {
-        const mappedData = formatKeyCase(data, "camel");
-        setSummaryData(mappedData ?? []);
+      if (error || !data) {
+        console.log("Fetch Dashboard Summary Error:", error);
+        setSummaryData(null);
+        setLoading(false);
+        return;
       }
+
+      const mappedData = formatKeyCase(data, "camel");
+      setSummaryData(mappedData ?? null);
       setLoading(false);
     };
 
     fetchSummaryData();
   }, [targetDate, userId]);
-  console.log("..........", summaryData);
+
   const expense = summaryData?.thisMonth.expense ?? 0;
   const lastExpense = summaryData?.lastMonth.expense ?? 0;
   const income = summaryData?.thisMonth.income ?? 0;
@@ -57,10 +59,6 @@ export const useFetchDashboardSummary = ({
   const budgetRate = budget > 0 ? (expense / budget) * 100 : 0;
 
   return {
-    loading,
-    lastExpense,
-    lastIncome,
-
     expenseSummary: {
       expense,
       monthlyExpenseRate,

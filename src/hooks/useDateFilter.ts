@@ -23,6 +23,7 @@ export const useDateFilter = () => {
 
   const handleChangeMonth = (month: number) => {
     setSelectedDate((prev) => ({ ...prev, month }));
+    setShowDateSelector(false);
   };
 
   const years =

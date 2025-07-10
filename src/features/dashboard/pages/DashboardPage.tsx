@@ -36,6 +36,7 @@ const Dashboard = () => {
     targetDate: targetDate,
     userId: userId!,
   });
+
   const recentExpenses = useFetchRecentExpenses(targetDate, userId!);
 
   const hasDataThisMonth = summaryData.expenseSummary.expense > 0;
@@ -46,10 +47,7 @@ const Dashboard = () => {
 
   return (
     <div className="h-full">
-      <PageHeader
-        title="예산 계획"
-        description="카테고리별 예산을 설정하고 지출을 체계적으로 관리하세요."
-      >
+      <PageHeader title="대시보드" description="한눈에 보는 나의 재정 현황">
         <div className="flex items-center space-x-3">
           <DateFilterControl
             selectedDate={selectedDate}

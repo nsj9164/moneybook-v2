@@ -1,12 +1,5 @@
 import { motion } from "framer-motion";
-import {
-  AlertCircle,
-  BarChart3,
-  Calendar,
-  ChevronLeft,
-  Plus,
-  Target,
-} from "lucide-react";
+import { AlertCircle, Calendar, ChevronLeft, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { actionCards } from "../constants/noDataActions";
 

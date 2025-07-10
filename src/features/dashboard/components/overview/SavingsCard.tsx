@@ -2,7 +2,13 @@ import { PieChart } from "lucide-react";
 import { OverviewCard } from "./OverviewCard";
 import { SavingSummary } from "../../types/DashboardSummaryState";
 
-export const SavingsCard = ({ saving, savingRate }: SavingSummary) => {
+export const SavingsCard = ({
+  savingSummary,
+}: {
+  savingSummary: SavingSummary;
+}) => {
+  const { saving, savingRate } = savingSummary;
+  const roundRate = Math.round(savingRate);
   return (
     <OverviewCard
       transition={{ duration: 0.5, delay: 0.2 }}
@@ -12,7 +18,7 @@ export const SavingsCard = ({ saving, savingRate }: SavingSummary) => {
       iconBgColor="bg-blue-50"
       iconColor="text-blue-600"
     >
-      <span className="text-sm font-medium text-blue-600">{savingRate}%</span>
+      <span className="text-sm font-medium text-blue-600">{roundRate}%</span>
       <span className="text-sm text-gray-500 ml-1">저축률</span>
     </OverviewCard>
   );
