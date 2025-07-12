@@ -14,7 +14,7 @@ export const MonthlyStatistics = ({
   return (
     <div className="space-y-6">
       {/* 카테고리별 월별 지출 추이 */}
-      <MonthlyStats />
+      <MonthlyStats categorySummary={categorySummary} />
 
       {/* 요일별 평균 지출 */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm">

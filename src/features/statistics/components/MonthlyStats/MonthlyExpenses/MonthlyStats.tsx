@@ -1,8 +1,19 @@
 import { CardSection } from "@/components/common/layout/CardSection";
+import {
+  CategorySummary,
+  MonthlyStatisticsResponse,
+} from "@/features/statistics/types/MonthlyStatistics";
 import { useState } from "react";
 import { ToggleIncomeExpenses } from "../ToggleIncomeExpenses";
+import { MonthlyExpensesBar, MonthlyExpensesStats } from "./MonthlyExpensesBar";
+import { MonthlyIncomeBar } from "./MonthlyIncomeBar";
 
-export const MonthlyStats = () => {
+interface MonthlyStatsProps {
+  categorySummary: { income: CategorySummary[]; expenses: CategorySummary[] };
+}
+
+export const MonthlyStats = ({ categorySummary }: MonthlyStatsProps) => {
+  const { income, expenses } = categorySummary;
   const [showIncome, setShowIncome] = useState(false);
   const toggleIncomeExpenses = () => setShowIncome(!showIncome);
   return (
@@ -15,13 +26,30 @@ export const MonthlyStats = () => {
         />
       }
     >
-      {showIncome ? (
-        // 수입 차트 (기존 유지)
-        <MonthlyIncomeStats />
-      ) : (
-        // 카테고리별 지출 비교 차트
-        <MonthlyExpensesStats />
-      )}
+      <div className="h-80">
+        <div className="h-full flex items-end justify-between space-x-4">
+          {showIncome
+            ? income.map((item, index) => {
+                const maxValue = Math.max(...monthlyData.map((d) => d.income));
+                const height = (item.income / maxValue) * 100;
+                const isCurrentMonth = item.month === `${selectedMonth}월`;
+
+                return <MonthlyIncomeBar key={index} income={item} />;
+              })
+            : currentMonthCategories.map((category, index) => {
+                const maxValue = Math.max(
+                  ...currentMonthCategories.flatMap((c) => [
+                    c.currentMonth,
+                    c.lastMonth,
+                  ])
+                );
+                const currentHeight = (category.currentMonth / maxValue) * 100;
+                const lastHeight = (category.lastMonth / maxValue) * 100;
+
+                return <MonthlyExpensesBar key={index} expenses={category} />;
+              })}
+        </div>
+      </div>
 
       <div className="mt-6 flex items-center justify-center space-x-6">
         <div className="flex items-center">
