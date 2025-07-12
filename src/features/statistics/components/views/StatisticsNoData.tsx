@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 import {
   Award,
   BarChart3,
+  Calendar,
   Clock,
   Eye,
-  Flame,
   PieChart,
   Plus,
   Target,
@@ -44,9 +44,7 @@ export const StatisticsNoData = () => {
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
               <TrendingUp className="w-6 h-6 text-blue-600" />
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">
-              월간/분기/연간 분석
-            </h3>
+            <h3 className="font-semibold text-gray-900 mb-2">월간/연간 분석</h3>
             <p className="text-sm text-gray-600">
               기간별 수입과 지출을 비교하고 저축률을 추적할 수 있어요
             </p>
@@ -76,11 +74,11 @@ export const StatisticsNoData = () => {
             className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 text-center"
           >
             <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Flame className="w-6 h-6 text-orange-600" />
+              <Calendar className="w-6 h-6 text-orange-600" />
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">무지출 챌린지</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">무지출 캘린더</h3>
             <p className="text-sm text-gray-600">
-              무지출일을 기록하고 연속 기록을 달성해보세요
+              무지출일을 캘린더에서 확인하고 패턴을 분석해보세요
             </p>
           </motion.div>
         </div>
@@ -97,10 +95,10 @@ export const StatisticsNoData = () => {
               </div>
               <div>
                 <h4 className="font-semibold text-gray-900 mb-1">
-                  주별/일별 지출 패턴
+                  지출 패턴 분석
                 </h4>
                 <p className="text-sm text-gray-600">
-                  언제 가장 많이 지출하는지 패턴을 파악할 수 있어요
+                  언제, 어디서, 얼마나 지출하는지 상세한 패턴을 파악할 수 있어요
                 </p>
               </div>
             </div>
@@ -111,7 +109,7 @@ export const StatisticsNoData = () => {
               </div>
               <div>
                 <h4 className="font-semibold text-gray-900 mb-1">
-                  목표 대비 성과
+                  예산 대비 성과
                 </h4>
                 <p className="text-sm text-gray-600">
                   설정한 예산 목표 대비 실제 지출을 비교 분석해요

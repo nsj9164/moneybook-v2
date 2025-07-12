@@ -1,16 +1,27 @@
 import { formatCurrency } from "@/utils/format";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ToggleLeft, ToggleRight } from "lucide-react";
+import { MonthlyStatisticsResponse } from "../../types/MonthlyStatistics";
+import { useState } from "react";
+import { MonthlyStats } from "../MonthlyStats/MonthlyExpenses/MonthlyStats";
 
-export const MonthlyStatistics = () => {
+export const MonthlyStatistics = ({
+  monthlyData,
+}: {
+  monthlyData: MonthlyStatisticsResponse;
+}) => {
+  const { categorySummary, noSpendingDays, paymentMethods } = monthlyData;
   return (
     <div className="space-y-6">
-      {/* 월별 수입/지출 추이 */}
+      {/* 카테고리별 월별 지출 추이 */}
+      <MonthlyStats />
+
+      {/* 요일별 평균 지출 */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900">
-              월별 수입/지출 추이
+              요일별 평균 지출
             </h2>
             <button className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center">
               <span>상세 보기</span>
@@ -21,109 +32,70 @@ export const MonthlyStatistics = () => {
         <div className="p-6">
           <div className="h-80">
             <div className="h-full flex items-end justify-between space-x-4">
-              {monthlyData.map((item, index) => {
+              {weekdayData.map((day, index) => {
                 const maxValue = Math.max(
-                  ...monthlyData.map((d) => Math.max(d.income, d.expense))
+                  ...weekdayData.map((d) => d.avgExpense)
                 );
-                const incomeHeight = (item.income / maxValue) * 100;
-                const expenseHeight = (item.expense / maxValue) * 100;
-                const isCurrentMonth = item.month === `${selectedMonth}월`;
+                const height = (day.avgExpense / maxValue) * 100;
+                const isWeekend = day.day === "토" || day.day === "일";
 
                 return (
                   <div
-                    key={item.month}
+                    key={day.day}
                     className="flex-1 flex flex-col items-center"
                   >
-                    <div className="w-full flex justify-center space-x-1 mb-2">
-                      <motion.div
-                        initial={{ height: 0 }}
-                        animate={{ height: `${incomeHeight * 0.7}%` }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className={`w-4 rounded-t-sm ${
-                          isCurrentMonth ? "bg-emerald-500" : "bg-emerald-300"
-                        }`}
-                        title={`수입: ${formatCurrency(item.income)}`}
-                      />
-                      <motion.div
-                        initial={{ height: 0 }}
-                        animate={{ height: `${expenseHeight * 0.7}%` }}
-                        transition={{ duration: 0.5, delay: index * 0.1 + 0.1 }}
-                        className={`w-4 rounded-t-sm ${
-                          isCurrentMonth ? "bg-red-500" : "bg-red-300"
-                        }`}
-                        title={`지출: ${formatCurrency(item.expense)}`}
-                      />
+                    <motion.div
+                      initial={{ height: 0 }}
+                      animate={{ height: `${height * 0.8}%` }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className={`w-full rounded-t-lg ${day.color} ${
+                        isWeekend ? "opacity-90" : ""
+                      }`}
+                      title={`${day.dayName}: ${formatCurrency(
+                        day.avgExpense
+                      )}`}
+                    />
+                    <div className="text-sm font-medium text-gray-600 mt-2">
+                      {day.day}
                     </div>
-                    <div className="text-xs font-medium text-gray-600 mt-2">
-                      {item.month}
+                    <div className="text-xs text-gray-500">
+                      {formatCurrency(day.avgExpense)}
                     </div>
                   </div>
                 );
               })}
             </div>
           </div>
-          <div className="mt-6 flex items-center justify-center space-x-6">
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-emerald-500 rounded mr-2"></div>
-              <span className="text-sm text-gray-600">수입</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-red-500 rounded mr-2"></div>
-              <span className="text-sm text-gray-600">지출</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 카테고리별 지출 분석 (모든 기간 공통) */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">
-            카테고리별 지출 분석
-            {selectedPeriod === "month" && ` (${selectedMonth}월)`}
-            {selectedPeriod === "quarter" &&
-              ` (${Math.ceil(Number.parseInt(selectedMonth) / 3)}분기)`}
-            {selectedPeriod === "year" && ` (${selectedYear}년)`}
-          </h2>
-        </div>
-        <div className="p-6">
-          <div className="space-y-4">
-            {categoryData.map((category, index) => (
-              <div key={category.name} className="flex items-center">
-                <div className={`h-4 w-4 rounded ${category.color} mr-3`} />
-                <div className="flex-1">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-sm font-medium text-gray-700">
-                      {category.name}
-                    </span>
-                    <span className="text-sm font-medium text-gray-900">
-                      {formatCurrency(category.value)}
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${category.percentage}%` }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className={`h-2 rounded-full ${category.color.replace(
-                        "bg-",
-                        "bg-"
-                      )}`}
-                    />
-                  </div>
-                  <div className="flex justify-between items-center mt-1">
-                    <span className="text-xs text-gray-500">
-                      {category.percentage}%
-                    </span>
-                  </div>
-                </div>
+          <div className="mt-6 grid grid-cols-7 gap-2">
+            <div className="col-span-5 text-center p-3 bg-blue-50 rounded-lg">
+              <div className="text-sm font-medium text-blue-700">평일 평균</div>
+              <div className="text-lg font-bold text-blue-600">
+                {formatCurrency(
+                  weekdayData
+                    .filter((day) =>
+                      ["월", "화", "수", "목", "금"].includes(day.day)
+                    )
+                    .reduce((sum, day) => sum + day.avgExpense, 0) / 5
+                )}
               </div>
-            ))}
+            </div>
+            <div className="col-span-2 text-center p-3 bg-orange-50 rounded-lg">
+              <div className="text-sm font-medium text-orange-700">
+                주말 평균
+              </div>
+              <div className="text-lg font-bold text-orange-600">
+                {formatCurrency(
+                  weekdayData
+                    .filter((day) => ["토", "일"].includes(day.day))
+                    .reduce((sum, day) => sum + day.avgExpense, 0) / 2
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* 주별 요약 & 일별 추이 */}
+      {/* 주별 요약 & 무지출 캘린더 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
           <div className="px-6 py-4 border-b border-gray-200">
@@ -170,150 +142,208 @@ export const MonthlyStatistics = () => {
 
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">
-              일별 지출 추이
-            </h2>
+            <div className="flex items-center">
+              <Calendar className="h-5 w-5 text-emerald-500 mr-2" />
+              <h2 className="text-lg font-semibold text-gray-900">
+                무지출 캘린더
+              </h2>
+            </div>
           </div>
           <div className="p-6">
-            <div className="h-48 overflow-x-auto">
-              <div className="flex items-end space-x-1 h-full min-w-max">
-                {dailyData.slice(0, 15).map((day, index) => {
-                  const maxDailyExpense = Math.max(
-                    ...dailyData.map((d) => d.expense)
-                  );
-                  const heightPercentage = day.hasExpense
-                    ? (day.expense / maxDailyExpense) * 100
-                    : 0;
-
-                  return (
-                    <div key={day.day} className="flex flex-col items-center">
-                      <motion.div
-                        initial={{ height: 0 }}
-                        animate={{ height: `${heightPercentage * 0.8}%` }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                        className={`w-4 rounded-t-sm ${
-                          day.hasExpense
-                            ? "bg-gradient-to-t from-purple-500 to-purple-400"
-                            : "bg-green-200"
-                        }`}
-                        title={
-                          day.hasExpense
-                            ? formatCurrency(day.expense)
-                            : "무지출일"
-                        }
-                      />
-                      <div className="text-xs text-gray-500 mt-1">
-                        {day.day}
-                      </div>
-                    </div>
-                  );
-                })}
+            {/* 무지출 통계 */}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-emerald-600 mb-1">
+                  {noSpendingStats.currentMonth}일
+                </div>
+                <div className="text-xs text-gray-600">이번 달 무지출</div>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center">
+                  <span className="text-2xl font-bold text-gray-900 mr-2">
+                    {noSpendingStats.lastMonth}일
+                  </span>
+                  <ChangeIndicator
+                    current={noSpendingStats.currentMonth}
+                    previous={noSpendingStats.lastMonth}
+                    isPositiveGood={true}
+                  />
+                </div>
+                <div className="text-xs text-gray-600">지난 달 대비</div>
               </div>
             </div>
-            <div className="mt-4 flex items-center justify-center space-x-4">
+
+            {/* 캘린더 - 크기 줄임 */}
+            <div className="grid grid-cols-7 gap-1 mb-4">
+              {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
+                <div
+                  key={day}
+                  className="text-center text-xs font-medium text-gray-500 py-1"
+                >
+                  {day}
+                </div>
+              ))}
+              {calendarData.map((day) => (
+                <div
+                  key={day.day}
+                  className="aspect-square flex flex-col items-center justify-center text-xs rounded relative border border-gray-200"
+                >
+                  {!day.hasExpense && <span className="text-sm mb-1">💰</span>}
+                  <span className="text-xs text-gray-700">{day.day}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-center space-x-4 text-xs">
               <div className="flex items-center">
-                <div className="w-3 h-3 bg-purple-500 rounded mr-2"></div>
-                <span className="text-xs text-gray-600">지출 있음</span>
+                <span className="text-sm mr-2">💰</span>
+                <span className="text-gray-600">무지출일</span>
               </div>
               <div className="flex items-center">
-                <div className="w-3 h-3 bg-green-200 rounded mr-2"></div>
-                <span className="text-xs text-gray-600">무지출일</span>
+                <span className="text-gray-600">숫자만: 지출일</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 무지출 챌린지 */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <div className="flex items-center">
-            <Flame className="h-5 w-5 text-orange-500 mr-2" />
-            <h2 className="text-lg font-semibold text-gray-900">
-              무지출 챌린지
-            </h2>
+      {/* 지출 하이라이트 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            💸 가장 많이 소비한 날
+          </h3>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-red-600 mb-2">
+              {noSpendingStats.highestSpendingDay.day}일
+            </div>
+            <div className="text-lg text-gray-900 mb-1">
+              {formatCurrency(noSpendingStats.highestSpendingDay.amount)}
+            </div>
+            <div className="text-sm text-gray-500">하루 총 지출</div>
           </div>
         </div>
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-orange-500 mb-1">
-                {noSpendingChallenge.currentStreak}일
-              </div>
-              <div className="text-sm text-gray-600">현재 연속</div>
+
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            🛍️ 가장 큰 소비
+          </h3>
+          <div className="text-center">
+            <div className="text-lg font-bold text-purple-600 mb-2">
+              {noSpendingStats.biggestExpense.item}
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-red-500 mb-1">
-                {noSpendingChallenge.longestStreak}일
-              </div>
-              <div className="text-sm text-gray-600">최장 기록</div>
+            <div className="text-2xl font-bold text-gray-900 mb-1">
+              {formatCurrency(noSpendingStats.biggestExpense.amount)}
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-500 mb-1">
-                {noSpendingChallenge.totalNoSpendDays}일
-              </div>
-              <div className="text-sm text-gray-600">이번 달 총계</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-emerald-500 mb-1">
-                {noSpendingChallenge.monthlyGoal}일
-              </div>
-              <div className="text-sm text-gray-600">월간 목표</div>
+            <div className="text-sm text-gray-500">
+              {noSpendingStats.biggestExpense.date}
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-700">
-                월간 목표 진행률
-              </span>
-              <span className="text-sm text-gray-600">
-                {noSpendingChallenge.totalNoSpendDays}/
-                {noSpendingChallenge.monthlyGoal}일
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{
-                  width: `${
-                    (noSpendingChallenge.totalNoSpendDays /
-                      noSpendingChallenge.monthlyGoal) *
-                    100
-                  }%`,
-                }}
-                transition={{ duration: 1 }}
-                className="h-3 bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
-              />
-            </div>
+      {/* 결제수단별 & 고정비 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900">
+              결제수단별 지출
+            </h2>
           </div>
-
-          <div>
-            <h3 className="text-sm font-medium text-gray-900 mb-3">
-              달성 뱃지
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {noSpendingChallenge.achievements.map((achievement, index) => (
+          <div className="p-6">
+            <div className="space-y-4">
+              {paymentMethodData.map((method, index) => (
                 <div
-                  key={achievement.name}
-                  className={`p-3 rounded-lg border text-center ${
-                    achievement.achieved
-                      ? "bg-emerald-50 border-emerald-200"
-                      : "bg-gray-50 border-gray-200"
-                  }`}
+                  key={method.name}
+                  className="flex items-center justify-between"
                 >
-                  <div className="text-2xl mb-1">{achievement.icon}</div>
-                  <div
-                    className={`text-xs font-medium ${
-                      achievement.achieved
-                        ? "text-emerald-700"
-                        : "text-gray-500"
-                    }`}
-                  >
-                    {achievement.name}
+                  <div className="flex items-center flex-1">
+                    <CreditCard className="h-4 w-4 text-gray-400 mr-3" />
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm font-medium text-gray-700">
+                          {method.name}
+                        </span>
+                        <span className="text-sm font-medium text-gray-900">
+                          {formatCurrency(method.value)}
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${method.percentage}%` }}
+                          transition={{ duration: 0.5, delay: index * 0.1 }}
+                          className="h-2 rounded-full bg-blue-500"
+                        />
+                      </div>
+                      <div className="flex justify-between items-center mt-1">
+                        <span className="text-xs text-gray-500">
+                          {method.percentage}%
+                        </span>
+                        <ChangeIndicator
+                          current={method.value}
+                          previous={method.lastMonthValue}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900">고정비</h2>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 gap-3">
+              {fixedExpenses.map((expense, index) => (
+                <div
+                  key={expense.name}
+                  className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                >
+                  <div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {expense.name}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {expense.category}
+                    </div>
+                  </div>
+                  <div className="text-sm font-bold text-gray-700">
+                    {formatCurrency(expense.amount)}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-gray-700">
+                  월 고정비 총액
+                </span>
+                <span className="text-lg font-bold text-gray-900">
+                  {formatCurrency(
+                    fixedExpenses.reduce(
+                      (sum, expense) => sum + expense.amount,
+                      0
+                    )
+                  )}
+                </span>
+              </div>
+              <div className="text-xs text-gray-500 mt-1">
+                전체 지출의{" "}
+                {(
+                  (fixedExpenses.reduce(
+                    (sum, expense) => sum + expense.amount,
+                    0
+                  ) /
+                    currentData.totalExpense) *
+                  100
+                ).toFixed(1)}
+                %
+              </div>
             </div>
           </div>
         </div>

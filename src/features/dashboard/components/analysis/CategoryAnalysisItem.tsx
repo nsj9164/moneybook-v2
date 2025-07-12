@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/utils/format";
-import { motion, number } from "framer-motion";
+import { motion } from "framer-motion";
 import { TopCategory } from "../../types/DashboardSummary";
 
 type CategoryAnalysisItemProps = TopCategory & { index: number };
@@ -11,6 +11,7 @@ export const CategoryAnalysisItem = ({
   percent,
   index,
 }: CategoryAnalysisItemProps) => {
+  console.log("#########", percent, color);
   return (
     <div className="flex items-center">
       <div className={`w-4 h-4 rounded-full ${color} mr-3 flex-shrink-0`} />
@@ -27,7 +28,8 @@ export const CategoryAnalysisItem = ({
               initial={{ width: 0 }}
               animate={{ width: `${percent}%` }}
               transition={{ duration: 0.8, delay: 0.1 * index }}
-              className={`h-2 rounded-full ${color}`}
+              className="h-2 rounded-full"
+              style={{ backgroundColor: `${color}` }}
             />
           </div>
           <span className="text-xs text-gray-500 w-10 text-right">
