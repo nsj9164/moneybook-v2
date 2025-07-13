@@ -1,21 +1,27 @@
-import { ReactNode } from "react";
-
 interface CardProps {
   title: string;
-  children: ReactNode;
-  action?: ReactNode;
+  mainValue: string;
+  subValue: string;
+  description: string;
+  mainColorClass: string;
 }
-
-export const StatisticsCard = ({ title, children, action }: CardProps) => {
+export const StatisticsCard = ({
+  title,
+  mainValue,
+  subValue,
+  description,
+  mainColorClass,
+}: CardProps) => {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-          {action && <>{action}</>}
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">{title}</h3>
+      <div className="text-center">
+        <div className={`text-3xl font-bold ${mainColorClass} mb-2`}>
+          {mainValue}
         </div>
+        <div className="text-lg text-gray-900 mb-1">{subValue}</div>
+        <div className="text-sm text-gray-500">{description}</div>
       </div>
-      <div className="p-6">{children}</div>
     </div>
   );
 };

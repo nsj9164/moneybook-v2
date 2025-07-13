@@ -30,8 +30,10 @@ export const MonthlyStats = ({ categorySummary }: MonthlyStatsProps) => {
         <div className="h-full flex items-end justify-between space-x-4">
           {showIncome
             ? income.map((item, index) => {
-                const maxValue = Math.max(...monthlyData.map((d) => d.income));
-                const height = (item.income / maxValue) * 100;
+                const maxValue = Math.max(
+                  ...income.map((d) => d.currentAmount)
+                );
+                const height = (item.currentAmount / maxValue) * 100;
                 const isCurrentMonth = item.month === `${selectedMonth}월`;
 
                 return <MonthlyIncomeBar key={index} income={item} />;
