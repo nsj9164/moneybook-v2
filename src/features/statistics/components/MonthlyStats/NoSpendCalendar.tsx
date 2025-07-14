@@ -1,13 +1,24 @@
 import { Calendar } from "lucide-react";
+import { ChangeIndicator } from "../ChangeIndicator";
 
 interface NoSpendCalendarProps {
-  currentMonth: number;
-  previousMonth: number;
-  yearToDate: number;
+  noSpendingDays: {
+    currentMonth: number;
+    previousMonth: number;
+    yearToDate: number;
+    currentMonthDays: number[];
+  };
 }
 
 export const NoSpendCalendar = ({ noSpendingDays }: NoSpendCalendarProps) => {
-  const { currentMonth, previousMonth, yearToDate } = noSpendingDays;
+  const { currentMonth, previousMonth, yearToDate, currentMonthDays } =
+    noSpendingDays;
+
+  const calendarData = Array.from({ length: 30 }, (_, i) => ({
+    day: i + 1,
+    noSpendingDays: currentMonthDays,
+  }));
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
       <div className="px-6 py-4 border-b border-gray-200">
@@ -55,7 +66,9 @@ export const NoSpendCalendar = ({ noSpendingDays }: NoSpendCalendarProps) => {
               key={day.day}
               className="aspect-square flex flex-col items-center justify-center text-xs rounded relative border border-gray-200"
             >
-              {!day.hasExpense && <span className="text-sm mb-1">💰</span>}
+              {currentMonthDays.has(day.day) && (
+                <span className="text-sm mb-1">💰</span>
+              )}
               <span className="text-xs text-gray-700">{day.day}</span>
             </div>
           ))}

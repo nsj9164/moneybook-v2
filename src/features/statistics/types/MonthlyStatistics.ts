@@ -3,9 +3,11 @@ export interface MonthlyStatisticsResponse {
     currentMonth: number;
     previousMonth: number;
     yearToDate: number;
+    currentMonthDays: number[];
   };
   categorySummary: { income: CategorySummary[]; expenses: CategorySummary[] };
   paymentMethods: PaymentMethodSummary[];
+  weekdayCategoryAverage: WeekdaySummary[];
 }
 
 export interface CategorySummary {
@@ -20,4 +22,9 @@ export interface PaymentMethodSummary {
   method: string;
   currentAmount: number;
   previousAmount: number;
+}
+
+export interface WeekdaySummary {
+  weekday: number;
+  categories: { categoryId: number; category: string; average: number };
 }

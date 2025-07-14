@@ -2,7 +2,7 @@ import { formatCurrency } from "@/utils/format";
 import { MonthlyStatisticsResponse } from "../../types/MonthlyStatistics";
 import { MonthlyStats } from "../MonthlyStats/MonthlyExpenses/MonthlyStats";
 import { MonthlyExpensesByDay } from "../MonthlyStats/MonthlyExpensesByDay";
-import { WeeklyExpenses } from "../MonthlyStats/WeeklyExpenses";
+import { WeeklyExpenses } from "../MonthlyStats/WeeklyExpenses/WeeklyExpenses";
 import { StatisticsCard } from "../StatisticsCard";
 import { MonthlyPayment } from "../MonthlyStats/MonthlyPayment";
 import { MonthlyRecurrings } from "../MonthlyStats/MonthlyRecurrings";
@@ -13,7 +13,12 @@ export const MonthlyStatistics = ({
 }: {
   monthlyData: MonthlyStatisticsResponse;
 }) => {
-  const { categorySummary, noSpendingDays, paymentMethods } = monthlyData;
+  const {
+    categorySummary,
+    noSpendingDays,
+    paymentMethods,
+    weekdayCategoryAverage,
+  } = monthlyData;
   return (
     <div className="space-y-6">
       {/* 카테고리별 월별 지출 추이 */}
@@ -24,7 +29,7 @@ export const MonthlyStatistics = ({
 
       {/* 주별 요약 & 무지출 캘린더 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <WeeklyExpenses />
+        <WeeklyExpenses weekdayCategoryAverage={weekdayCategoryAverage} />
         <NoSpendCalendar noSpendingDays={noSpendingDays} />
       </div>
 
