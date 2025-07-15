@@ -2,8 +2,71 @@ import { CardSection } from "@/components/common/layout/CardSection";
 import { formatCurrency } from "@/utils/format";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { WeekdaySummary } from "../../types/MonthlyStatistics";
+import EChartsReact from "echarts-for-react";
 
-export const MonthlyExpensesByDay = () => {
+export const MonthlyExpensesByDay = ({
+  weekdayCategoryAverage,
+}: {
+  weekdayCategoryAverage: WeekdaySummary[];
+}) => {
+  const { weekday, categories } = weekdayCategoryAverage;
+
+  const weekdays = ["월", "화", "수", "목", "금", "토", "일"];
+
+  const datePerDay = Array(7)
+    .fill(0)
+    .map((_, idx) => {
+      const found = weekdayCategoryAverage.find((d) => d.weekday === idx);
+      if (found && found.categories.length > 0) {
+        return found.categories[0].average;
+      }
+      return 0;
+    });
+
+  const total = dataPerDay.reduce((a, b) => a + b, 0);
+
+  const dataRatio = dataPerDay.map((v) => (total > 0 ? v / total : 0));
+
+  const series = [
+    {
+      name: "평균 지출",
+      type: "bar",
+      barWidth: "60%",
+      label: {
+        show: true,
+        formatter: (params: any) => `${(params.value * 100).toFixed(1)}%`,
+      },
+      data: dataRatio,
+    },
+  ];
+
+  const option = {
+    tooltip: {
+      trigger: "axis",
+      formatter: (params: any) => {
+        return `${params[0].name}: ${(params[0].value * 100).toFixed(1)}%`;
+      },
+    },
+    grid: {
+      left: 50,
+      right: 30,
+      top: 50,
+      bottom: 50,
+    },
+    xAxis: {
+      type: "category",
+      data: weekdays,
+    },
+    yAxis: {
+      type: "value",
+      axisLabel: {
+        formatter: (val: number) => `${(val * 100).toFixed(0)}%`,
+      },
+    },
+    series,
+  };
+
   return (
     <CardSection
       title="요일별 평균 지출"
@@ -16,31 +79,7 @@ export const MonthlyExpensesByDay = () => {
     >
       <div className="h-80">
         <div className="h-full flex items-end justify-between space-x-4">
-          {weekdayData.map((day, index) => {
-            const maxValue = Math.max(...weekdayData.map((d) => d.avgExpense));
-            const height = (day.avgExpense / maxValue) * 100;
-            const isWeekend = day.day === "토" || day.day === "일";
-
-            return (
-              <div key={day.day} className="flex-1 flex flex-col items-center">
-                <motion.div
-                  initial={{ height: 0 }}
-                  animate={{ height: `${height * 0.8}%` }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={`w-full rounded-t-lg ${day.color} ${
-                    isWeekend ? "opacity-90" : ""
-                  }`}
-                  title={`${day.dayName}: ${formatCurrency(day.avgExpense)}`}
-                />
-                <div className="text-sm font-medium text-gray-600 mt-2">
-                  {day.day}
-                </div>
-                <div className="text-xs text-gray-500">
-                  {formatCurrency(day.avgExpense)}
-                </div>
-              </div>
-            );
-          })}
+          <EChartsReact option={option} />
         </div>
       </div>
       <div className="mt-6 grid grid-cols-7 gap-2">

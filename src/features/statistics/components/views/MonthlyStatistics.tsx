@@ -25,11 +25,11 @@ export const MonthlyStatistics = ({
       <MonthlyStats categorySummary={categorySummary} />
 
       {/* 요일별 평균 지출 */}
-      <MonthlyExpensesByDay />
+      <MonthlyExpensesByDay weekdayCategoryAverage={weekdayCategoryAverage} />
 
       {/* 주별 요약 & 무지출 캘린더 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <WeeklyExpenses weekdayCategoryAverage={weekdayCategoryAverage} />
+        <WeeklyExpenses />
         <NoSpendCalendar noSpendingDays={noSpendingDays} />
       </div>
 
