@@ -15,10 +15,16 @@ export const MonthlyStatistics = ({
 }) => {
   const {
     categorySummary,
-    noSpendingDays,
     paymentMethods,
     weekdayCategoryAverage,
+    weeklySummary,
+    recurringExpenses,
+    topSpending,
+    noSpendingDays,
   } = monthlyData;
+
+  const { highestSpendingDay, largestSingleExpense } = topSpending;
+
   return (
     <div className="space-y-6">
       {/* 카테고리별 월별 지출 추이 */}
@@ -29,7 +35,7 @@ export const MonthlyStatistics = ({
 
       {/* 주별 요약 & 무지출 캘린더 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <WeeklyExpenses />
+        <WeeklyExpenses weeklySummary={weeklySummary} />
         <NoSpendCalendar noSpendingDays={noSpendingDays} />
       </div>
 
@@ -37,17 +43,17 @@ export const MonthlyStatistics = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <StatisticsCard
           title="💸 가장 많이 소비한 날"
-          mainValue={`${noSpendingStats.highestSpendingDay.day}일`}
-          subValue={formatCurrency(noSpendingStats.highestSpendingDay.amount)}
+          mainValue={`${highestSpendingDay.date}일`}
+          subValue={formatCurrency(highestSpendingDay.amount)}
           description="하루 총 지출"
           mainColorClass="text-red-600"
         />
 
         <StatisticsCard
           title="🛍️ 가장 큰 소비"
-          mainValue={noSpendingStats.biggestExpense.item}
-          subValue={formatCurrency(noSpendingStats.biggestExpense.amount)}
-          description={noSpendingStats.biggestExpense.date}
+          mainValue={largestSingleExpense.name}
+          subValue={formatCurrency(largestSingleExpense.amount)}
+          description={largestSingleExpense.date}
           mainColorClass="text-purple-600"
         />
       </div>
@@ -55,7 +61,7 @@ export const MonthlyStatistics = ({
       {/* 결제수단별 & 고정비 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <MonthlyPayment paymentMethods={paymentMethods} />
-        <MonthlyRecurrings />
+        <MonthlyRecurrings recurringExpenses={recurringExpenses} />
       </div>
     </div>
   );

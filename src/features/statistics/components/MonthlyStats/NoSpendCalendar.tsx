@@ -10,7 +10,11 @@ interface NoSpendCalendarProps {
   };
 }
 
-export const NoSpendCalendar = ({ noSpendingDays }: NoSpendCalendarProps) => {
+export const NoSpendCalendar = ({
+  noSpendingDays,
+}: {
+  noSpendingDays: NoSpendCalendarProps;
+}) => {
   const { currentMonth, previousMonth, yearToDate, currentMonthDays } =
     noSpendingDays;
 
