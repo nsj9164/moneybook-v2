@@ -1,14 +1,14 @@
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { OverviewCard } from "./OverviewCard";
-import { ExpenseSummary } from "../../types/DashboardSummaryState";
 import { formatCurrency } from "@/utils/format";
+import { ExpenseSummary } from "@/types/\bOverviewSummary";
 
 export const ExpenseCard = ({
-  expenseSummary,
+  expenseData,
 }: {
-  expenseSummary: ExpenseSummary;
+  expenseData: ExpenseSummary;
 }) => {
-  const { expense, monthlyExpenseRate, isExpenseIncrease } = expenseSummary;
+  const { expense, monthlyExpenseRate, isExpenseIncrease } = expenseData;
   const roundedRate = Math.round(Math.abs(monthlyExpenseRate));
   return (
     <OverviewCard

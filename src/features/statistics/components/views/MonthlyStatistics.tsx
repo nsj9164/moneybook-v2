@@ -4,9 +4,9 @@ import { MonthlyStats } from "../MonthlyStats/MonthlyExpenses/MonthlyStats";
 import { MonthlyExpensesByDay } from "../MonthlyStats/MonthlyExpensesByDay";
 import { WeeklyExpenses } from "../MonthlyStats/WeeklyExpenses/WeeklyExpenses";
 import { StatisticsCard } from "../StatisticsCard";
-import { MonthlyPayment } from "../MonthlyStats/MonthlyPayment";
-import { MonthlyRecurrings } from "../MonthlyStats/MonthlyRecurrings";
-import { NoSpendCalendar } from "../MonthlyStats/NoSpendCalendar";
+import { NoSpendingCalendar } from "../MonthlyStats/NoSpendingCalendar/NoSpendingCalendar";
+import { MonthlyPayment } from "../MonthlyStats/MonthlyPayment/MonthlyPayment";
+import { MonthlyRecurrings } from "../MonthlyStats/MonthlyRecurrings/MonthlyRecurrings";
 
 export const MonthlyStatistics = ({
   monthlyData,
@@ -36,7 +36,7 @@ export const MonthlyStatistics = ({
       {/* 주별 요약 & 무지출 캘린더 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <WeeklyExpenses weeklySummary={weeklySummary} />
-        <NoSpendCalendar noSpendingDays={noSpendingDays} />
+        <NoSpendingCalendar noSpendingDays={noSpendingDays} />
       </div>
 
       {/* 지출 하이라이트 */}

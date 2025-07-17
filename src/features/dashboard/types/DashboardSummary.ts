@@ -1,18 +1,4 @@
-export interface DashboardSummary {
-  budget: {
-    goal: number;
-    used: number;
-  };
-  thisMonth: {
-    income: number;
-    expense: number;
-    saving: number;
-    budgetUsed: number;
-  };
-  lastMonth: {
-    income: number;
-    expense: number;
-  };
+export interface ChartSummary {
   lastSixMonths: LastSixMonth[];
   topCategories: TopCategory[];
 }

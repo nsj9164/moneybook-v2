@@ -15,6 +15,7 @@ export const AnalysisSection = ({
   lastSixMonths,
   selectedMonth,
 }: AnalysisSectionProps) => {
+  console.log("얍얍얍얍", topCategories, lastSixMonths);
   const { sum, max } = lastSixMonths.reduce(
     (acc, month) => {
       acc.sum += month.total;

@@ -1,6 +1,6 @@
 import { CardSection } from "@/components/common/layout/CardSection";
 import { formatCurrency } from "@/utils/format";
-import { RecurringExpensesSummary } from "../../types/MonthlyStatistics";
+import { RecurringExpensesSummary } from "../../../types/MonthlyStatistics";
 import { MonthlyRecurringItem } from "./MonthlyRecurringItem";
 
 export const MonthlyRecurrings = ({

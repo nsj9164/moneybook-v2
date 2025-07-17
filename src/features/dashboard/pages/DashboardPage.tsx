@@ -1,4 +1,3 @@
-import { useFetchDashboardSummary } from "../hooks/useFetchDashboardSummary";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDateFilter } from "@/hooks/useDateFilter";
 import { DashboardMain } from "../components/DashboardMain";
@@ -12,6 +11,9 @@ import { DateFilterControl } from "@/components/monthSelector/DateFilterControl"
 import { Button } from "@/components/ui/Button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useFetchRpc } from "@/hooks/fetchData/useFetchRpc";
+import { ChartSummary } from "../types/DashboardSummary";
+import { OverviewSummary } from "@/types/overviewSummary";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -32,14 +34,22 @@ const Dashboard = () => {
   );
 
   const { userId } = useAuth();
-  const summaryData = useFetchDashboardSummary({
-    targetDate: targetDate,
-    userId: userId!,
-  });
+  const chartData = useFetchRpc<ChartSummary>(
+    "get_dashboard_chart_data",
+    targetDate,
+    userId!
+  );
+  const summaryData = useFetchRpc<OverviewSummary>(
+    "get_overview_summary",
+    targetDate,
+    userId!
+  );
+  console.log("@@@@@@@@@@@@@@", chartData);
+  console.log("@@@@@@@@@@@@@@", summaryData);
 
   const recentExpenses = useFetchRecentExpenses(targetDate, userId!);
 
-  const hasDataThisMonth = summaryData.expenseSummary.expense > 0;
+  const hasDataThisMonth = summaryData && summaryData.expenseData.expense > 0;
 
   if (!firstExpenseYear) {
     return <DashboardOnboarding />;
@@ -74,6 +84,7 @@ const Dashboard = () => {
       ) : (
         <DashboardMain
           summaryData={summaryData}
+          chartData={chartData}
           recentExpenses={recentExpenses}
           selectedMonth={selectedDate.month}
         />

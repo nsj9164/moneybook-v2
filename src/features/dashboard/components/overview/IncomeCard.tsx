@@ -1,14 +1,10 @@
 import { formatCurrency } from "@/utils/format";
 import { ArrowUpRight, DollarSign } from "lucide-react";
-import { IncomeSummary } from "../../types/DashboardSummaryState";
 import { OverviewCard } from "./OverviewCard";
+import { IncomeSummary } from "@/types/\bOverviewSummary";
 
-export const IncomeCard = ({
-  incomeSummary,
-}: {
-  incomeSummary: IncomeSummary;
-}) => {
-  const { income, monthlyIncomeRate, isIncomeIncrease } = incomeSummary;
+export const IncomeCard = ({ incomeData }: { incomeData: IncomeSummary }) => {
+  const { income, monthlyIncomeRate, isIncomeIncrease } = incomeData;
   const roundedRate = Math.round(monthlyIncomeRate);
   return (
     <OverviewCard

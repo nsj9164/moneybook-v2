@@ -1,13 +1,9 @@
 import { PieChart } from "lucide-react";
 import { OverviewCard } from "./OverviewCard";
-import { SavingSummary } from "../../types/DashboardSummaryState";
+import { SavingSummary } from "@/types/\bOverviewSummary";
 
-export const SavingsCard = ({
-  savingSummary,
-}: {
-  savingSummary: SavingSummary;
-}) => {
-  const { saving, savingRate } = savingSummary;
+export const SavingsCard = ({ savingData }: { savingData: SavingSummary }) => {
+  const { saving, savingRate } = savingData;
   const roundRate = Math.round(savingRate);
   return (
     <OverviewCard

@@ -1,14 +1,10 @@
 import { formatCurrency } from "@/utils/format";
 import { OverviewCard } from "./OverviewCard";
-import { BudgetSummary } from "../../types/DashboardSummaryState";
 import { Target } from "lucide-react";
+import { BudgetSummary } from "@/types/\bOverviewSummary";
 
-export const BudgetCard = ({
-  budgetSummary,
-}: {
-  budgetSummary: BudgetSummary;
-}) => {
-  const { budget, budgetRate } = budgetSummary;
+export const BudgetCard = ({ budgetData }: { budgetData: BudgetSummary }) => {
+  const { budget, budgetRate } = budgetData;
   const roundRate = Math.round(budgetRate);
   return (
     <OverviewCard
