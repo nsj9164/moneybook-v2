@@ -1,5 +1,6 @@
 import { useFirstExpenseYear } from "@/features/budget/hooks/useFirstExpenseYear";
-import { useState } from "react";
+import { format } from "date-fns";
+import { useMemo, useState } from "react";
 
 export const useDateFilter = () => {
   const { data: firstExpenseYear } = useFirstExpenseYear();
@@ -34,10 +35,20 @@ export const useDateFilter = () => {
         )
       : [];
 
+  const targetDate = useMemo(
+    () =>
+      format(
+        new Date(selectedDate.year, selectedDate.month - 1, 1),
+        "yyyy-MM-dd"
+      ),
+    [selectedDate.year, selectedDate.month]
+  );
+
   return {
     firstExpenseYear,
     selectedDate,
     years,
+    targetDate,
     showDateSelector,
     toggleDateSelector,
     handleChangeYear,

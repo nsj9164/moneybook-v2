@@ -1,9 +1,9 @@
-import { OverviewSection } from "./overview/OverviewSection";
 import { AnalysisSection } from "./analysis/AnalysisSection";
 import { TransactionSection } from "./transactions/TransactionSection";
 import { IExpense } from "@/types";
 import { ChartSummary } from "../types/DashboardSummary";
-import { OverviewSummary } from "@/types/OverviewSummary";
+import { OverviewSummary } from "@/types/OverviewSummary";
+import { OverviewSummarySection } from "@/components/summaryCard/OverviewSummarySection";
 
 interface DashboardMainProps {
   summaryData: OverviewSummary;
@@ -18,18 +18,19 @@ export const DashboardMain = ({
   recentExpenses,
   selectedMonth,
 }: DashboardMainProps) => {
-  const { expenseData, incomeData, savingData, budgetData } = summaryData;
   const { topCategories, lastSixMonths } = chartData;
 
   return (
     <div className="p-6 space-y-6">
       {/* 핵심 지표 카드 */}
-      <OverviewSection
+      {/* <OverviewSection
         expenseData={expenseData}
         incomeData={incomeData}
         savingData={savingData}
         budgetData={budgetData}
-      />
+      /> */}
+
+      <OverviewSummarySection summaryData={summaryData} />
 
       {/* 요약 차트 섹션 */}
       <AnalysisSection

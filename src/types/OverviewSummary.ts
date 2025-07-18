@@ -8,21 +8,23 @@ export interface OverviewSummary {
 export interface ExpenseSummary {
   expense: number;
   monthlyExpenseRate: number;
-  isExpenseIncrease: boolean;
+  isIncrease: boolean;
 }
 
 export interface IncomeSummary {
   income: number;
   monthlyIncomeRate: number;
-  isIncomeIncrease: boolean;
+  isIncrease: boolean;
 }
 
 export interface SavingSummary {
   saving: number;
   savingRate: number;
+  isIncrease: boolean;
 }
 
 export interface BudgetSummary {
   budget: number;
   budgetRate: number;
+  isIncrease: boolean;
 }

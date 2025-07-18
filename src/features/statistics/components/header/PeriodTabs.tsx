@@ -1,4 +1,12 @@
-export const PeriodTabs = () => {
+interface PeriodTabsProps {
+  selectedPeriod: "month" | "year";
+  togglePeriod: (period: "month" | "year") => void;
+}
+
+export const PeriodTabs = ({
+  selectedPeriod,
+  togglePeriod,
+}: PeriodTabsProps) => {
   return (
     <div className="flex items-center bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm">
       <button
@@ -7,19 +15,9 @@ export const PeriodTabs = () => {
             ? "bg-emerald-50 text-emerald-700"
             : "text-gray-700 hover:bg-gray-50"
         }`}
-        onClick={() => setSelectedPeriod("month")}
+        onClick={() => togglePeriod("month")}
       >
         월간
-      </button>
-      <button
-        className={`px-4 py-2 text-sm font-medium ${
-          selectedPeriod === "quarter"
-            ? "bg-emerald-50 text-emerald-700"
-            : "text-gray-700 hover:bg-gray-50"
-        }`}
-        onClick={() => setSelectedPeriod("quarter")}
-      >
-        분기
       </button>
       <button
         className={`px-4 py-2 text-sm font-medium ${
@@ -27,7 +25,7 @@ export const PeriodTabs = () => {
             ? "bg-emerald-50 text-emerald-700"
             : "text-gray-700 hover:bg-gray-50"
         }`}
-        onClick={() => setSelectedPeriod("year")}
+        onClick={() => togglePeriod("year")}
       >
         연간
       </button>

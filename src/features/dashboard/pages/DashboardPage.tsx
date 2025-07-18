@@ -4,8 +4,6 @@ import { DashboardMain } from "../components/DashboardMain";
 import { DashboardOnboarding } from "../components/DashboardOnboarding";
 import { useFetchRecentExpenses } from "../hooks/useFetchRecentExpenses";
 import { DashboardNoData } from "../components/DashboardNoData";
-import { useMemo } from "react";
-import { format } from "date-fns";
 import { PageHeader } from "@/components/common/layout/PageHeader";
 import { DateFilterControl } from "@/components/monthSelector/DateFilterControl";
 import { Button } from "@/components/ui/Button";
@@ -13,7 +11,7 @@ import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useFetchRpc } from "@/hooks/fetchData/useFetchRpc";
 import { ChartSummary } from "../types/DashboardSummary";
-import { OverviewSummary } from "@/types/overviewSummary";
+import { OverviewSummary } from "@/types/OverviewSummary";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -23,15 +21,11 @@ const Dashboard = () => {
     selectedDate,
     showDateSelector,
     years,
+    targetDate,
     toggleDateSelector,
     handleChangeMonth,
     handleChangeYear,
   } = dateFilter;
-  const { year, month } = selectedDate;
-  const targetDate = useMemo(
-    () => format(new Date(year, month - 1, 1), "yyyy-MM-dd"),
-    [year, month]
-  );
 
   const { userId } = useAuth();
   const chartData = useFetchRpc<ChartSummary>(
