@@ -3,7 +3,7 @@ import { MonthlyStatisticsResponse } from "../../types/MonthlyStatistics";
 import { MonthlyStats } from "../MonthlyStats/MonthlyExpenses/MonthlyStats";
 import { MonthlyExpensesByDay } from "../MonthlyStats/MonthlyExpensesByDay";
 import { WeeklyExpenses } from "../MonthlyStats/WeeklyExpenses/WeeklyExpenses";
-import { StatisticsCard } from "../StatisticsCard";
+import { StatisticsCard } from "../layout/StatisticsCard";
 import { NoSpendingCalendar } from "../MonthlyStats/NoSpendingCalendar/NoSpendingCalendar";
 import { MonthlyPayment } from "../MonthlyStats/MonthlyPayment/MonthlyPayment";
 import { MonthlyRecurrings } from "../MonthlyStats/MonthlyRecurrings/MonthlyRecurrings";

@@ -1,5 +1,5 @@
 import { Calendar } from "lucide-react";
-import { ChangeIndicator } from "../../ChangeIndicator";
+import { ChangeIndicator } from "../../../../../components/summaryCard/ChangeIndicator";
 import { NoSpendingDaysSummary } from "../../../types/MonthlyStatistics";
 import { CardSection } from "@/components/common/layout/CardSection";
 

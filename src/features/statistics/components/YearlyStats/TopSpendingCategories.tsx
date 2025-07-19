@@ -1,21 +1,19 @@
-import { formatCurrency } from "@/utils/format";
-import { StatisticsCard } from "../layout/StatisticsCard";
-import { motion } from "framer-motion";
-
-export const CategoryBreakdown = () => {
+export const TopSpendingCategories = () => {
   return (
-    <StatisticsCard title={"카테고리별 지출"}>
+    <CardSection title="소비가 높은 카테고리 TOP 3">
       <div className="space-y-4">
-        {categoryData.map((category, index) => (
+        {yearlyStats.topCategories.map((category, index) => (
           <div key={category.name} className="flex items-center">
-            <div className={`h-4 w-4 rounded ${category.color} mr-3`} />
+            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+              {index + 1}
+            </div>
             <div className="flex-1">
               <div className="flex justify-between items-center mb-1">
                 <span className="text-sm font-medium text-gray-700">
                   {category.name}
                 </span>
                 <span className="text-sm font-medium text-gray-900">
-                  {formatCurrency(category.value)}
+                  {formatCurrency(category.amount)}
                 </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
@@ -23,21 +21,13 @@ export const CategoryBreakdown = () => {
                   initial={{ width: 0 }}
                   animate={{ width: `${category.percentage}%` }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={`h-2 rounded-full ${category.color.replace(
-                    "bg-",
-                    "bg-"
-                  )}`}
+                  className="h-2 rounded-full bg-gradient-to-r from-purple-500 to-purple-400"
                 />
-              </div>
-              <div className="flex justify-between items-center mt-1">
-                <span className="text-xs text-gray-500">
-                  {category.percentage}%
-                </span>
               </div>
             </div>
           </div>
         ))}
       </div>
-    </StatisticsCard>
+    </CardSection>
   );
 };

@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useFetchRpc } from "@/hooks/fetchData/useFetchRpc";
 import { ChartSummary } from "../types/DashboardSummary";
 import { OverviewSummary } from "@/types/OverviewSummary";
+import { Loading } from "@/components/common/loading/Loading";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -28,22 +29,28 @@ const Dashboard = () => {
   } = dateFilter;
 
   const { userId } = useAuth();
-  const chartData = useFetchRpc<ChartSummary>(
+  const {
+    data: chartData,
+    loading: chartLoading,
+    error: chartError,
+  } = useFetchRpc<ChartSummary>(
     "get_dashboard_chart_data",
     targetDate,
     userId!
   );
-  const summaryData = useFetchRpc<OverviewSummary>(
-    "get_overview_summary",
-    targetDate,
-    userId!
-  );
+  const {
+    data: summaryData,
+    loading: summaryLoading,
+    error: summaryError,
+  } = useFetchRpc<OverviewSummary>("get_overview_summary", targetDate, userId!);
   console.log("@@@@@@@@@@@@@@", chartData);
   console.log("@@@@@@@@@@@@@@", summaryData);
 
   const recentExpenses = useFetchRecentExpenses(targetDate, userId!);
 
   const hasDataThisMonth = summaryData && summaryData.expenseData.expense > 0;
+
+  if (chartLoading || summaryLoading) return <Loading />;
 
   if (!firstExpenseYear) {
     return <DashboardOnboarding />;

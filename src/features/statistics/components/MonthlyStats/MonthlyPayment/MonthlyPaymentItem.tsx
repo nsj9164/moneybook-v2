@@ -2,7 +2,7 @@ import { CreditCard } from "lucide-react";
 import { PaymentMethodSummary } from "../../../types/MonthlyStatistics";
 import { motion } from "framer-motion";
 import { formatCurrency } from "@/utils/format";
-import { ChangeIndicator } from "../../ChangeIndicator";
+import { ChangeIndicator } from "../../../../../components/summaryCard/ChangeIndicator";
 
 export const MonthlyPaymentItem = ({
   methodData,

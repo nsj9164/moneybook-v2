@@ -38,5 +38,5 @@ export const useFetchRpc = <T>(
     fetchData();
   }, [rpcName, targetDate, userId, JSON.stringify(extraParams)]);
 
-  return data;
+  return { data, loading, error };
 };

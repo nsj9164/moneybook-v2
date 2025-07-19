@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/utils/format";
-import { BarChart3, PieChart, TrendingUp } from "lucide-react";
+import { BarChart3, PieChart, Target, TrendingUp } from "lucide-react";
 import OverviewCard from "./OverviewCard";
 import { BudgetCard } from "./BudgetCard";
 import { OverviewSummary } from "@/types/OverviewSummary";
@@ -41,7 +41,16 @@ export const OverviewSummarySection = ({
         ratio={savingData.savingRate}
         isIncrease={savingData.isIncrease}
       />
-      <BudgetCard budgetData={budgetData} />
+      <OverviewCard
+        icon={<Target className="h-8 w-8 text-purple-600" />}
+        label="예상 달성률"
+        value={`${budgetData.budgetRate}%`}
+        valueColor="text-purple-600"
+        ratio={budgetData.budgetRate}
+        isIncrease={budgetData.isIncrease}
+      >
+        <BudgetCard budgetData={budgetData} />
+      </OverviewCard>
     </div>
   );
 };

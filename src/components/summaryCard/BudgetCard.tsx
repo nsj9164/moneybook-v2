@@ -1,20 +1,11 @@
 import { formatCurrency } from "@/utils/format";
-import { Target } from "lucide-react";
-import OverviewCard from "./OverviewCard";
 import { BudgetSummary } from "@/types/OverviewSummary";
 
 export const BudgetCard = ({ budgetData }: { budgetData: BudgetSummary }) => {
-  const { budget, budgetRate, isIncrease } = budgetData;
+  const { budget, budgetRate } = budgetData;
 
   return (
-    <OverviewCard
-      icon={<Target className="h-8 w-8 text-purple-600" />}
-      label="예상 달성률"
-      value={`${budgetRate}%`}
-      valueColor="text-purple-600"
-      ratio={budgetRate}
-      isIncrease={isIncrease}
-    >
+    <div>
       <span className="text-sm text-gray-500">
         목표: ₩{formatCurrency(budget)}
       </span>
@@ -29,6 +20,6 @@ export const BudgetCard = ({ budgetData }: { budgetData: BudgetSummary }) => {
           }}
         ></div>
       </div>
-    </OverviewCard>
+    </div>
   );
 };
