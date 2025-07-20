@@ -1,12 +1,12 @@
 import { formatCurrency } from "@/utils/format";
 import { MonthlyStatisticsResponse } from "../../types/MonthlyStatistics";
-import { MonthlyStats } from "../MonthlyStats/MonthlyExpenses/MonthlyStats";
-import { MonthlyExpensesByDay } from "../MonthlyStats/MonthlyExpensesByDay";
-import { WeeklyExpenses } from "../MonthlyStats/WeeklyExpenses/WeeklyExpenses";
+import { MonthlyStats } from "../monthlyStats/monthlyExpenses/MonthlyStats";
+import { MonthlyExpensesByDay } from "../monthlyStats/MonthlyExpensesByDay";
+import { WeeklyExpenses } from "../monthlyStats/weeklyExpenses/WeeklyExpenses";
 import { StatisticsCard } from "../layout/StatisticsCard";
-import { NoSpendingCalendar } from "../MonthlyStats/NoSpendingCalendar/NoSpendingCalendar";
-import { MonthlyPayment } from "../MonthlyStats/MonthlyPayment/MonthlyPayment";
-import { MonthlyRecurrings } from "../MonthlyStats/MonthlyRecurrings/MonthlyRecurrings";
+import { NoSpendingCalendar } from "../monthlyStats/noSpendingCalendar/NoSpendingCalendar";
+import { MonthlyPayment } from "../monthlyStats/monthlyPayment/MonthlyPayment";
+import { MonthlyRecurrings } from "../monthlyStats/m onthlyRecurrings/MonthlyRecurrings";
 
 export const MonthlyStatistics = ({
   monthlyData,
