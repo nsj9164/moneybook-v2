@@ -7,11 +7,11 @@ import { monthlyFinanceOption } from "./monthlyFinanceOption";
 export const MonthlyFinanceTrend = ({
   monthlyFinance,
 }: {
-  monthlyFinance: MonthlyFinance;
+  monthlyFinance: MonthlyFinance[];
 }) => {
   return (
     <CardSection title="월별 재정 추이" action={<DetailButton />}>
-      <EChartsReact option={monthlyFinanceOption([monthlyFinance])} />
+      <EChartsReact option={monthlyFinanceOption(monthlyFinance)} />
     </CardSection>
   );
 };

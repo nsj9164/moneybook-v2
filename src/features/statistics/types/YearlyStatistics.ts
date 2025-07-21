@@ -7,12 +7,13 @@ export interface YearlyStatisticsResponse {
   monthlyFinance: MonthlyFinance[];
   budgetAchievement: BudgetAchievement;
   topPaymentMethods: TopPaymentMethod[];
-  yearlyFixedExpenses: YearlyFixedExpenses;
+  yearlyFixedExpenses: YearlyFixedExpense;
 }
 
 export interface TopItem {
-  count: number;
   itemName: string;
+  count: number;
+  amount: number;
 }
 
 export interface MonthSummary {
@@ -47,11 +48,12 @@ export interface BudgetAchievement {
 }
 
 export interface TopPaymentMethod {
-  count: number;
-  paymentMethodId: number;
+  name: string;
+  amount: number;
+  rate: number;
 }
 
-export interface YearlyFixedExpenses {
+export interface YearlyFixedExpense {
   total: number;
   details: FixedExpenseDetail[] | null;
   percentageOfTotalExpense: number | null;

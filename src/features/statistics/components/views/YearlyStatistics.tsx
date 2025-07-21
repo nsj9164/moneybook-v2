@@ -1,9 +1,9 @@
 import { MonthlyFinanceTrend } from "../yearlyStats/monthlyFinance/MonthlyFinanceTrend";
 import { BudgetAchievementRate } from "../yearlyStats/BudgetAchievementRate";
 import { TopSpendingCategories } from "../yearlyStats/topSpendingCategories/TopSpendingCategories";
-import { TopFrequentItems } from "../yearlyStats/TopFrequentItems";
-import { TopPaymentMethods } from "../yearlyStats/TopPaymentMethods";
-import { YearlyFixedExpenses } from "../yearlyStats/YearlyFixedExpenses";
+import { TopFrequentList } from "../yearlyStats/topFrequent/TopFrequentList";
+import { TopPaymentMethods } from "../yearlyStats/topPaymentMethods/TopPaymentMethods";
+import { YearlyFixedExpenses } from "../yearlyStats/FixedExpenses/YearlyFixedExpenses";
 import { YearlyStatisticsResponse } from "../../types/YearlyStatistics";
 import { YearlyFinanceTrend } from "../yearlyStats/yearlyFinance/YearlyFinanceTrend";
 import { MonthlyExpenseComparison } from "../yearlyStats/MonthlyExpenseComparison";
@@ -47,7 +47,7 @@ export const YearlyStatistics = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <TopSpendingCategories topCategories={topCategories} />
 
-        <TopFrequentItems topItems={topItems} />
+        <TopFrequentList topItems={topItems} />
       </div>
 
       {/* 결제수단 & 고정비 */}

@@ -11,11 +11,12 @@ import { OverviewSummary } from "@/types/OverviewSummary";
 import { Loading } from "@/components/common/loading/Loading";
 import { YearlyStatistics } from "../components/views/YearlyStatistics";
 import { YearlyStatisticsResponse } from "../types/YearlyStatistics";
+import { StatisticsNoData } from "../components/views/StatisticsNoData";
 
 const Statistics = () => {
   const { userId } = useAuth();
   const dateFilter = useDateFilter();
-  const { targetDate } = dateFilter;
+  const { firstExpenseYear, targetDate } = dateFilter;
 
   const {
     data: summaryData,
@@ -56,8 +57,9 @@ const Statistics = () => {
   // 빈 상태 화면
   const renderEmptyState = () => <StatisticsOnboarding />;
 
-  // 현재 달 데이터가 없는 경우의 화면
-  // const renderNoCurrentMonthDataState = () => <StatisticsNoData />;
+  if (!firstExpenseYear) {
+    return <StatisticsOnboarding />;
+  }
 
   return (
     <div className="h-full">
