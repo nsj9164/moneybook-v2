@@ -27,6 +27,16 @@ export const useDateFilter = () => {
     setShowDateSelector(false);
   };
 
+  const goBackOneMonth = (year: number, month: number) => {
+    if (month === 1) {
+      handleChangeYear(year - 1);
+      handleChangeMonth(12);
+      return;
+    }
+
+    handleChangeMonth(month - 1);
+  };
+
   const years =
     firstExpenseYear != null
       ? Array.from(
@@ -53,5 +63,6 @@ export const useDateFilter = () => {
     toggleDateSelector,
     handleChangeYear,
     handleChangeMonth,
+    goBackOneMonth,
   };
 };

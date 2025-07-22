@@ -6,7 +6,7 @@ import { WeeklyExpenses } from "../monthlyStats/weeklyExpenses/WeeklyExpenses";
 import { StatisticsCard } from "../layout/StatisticsCard";
 import { NoSpendingCalendar } from "../monthlyStats/noSpendingCalendar/NoSpendingCalendar";
 import { MonthlyPayment } from "../monthlyStats/monthlyPayment/MonthlyPayment";
-import { MonthlyRecurrings } from "../monthlyStats/m onthlyRecurrings/MonthlyRecurrings";
+import { MonthlyRecurrings } from "../monthlyStats/monthlyRecurrings/MonthlyRecurrings";
 
 export const MonthlyStatistics = ({
   monthlyData,

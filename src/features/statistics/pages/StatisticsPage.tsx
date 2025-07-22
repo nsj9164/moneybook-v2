@@ -16,7 +16,8 @@ import { StatisticsNoData } from "../components/views/StatisticsNoData";
 const Statistics = () => {
   const { userId } = useAuth();
   const dateFilter = useDateFilter();
-  const { firstExpenseYear, targetDate } = dateFilter;
+  const { firstExpenseYear, targetDate, selectedDate, goBackOneMonth } =
+    dateFilter;
 
   const {
     data: summaryData,
@@ -54,11 +55,20 @@ const Statistics = () => {
 
   if ((summaryLoading, monthlyLoading)) return <Loading />;
 
-  // 빈 상태 화면
-  const renderEmptyState = () => <StatisticsOnboarding />;
-
   if (!firstExpenseYear) {
     return <StatisticsOnboarding />;
+  }
+  console.log("???????????????????", summaryData?.expenseData.expense);
+  if (summaryData?.expenseData.expense === 0) {
+    return (
+      <div className="p-6 py-8">
+        <StatisticsNoData
+          selectedDate={selectedDate}
+          summaryData={summaryData}
+          goBackOneMonth={goBackOneMonth}
+        />
+      </div>
+    );
   }
 
   return (

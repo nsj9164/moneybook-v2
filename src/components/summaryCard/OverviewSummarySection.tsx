@@ -7,11 +7,13 @@ import { OverviewSummary } from "@/types/OverviewSummary";
 interface OverviewSummaryProps {
   selectedPeriod?: "month" | "year";
   summaryData: OverviewSummary;
+  hasData?: boolean;
 }
 
 export const OverviewSummarySection = ({
   selectedPeriod = "month",
   summaryData,
+  hasData = true,
 }: OverviewSummaryProps) => {
   const { expenseData, incomeData, savingData, budgetData } = summaryData;
 

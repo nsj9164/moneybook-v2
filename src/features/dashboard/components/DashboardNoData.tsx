@@ -5,26 +5,14 @@ import { actionCards } from "../constants/noDataActions";
 
 interface DashboardNoDataProps {
   selectedDate: { year: number; month: number };
-  handleChangeYear: (year: number) => void;
-  handleChangeMonth: (month: number) => void;
+  goBackOneMonth: (year: number, month: number) => void;
 }
 export const DashboardNoData = ({
   selectedDate,
-  handleChangeYear,
-  handleChangeMonth,
+  goBackOneMonth,
 }: DashboardNoDataProps) => {
   const { year, month } = selectedDate;
-  const isJanuary = month === 1;
 
-  const handleChangeDate = () => {
-    if (isJanuary) {
-      handleChangeYear(year - 1);
-      handleChangeMonth(12);
-      return;
-    }
-
-    handleChangeMonth(month - 1);
-  };
   return (
     <div className="p-6">
       {/* 빈 상태 메시지 */}
@@ -52,7 +40,7 @@ export const DashboardNoData = ({
             이번 달 첫 거래 추가하기
           </Link>
           <button
-            onClick={handleChangeDate}
+            onClick={() => goBackOneMonth(year, month)}
             className="inline-flex items-center border border-gray-300 bg-white px-6 py-3 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             <ChevronLeft className="mr-2 h-4 w-4" />

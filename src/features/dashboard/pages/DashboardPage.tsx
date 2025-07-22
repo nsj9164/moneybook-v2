@@ -26,6 +26,7 @@ const Dashboard = () => {
     toggleDateSelector,
     handleChangeMonth,
     handleChangeYear,
+    goBackOneMonth,
   } = dateFilter;
 
   const { userId } = useAuth();
@@ -79,8 +80,7 @@ const Dashboard = () => {
       {!hasDataThisMonth ? (
         <DashboardNoData
           selectedDate={selectedDate}
-          handleChangeYear={handleChangeYear}
-          handleChangeMonth={handleChangeMonth}
+          goBackOneMonth={goBackOneMonth}
         />
       ) : (
         <DashboardMain
