@@ -9,7 +9,7 @@ import { DateFilterControl } from "@/components/monthSelector/DateFilterControl"
 import { Button } from "@/components/ui/Button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useFetchRpc } from "@/hooks/fetchData/useFetchRpc";
+import { useFetchRpcQuery } from "@/hooks/fetchData/useFetchRpcQuery";
 import { ChartSummary } from "../types/DashboardSummary";
 import { OverviewSummary } from "@/types/OverviewSummary";
 import { Loading } from "@/components/common/loading/Loading";
@@ -34,7 +34,7 @@ const Dashboard = () => {
     data: chartData,
     loading: chartLoading,
     error: chartError,
-  } = useFetchRpc<ChartSummary>(
+  } = useFetchRpcQuery<ChartSummary>(
     "get_dashboard_chart_data",
     targetDate,
     userId!
@@ -43,9 +43,11 @@ const Dashboard = () => {
     data: summaryData,
     loading: summaryLoading,
     error: summaryError,
-  } = useFetchRpc<OverviewSummary>("get_overview_summary", targetDate, userId!);
-  console.log("@@@@@@@@@@@@@@", chartData);
-  console.log("@@@@@@@@@@@@@@", summaryData);
+  } = useFetchRpcQuery<OverviewSummary>(
+    "get_overview_summary",
+    targetDate,
+    userId!
+  );
 
   const recentExpenses = useFetchRecentExpenses(targetDate, userId!);
 

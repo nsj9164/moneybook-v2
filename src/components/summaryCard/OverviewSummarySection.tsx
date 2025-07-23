@@ -7,13 +7,11 @@ import { OverviewSummary } from "@/types/OverviewSummary";
 interface OverviewSummaryProps {
   selectedPeriod?: "month" | "year";
   summaryData: OverviewSummary;
-  hasData?: boolean;
 }
 
 export const OverviewSummarySection = ({
   selectedPeriod = "month",
   summaryData,
-  hasData = true,
 }: OverviewSummaryProps) => {
   const { expenseData, incomeData, savingData, budgetData } = summaryData;
 
@@ -45,7 +43,7 @@ export const OverviewSummarySection = ({
       />
       <OverviewCard
         icon={<Target className="h-8 w-8 text-purple-600" />}
-        label="예상 달성률"
+        label="예산 달성률"
         value={`${budgetData.budgetRate}%`}
         valueColor="text-purple-600"
         ratio={budgetData.budgetRate}

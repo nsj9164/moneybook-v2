@@ -5,7 +5,7 @@ import { useDateFilter } from "@/hooks/useDateFilter";
 import { useState } from "react";
 import { DashboardHeader } from "../components/header/DashboardHeader";
 import { OverviewSummarySection } from "@/components/summaryCard/OverviewSummarySection";
-import { useFetchRpc } from "@/hooks/fetchData/useFetchRpc";
+import { useFetchRpcQuery } from "@/hooks/fetchData/useFetchRpcQuery";
 import { MonthlyStatisticsResponse } from "../types/MonthlyStatistics";
 import { OverviewSummary } from "@/types/OverviewSummary";
 import { Loading } from "@/components/common/loading/Loading";
@@ -19,32 +19,6 @@ const Statistics = () => {
   const { firstExpenseYear, targetDate, selectedDate, goBackOneMonth } =
     dateFilter;
 
-  const {
-    data: summaryData,
-    loading: summaryLoading,
-    error: summaryError,
-  } = useFetchRpc<OverviewSummary>("get_overview_summary", targetDate, userId!);
-
-  const {
-    data: monthlyData,
-    loading: monthlyLoading,
-    error: monthlyError,
-  } = useFetchRpc<MonthlyStatisticsResponse>(
-    "get_monthly_statistics",
-    targetDate,
-    userId!
-  );
-
-  const {
-    data: yearlyData,
-    loading: yearlyLoading,
-    error: yearlyError,
-  } = useFetchRpc<YearlyStatisticsResponse>(
-    "get_yearly_statistics",
-    targetDate,
-    userId!
-  );
-
   const [selectedPeriod, setSelectedPeriod] = useState<"month" | "year">(
     "month"
   );
@@ -53,18 +27,42 @@ const Statistics = () => {
     setSelectedPeriod(period);
   };
 
-  if ((summaryLoading, monthlyLoading)) return <Loading />;
+  const summaryQuery = useFetchRpcQuery<OverviewSummary>(
+    "get_overview_summary",
+    targetDate,
+    userId!
+  );
+  const monthlyQuery = useFetchRpcQuery<MonthlyStatisticsResponse>(
+    "get_monthly_statistics",
+    targetDate,
+    userId!
+  );
+
+  const yearlyQuery = useFetchRpcQuery<YearlyStatisticsResponse>(
+    "get_yearly_statistics",
+    targetDate,
+    userId!
+  );
+  console.log(summaryQuery, selectedDate);
+
+  if (
+    summaryQuery.isLoading ||
+    monthlyQuery.isLoading ||
+    yearlyQuery.isLoading
+  ) {
+    return <Loading />;
+  }
 
   if (!firstExpenseYear) {
     return <StatisticsOnboarding />;
   }
-  console.log("???????????????????", summaryData?.expenseData.expense);
-  if (summaryData?.expenseData.expense === 0) {
+
+  if (!summaryQuery.data || summaryQuery.data.expenseData.expense === 0) {
     return (
       <div className="p-6 py-8">
         <StatisticsNoData
           selectedDate={selectedDate}
-          summaryData={summaryData}
+          summaryData={summaryQuery.data!}
           goBackOneMonth={goBackOneMonth}
         />
       </div>
@@ -85,15 +83,15 @@ const Statistics = () => {
         {/* 통계 요약 카드 - 전월/전년 대비 추가 */}
         <OverviewSummarySection
           selectedPeriod={selectedPeriod}
-          summaryData={summaryData}
+          summaryData={summaryQuery.data}
         />
 
         {/* 기간별 콘텐츠 */}
-        {selectedPeriod === "month" && (
-          <MonthlyStatistics monthlyData={monthlyData} />
+        {selectedPeriod === "month" && monthlyQuery.data && (
+          <MonthlyStatistics monthlyData={monthlyQuery.data} />
         )}
-        {selectedPeriod === "year" && (
-          <YearlyStatistics yearlyData={yearlyData} />
+        {selectedPeriod === "year" && yearlyQuery.data && (
+          <YearlyStatistics yearlyData={yearlyQuery.data} />
         )}
       </div>
     </div>

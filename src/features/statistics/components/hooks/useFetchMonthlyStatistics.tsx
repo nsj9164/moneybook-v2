@@ -13,8 +13,6 @@ export const useFetchMonthlyStatistics = ({
   targetDate,
   userId,
 }: MonthlyStatisticsProps) => {
-  console.log("========", targetDate, userId);
-
   const [monthlyData, setMonthlyData] =
     useState<MonthlyStatisticsResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,7 +24,6 @@ export const useFetchMonthlyStatistics = ({
         input_target_date: targetDate,
         input_user_id: userId,
       });
-      console.log(".........", data);
 
       if (error || !data) {
         console.log("Fetch Monthly Statistics Error:", error);

@@ -11,7 +11,6 @@ export const CategoryAnalysisItem = ({
   percent,
   index,
 }: CategoryAnalysisItemProps) => {
-  console.log("#########", percent, color);
   return (
     <div className="flex items-center">
       <div className={`w-4 h-4 rounded-full ${color} mr-3 flex-shrink-0`} />

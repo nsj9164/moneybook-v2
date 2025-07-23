@@ -1,7 +1,7 @@
-import { OverviewSummarySection } from "@/components/summaryCard/OverviewSummarySection";
 import { OverviewSummary } from "@/types/OverviewSummary";
 import { motion } from "framer-motion";
 import { AlertCircle, Plus } from "lucide-react";
+import { NoDataOverviewSummary } from "../layout/NoDataOverviewSummary";
 
 interface StatisticsNoDataProps {
   selectedDate: { year: number; month: number };
@@ -59,7 +59,7 @@ export const StatisticsNoData = ({
       </motion.div>
 
       {/* 예상 통계 또는 데이터 없음 표시 */}
-      <OverviewSummarySection summaryData={summaryData} hasData={false} />
+      <NoDataOverviewSummary summaryData={summaryData} />
     </div>
   );
 };
