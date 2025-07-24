@@ -88,7 +88,10 @@ const Statistics = () => {
 
         {/* 기간별 콘텐츠 */}
         {selectedPeriod === "month" && monthlyQuery.data && (
-          <MonthlyStatistics monthlyData={monthlyQuery.data} />
+          <MonthlyStatistics
+            monthlyData={monthlyQuery.data}
+            targetDate={targetDate}
+          />
         )}
         {selectedPeriod === "year" && yearlyQuery.data && (
           <YearlyStatistics yearlyData={yearlyQuery.data} />

@@ -12,6 +12,7 @@ export const MonthlyPaymentItem = ({
   index: number;
 }) => {
   const { method, currentAmount, currentRatio, previousAmount } = methodData;
+  const isIncrease = currentAmount - previousAmount > 0;
 
   return (
     <div className="flex items-center justify-between">
@@ -34,10 +35,7 @@ export const MonthlyPaymentItem = ({
           </div>
           <div className="flex justify-between items-center mt-1">
             <span className="text-xs text-gray-500">{currentRatio}%</span>
-            <ChangeIndicator
-              current={currentAmount}
-              previous={previousAmount}
-            />
+            <ChangeIndicator ratio={currentRatio} isIncrease={isIncrease} />
           </div>
         </div>
       </div>

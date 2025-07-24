@@ -1,5 +1,5 @@
 export interface MonthlyStatisticsResponse {
-  categorySummary: { income: CategorySummary[]; expenses: CategorySummary[] };
+  categorySummary: { income: CategorySummary[]; expense: CategorySummary[] };
   paymentMethods: PaymentMethodSummary[];
   weekdayCategoryAverage: WeekdaySummary[];
   weeklySummary: WeeklySummary[];
@@ -63,8 +63,7 @@ export interface TopSpendingSummary {
 }
 
 export interface NoSpendingDaysSummary {
-  yearToDate: number;
   currentMonth: number;
   previousMonth: number;
-  curentMonthDays: number[];
+  currentMonthDays: number[];
 }

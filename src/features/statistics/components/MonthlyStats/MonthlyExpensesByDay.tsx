@@ -3,14 +3,12 @@ import { formatCurrency } from "@/utils/format";
 import { ArrowRight } from "lucide-react";
 import { WeekdaySummary } from "../../types/MonthlyStatistics";
 import EChartsReact from "echarts-for-react";
+import { useMemo } from "react";
 
 type TooltipParam = {
   name: string;
   value: number;
-};
-
-type LabelParam = {
-  value: number;
+  data: { value: number; total: number };
 };
 
 export const MonthlyExpensesByDay = ({
@@ -20,63 +18,97 @@ export const MonthlyExpensesByDay = ({
 }) => {
   const weekdays = ["월", "화", "수", "목", "금", "토", "일"];
 
-  const datePerDay = Array(7)
-    .fill(0)
-    .map((_, idx) => {
+  // 요일별 총합 평균 계산
+  const datePerDay = useMemo(() => {
+    return Array.from({ length: 7 }, (_, idx) => {
       const found = weekdayCategoryAverage.find((d) => d.weekday === idx);
-      return found?.categories?.[0]?.average ?? 0;
+      const totalAvg =
+        found?.categories.reduce((sum, c) => sum + c.average, 0) ?? 0;
+      return totalAvg;
     });
+  }, [weekdayCategoryAverage]);
 
-  const total = datePerDay.reduce((a, b) => a + b, 0);
+  const total = useMemo(
+    () => datePerDay.reduce((sum, value) => sum + value, 0),
+    [datePerDay]
+  );
 
-  const dataRatio = datePerDay.map((v) => (total > 0 ? v / total : 0));
-
-  const series = [
-    {
-      name: "평균 지출",
-      type: "bar",
-      barWidth: "60%",
-      label: {
-        show: true,
-        formatter: ({ value }: LabelParam) => `${(value * 100).toFixed(1)}%`,
-      },
-      data: dataRatio,
-    },
-  ];
+  const chartData = useMemo(() => {
+    return datePerDay.map((amount) => ({
+      value: total > 0 ? amount / total : 0,
+      total: amount,
+    }));
+  }, [datePerDay, total]);
 
   const option = {
     tooltip: {
       trigger: "axis",
       formatter: (params: TooltipParam[]) => {
-        const { name, value } = params[0];
-        return `${name}: ${(value * 100).toFixed(1)}%`;
+        const { data } = params[0];
+        return `₩${formatCurrency(data.total)}`;
+      },
+      backgroundColor: "#ffffff",
+      borderColor: "#e0e0e0",
+      borderWidth: 1,
+      textStyle: {
+        color: "#333",
+        fontSize: 12,
       },
     },
     grid: {
-      left: 50,
-      right: 30,
-      top: 50,
-      bottom: 50,
+      left: 40,
+      right: 20,
+      top: 30,
+      bottom: 40,
     },
     xAxis: {
       type: "category",
       data: weekdays,
+      axisTick: { show: false },
+      axisLine: { show: false },
+      axisLabel: {
+        fontSize: 12,
+        color: "#666",
+      },
     },
     yAxis: {
       type: "value",
+      axisLine: { show: false },
+      axisTick: { show: false },
       axisLabel: {
         formatter: (val: number) => `${(val * 100).toFixed(0)}%`,
+        fontSize: 12,
+        color: "#999",
+      },
+      splitLine: {
+        lineStyle: {
+          type: "dashed",
+          color: "#eee",
+        },
       },
     },
-    series,
+    series: [
+      {
+        name: "평균 지출 비율",
+        type: "bar",
+        barWidth: "40%",
+        label: {
+          show: false,
+        },
+        itemStyle: {
+          borderRadius: 6,
+        },
+        data: chartData,
+      },
+    ],
   };
 
-  const weekdayAverages = weekdayCategoryAverage.map(
-    ({ weekday, categories }) => {
+  const weekdayAverages = useMemo(() => {
+    return weekdayCategoryAverage.map(({ weekday, categories }) => {
       const total = categories.reduce((sum, c) => sum + c.average, 0);
       return { weekday, total };
-    }
-  );
+    });
+  }, [weekdayCategoryAverage]);
 
   const calcAvg = (days: number[]) => {
     const filtered = weekdayAverages.filter((d) => days.includes(d.weekday));
@@ -97,21 +129,19 @@ export const MonthlyExpensesByDay = ({
         </button>
       }
     >
-      <div className="h-80">
-        <div className="h-full flex items-end justify-between space-x-4">
-          <EChartsReact option={option} />
-        </div>
+      <div className="h-80 px-2">
+        <EChartsReact option={option} style={{ height: "100%" }} />
       </div>
-      <div className="mt-6 grid grid-cols-7 gap-2">
-        <div className="col-span-5 text-center p-3 bg-blue-50 rounded-lg">
-          <div className="text-sm font-medium text-blue-700">평일 평균</div>
-          <div className="text-lg font-bold text-blue-600">
+      <div className="mt-6 grid grid-cols-7 gap-2 text-center text-sm font-medium">
+        <div className="col-span-5 bg-[#f0f9ff] p-3 rounded-xl">
+          <div className="text-blue-700 mb-1">평일 평균</div>
+          <div className="text-lg text-blue-600 font-bold">
             {formatCurrency(weekdayAvg)}
           </div>
         </div>
-        <div className="col-span-2 text-center p-3 bg-orange-50 rounded-lg">
-          <div className="text-sm font-medium text-orange-700">주말 평균</div>
-          <div className="text-lg font-bold text-orange-600">
+        <div className="col-span-2 bg-[#fff7ed] p-3 rounded-xl">
+          <div className="text-orange-700 mb-1">주말 평균</div>
+          <div className="text-lg text-orange-600 font-bold">
             {formatCurrency(weekendAvg)}
           </div>
         </div>

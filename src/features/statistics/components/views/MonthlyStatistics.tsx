@@ -7,11 +7,14 @@ import { StatisticsCard } from "../layout/StatisticsCard";
 import { NoSpendingCalendar } from "../monthlyStats/noSpendingCalendar/NoSpendingCalendar";
 import { MonthlyPayment } from "../monthlyStats/monthlyPayment/MonthlyPayment";
 import { MonthlyRecurrings } from "../monthlyStats/monthlyRecurrings/MonthlyRecurrings";
+import { format } from "date-fns";
 
 export const MonthlyStatistics = ({
   monthlyData,
+  targetDate,
 }: {
   monthlyData: MonthlyStatisticsResponse;
+  targetDate: string;
 }) => {
   const {
     categorySummary,
@@ -24,6 +27,8 @@ export const MonthlyStatistics = ({
   } = monthlyData;
 
   const { highestSpendingDay, largestSingleExpense } = topSpending;
+  const highestDay = new Date(highestSpendingDay.date).getDate();
+  const largestDay = format(new Date(largestSingleExpense.date), "M월 d일");
 
   return (
     <div className="space-y-6">
@@ -36,14 +41,17 @@ export const MonthlyStatistics = ({
       {/* 주별 요약 & 무지출 캘린더 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <WeeklyExpenses weeklySummary={weeklySummary} />
-        <NoSpendingCalendar noSpendingDays={noSpendingDays} />
+        <NoSpendingCalendar
+          noSpendingDays={noSpendingDays}
+          targetDate={targetDate}
+        />
       </div>
 
       {/* 지출 하이라이트 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <StatisticsCard
           title="💸 가장 많이 소비한 날"
-          mainValue={`${highestSpendingDay.date}일`}
+          mainValue={`${highestDay}일`}
           subValue={formatCurrency(highestSpendingDay.amount)}
           description="하루 총 지출"
           mainColorClass="text-red-600"
@@ -53,7 +61,7 @@ export const MonthlyStatistics = ({
           title="🛍️ 가장 큰 소비"
           mainValue={largestSingleExpense.name}
           subValue={formatCurrency(largestSingleExpense.amount)}
-          description={largestSingleExpense.date}
+          description={largestDay}
           mainColorClass="text-purple-600"
         />
       </div>
