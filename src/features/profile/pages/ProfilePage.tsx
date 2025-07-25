@@ -5,6 +5,7 @@ import { ProfileAvatarCard } from "../components/ProfileAvatarCard";
 import { ProfileInfoSection } from "../components/ProfileInfoSection";
 import { ProfileStats } from "../components/ProfileStats";
 import { ProfileSocialSection } from "../components/ProfileSocialSection";
+import { useFetchUserSummary } from "../hooks/useFetchUserSummary";
 
 const Profile = () => {
   const { userId, user, logout } = useAuth();
@@ -12,6 +13,8 @@ const Profile = () => {
     userId,
     user && user.provider ? user.provider : undefined
   );
+
+  const totalSummary = useFetchUserSummary({ userId: userId! });
 
   if (!profile) return null;
 
@@ -38,7 +41,7 @@ const Profile = () => {
             <ProfileInfoSection profile={profile} />
 
             {/* 통계 요약 */}
-            <ProfileStats />
+            <ProfileStats totalSummary={totalSummary} />
 
             {/* 연결된 소셜 계정 */}
             <ProfileSocialSection
