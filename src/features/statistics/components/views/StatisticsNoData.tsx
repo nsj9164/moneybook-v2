@@ -2,6 +2,7 @@ import { OverviewSummary } from "@/types/OverviewSummary";
 import { motion } from "framer-motion";
 import { AlertCircle, Plus } from "lucide-react";
 import { NoDataOverviewSummary } from "../layout/NoDataOverviewSummary";
+import { getPreviousMonth } from "@/utils/getPreviousMonth";
 
 interface StatisticsNoDataProps {
   selectedDate: { year: number; month: number };
@@ -51,7 +52,7 @@ export const StatisticsNoData = ({
                 onClick={() => goBackOneMonth(year, month)}
                 className="inline-flex items-center px-4 py-2 bg-white text-amber-700 text-sm font-medium rounded-lg border border-amber-300 hover:bg-amber-50 transition-colors"
               >
-                지난 달 보기 (6월)
+                지난 달 보기 ({getPreviousMonth(month)}월)
               </button>
             </div>
           </div>

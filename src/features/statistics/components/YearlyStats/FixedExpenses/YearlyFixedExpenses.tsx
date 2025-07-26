@@ -19,7 +19,9 @@ export const YearlyFixedExpenses = ({
 
       <div className="space-y-3">
         {details &&
-          details.map((expense) => <FixedExpenseItem expense={expense} />)}
+          details.map((expense) => (
+            <FixedExpenseItem key={expense.itemName} expense={expense} />
+          ))}
       </div>
 
       <div className="mt-4 p-3 bg-amber-50 rounded-lg">

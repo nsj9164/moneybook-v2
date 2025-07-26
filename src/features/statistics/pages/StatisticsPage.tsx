@@ -27,42 +27,61 @@ const Statistics = () => {
     setSelectedPeriod(period);
   };
 
+  // 월간 통계 데이터
   const summaryQuery = useFetchRpcQuery<OverviewSummary>(
     "get_overview_summary",
     targetDate,
     userId!
   );
+
+  // 연간 통계 데이터
+  const yearlySummaryQuery = useFetchRpcQuery<OverviewSummary>(
+    "get_yearly_overview_summary",
+    targetDate,
+    userId!
+  );
+
+  // 월간 데이터
   const monthlyQuery = useFetchRpcQuery<MonthlyStatisticsResponse>(
     "get_monthly_statistics",
     targetDate,
     userId!
   );
 
+  // 연간 데이터
   const yearlyQuery = useFetchRpcQuery<YearlyStatisticsResponse>(
     "get_yearly_statistics",
     targetDate,
     userId!
   );
-  console.log(summaryQuery, selectedDate);
 
-  if (
+  const isLoading =
     summaryQuery.isLoading ||
+    yearlySummaryQuery.isLoading ||
     monthlyQuery.isLoading ||
-    yearlyQuery.isLoading
-  ) {
-    return <Loading />;
-  }
+    yearlyQuery.isLoading;
 
-  if (!firstExpenseYear) {
-    return <StatisticsOnboarding />;
-  }
+  if (isLoading) return <Loading />;
 
-  if (!summaryQuery.data || summaryQuery.data.expenseData.expense === 0) {
+  if (!firstExpenseYear) return <StatisticsOnboarding />;
+
+  const summaryData =
+    selectedPeriod === "month" ? summaryQuery.data : yearlySummaryQuery.data;
+
+  const isEmpty = !summaryData || summaryData.expenseData?.expense === 0;
+  console.log(
+    "isEmpty!!!!",
+    selectedPeriod,
+    summaryQuery.data,
+    yearlySummaryQuery.data
+  );
+
+  if (isEmpty) {
     return (
       <div className="p-6 py-8">
         <StatisticsNoData
           selectedDate={selectedDate}
-          summaryData={summaryQuery.data!}
+          summaryData={summaryData!}
           goBackOneMonth={goBackOneMonth}
         />
       </div>
@@ -80,10 +99,10 @@ const Statistics = () => {
 
       {/* 메인 콘텐츠 영역 */}
       <div className="p-6 py-8 space-y-6">
-        {/* 통계 요약 카드 - 전월/전년 대비 추가 */}
+        {/* 통계 요약 카드 */}
         <OverviewSummarySection
           selectedPeriod={selectedPeriod}
-          summaryData={summaryQuery.data}
+          summaryData={summaryData}
         />
 
         {/* 기간별 콘텐츠 */}

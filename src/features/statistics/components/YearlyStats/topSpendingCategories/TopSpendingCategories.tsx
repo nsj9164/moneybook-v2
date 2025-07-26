@@ -16,6 +16,7 @@ export const TopSpendingCategories = ({
             total > 0 ? Math.round((category.amount / total) * 100) : 0;
           return (
             <TopSpendingCategoriesItem
+              key={category.category}
               category={category}
               widthPercent={widthPercent}
               index={index}

@@ -27,7 +27,7 @@ export const YearlyStatistics = ({
 
   return (
     <div className="space-y-6">
-      {/* 월별 수입/지출/저축 추이 (기존 월간에서 이동) */}
+      {/* 월별 수입/지출/저축 추이 */}
       <MonthlyFinanceTrend monthlyFinance={monthlyFinance} />
 
       {/* 연간 재정 추이 */}

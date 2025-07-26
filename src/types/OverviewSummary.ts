@@ -7,13 +7,13 @@ export interface OverviewSummary {
 
 export interface ExpenseSummary {
   expense: number;
-  monthlyExpenseRate: number;
+  expenseRate: number;
   isIncrease: boolean;
 }
 
 export interface IncomeSummary {
   income: number;
-  monthlyIncomeRate: number;
+  incomeRate: number;
   isIncrease: boolean;
 }
 

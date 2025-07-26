@@ -1,7 +1,7 @@
 import { formatCurrency } from "@/utils/format";
 import { MonthlyStatisticsResponse } from "../../types/MonthlyStatistics";
 import { MonthlyStats } from "../monthlyStats/monthlyExpenses/MonthlyStats";
-import { MonthlyExpensesByDay } from "../monthlyStats/MonthlyExpensesByDay";
+import { MonthlyExpensesByDay } from "../monthlyStats/monthlyExpensesByDay/MonthlyExpensesByDay";
 import { WeeklyExpenses } from "../monthlyStats/weeklyExpenses/WeeklyExpenses";
 import { StatisticsCard } from "../layout/StatisticsCard";
 import { NoSpendingCalendar } from "../monthlyStats/noSpendingCalendar/NoSpendingCalendar";

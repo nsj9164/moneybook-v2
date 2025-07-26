@@ -19,7 +19,7 @@ export const NoDataOverviewSummary = ({
         label="예상 월 수입"
         value={formatCurrency(incomeData.income)}
         valueColor="text-gray-400"
-        ratio={incomeData.monthlyIncomeRate}
+        ratio={incomeData.incomeRate}
         isIncrease={incomeData.isIncrease}
         hasData={incomeData.income !== 0}
       >
@@ -32,7 +32,7 @@ export const NoDataOverviewSummary = ({
         label="현재 지출"
         value={formatCurrency(expenseData.expense)}
         valueColor="text-gray-900"
-        ratio={incomeData.monthlyIncomeRate}
+        ratio={expenseData.expense}
         isIncrease={expenseData.isIncrease}
         hasData={expenseData.expense !== 0}
       >

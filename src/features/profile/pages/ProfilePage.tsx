@@ -2,8 +2,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserProfile } from "../hooks/useUserProfile";
 import { ProfileHeader } from "../components/ProfileHeader";
 import { ProfileAvatarCard } from "../components/ProfileAvatarCard";
-import { ProfileInfoSection } from "../components/ProfileInfoSection";
-import { ProfileStats } from "../components/ProfileStats";
+import { ProfileInfoSection } from "../components/profileInfoSection/ProfileInfoSection";
+import { ProfileStats } from "../components/profileStats/ProfileStats";
 import { ProfileSocialSection } from "../components/ProfileSocialSection";
 import { useFetchUserSummary } from "../hooks/useFetchUserSummary";
 

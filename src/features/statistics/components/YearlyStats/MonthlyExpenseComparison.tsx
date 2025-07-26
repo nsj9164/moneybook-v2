@@ -18,7 +18,7 @@ export const MonthlyExpenseComparison = ({
           <div>
             <div className="text-sm font-medium text-red-700">가장 높은 달</div>
             <div className="text-lg font-bold text-red-600">
-              {bestMonth.month}
+              {bestMonth.month}월
             </div>
           </div>
           <div className="text-right">
@@ -34,7 +34,7 @@ export const MonthlyExpenseComparison = ({
               가장 낮은 달
             </div>
             <div className="text-lg font-bold text-emerald-600">
-              {worstMonth.month}
+              {worstMonth.month}월
             </div>
           </div>
           <div className="text-right">

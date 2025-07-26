@@ -58,12 +58,6 @@ const Settings = () => {
       icon: <Repeat />,
       content: <ManageRecurringExpenses />,
     },
-    {
-      key: "security",
-      label: "보안 설정",
-      icon: <Lock />,
-      content: <SecuritySettings />,
-    },
   ];
 
   return (

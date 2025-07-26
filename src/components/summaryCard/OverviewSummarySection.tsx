@@ -14,6 +14,7 @@ export const OverviewSummarySection = ({
   summaryData,
 }: OverviewSummaryProps) => {
   const { expenseData, incomeData, savingData, budgetData } = summaryData;
+  console.log("###########", summaryData);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -22,7 +23,7 @@ export const OverviewSummarySection = ({
         label={selectedPeriod === "month" ? "월 수입" : "연 수입"}
         value={formatCurrency(incomeData.income)}
         valueColor="text-emerald-600"
-        ratio={incomeData.monthlyIncomeRate}
+        ratio={incomeData.incomeRate}
         isIncrease={incomeData.isIncrease}
       />
       <OverviewCard
@@ -30,7 +31,7 @@ export const OverviewSummarySection = ({
         label={selectedPeriod === "month" ? "월 지출" : "연 지출"}
         value={formatCurrency(expenseData.expense)}
         valueColor="text-red-600"
-        ratio={incomeData.monthlyIncomeRate}
+        ratio={expenseData.expenseRate}
         isIncrease={expenseData.isIncrease}
       />
       <OverviewCard

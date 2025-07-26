@@ -1,29 +1,47 @@
 import { UUID } from "@/types/ids";
-import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
-import { UserTotalSummary } from "../types/TotalSummary";
 
 export const useFetchUserSummary = ({ userId }: { userId: UUID }) => {
-  const [data, setData] = useState<UserTotalSummary | null>(null);
+  const [summary, setSummary] = useState({
+    totalExpenseCount: 0,
+    totalExpenseAmount: 0,
+    averageMonthlyExpense: 0,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase.rpc("get_total_expense_summary", {
-        input_user_id: userId,
-      });
+      const { data, error } = await supabase
+        .from("expenses")
+        .select("amount, date")
+        .eq("user_id", userId)
+        .eq("transaction_type", 2);
 
-      if (error) {
+      if (error || !data) {
         console.error("Fetch Total Expense Summary Error:", error.message);
-        setData(null);
         return;
       }
 
-      setData(formatKeyCase(data, "camel"));
+      const totalExpenseCount = data.length;
+      const totalExpenseAmount = data.reduce((sum, cur) => sum + cur.amount, 0);
+
+      const uniqueMonths = new Set(
+        data.map((item) => new Date(item.date).toISOString().slice(0, 7))
+      );
+      const averageMonthlyExpense =
+        totalExpenseCount > 0
+          ? Math.round(totalExpenseAmount / uniqueMonths.size)
+          : 0;
+
+      setSummary({
+        totalExpenseCount,
+        totalExpenseAmount,
+        averageMonthlyExpense,
+      });
     };
 
     if (userId) fetchData();
   }, [userId]);
 
-  return data;
+  return summary;
 };

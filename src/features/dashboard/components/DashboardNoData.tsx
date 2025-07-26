@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { AlertCircle, Calendar, ChevronLeft, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { actionCards } from "../constants/noDataActions";
+import { getPreviousMonth } from "@/utils/getPreviousMonth";
 
 interface DashboardNoDataProps {
   selectedDate: { year: number; month: number };
@@ -44,7 +45,7 @@ export const DashboardNoData = ({
             className="inline-flex items-center border border-gray-300 bg-white px-6 py-3 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             <ChevronLeft className="mr-2 h-4 w-4" />
-            지난 달 데이터 보기 ({month - 1}월)
+            지난 달 데이터 보기 ({getPreviousMonth(month)}월)
           </button>
         </div>
       </div>
