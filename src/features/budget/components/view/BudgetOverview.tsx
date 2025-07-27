@@ -1,7 +1,7 @@
 import { CardSection } from "@/components/common/layout/CardSection";
 import { BudgetDisplay, BudgetEntity } from "@/types";
 import { UsageProgress } from "../progress/UsageProgress";
-import { SummarySection } from "./SummarySection";
+import { SummarySection } from "../summary/SummarySection";
 import { BudgetCategoryList } from "../list/BudgetCategoryList";
 import { getBudgetSummaryInfo } from "../../hooks/useBudgetSummary";
 import { useMemo } from "react";

@@ -1,6 +1,4 @@
 import { Plus } from "lucide-react";
-import NotificationModal from "@/components/common/modal/NotificationModal";
-import { useNotification } from "@/hooks/useNotification";
 import { Button } from "@/components/ui/Button";
 import { BudgetEntity } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,9 +10,9 @@ import { useBudgetHandlers } from "../hooks/useBudgetHandlers";
 import { useBudgetData } from "../hooks/useBudgetData";
 import { initialBudget } from "../constants/BudgetConstants";
 import { DateFilterControl } from "../../../components/monthSelector/DateFilterControl";
-import { BudgetOverview } from "../components/summary/BudgetOverview";
-import { EmptyFilterBudgetNotice } from "../components/list/EmptyFilterBudgetNotice";
-import { EmptyBudgetNotice } from "../components/list/EmptyBudgetNotice";
+import { BudgetOverview } from "../components/view/BudgetOverview";
+import { EmptyFilterBudgetNotice } from "../components/view/EmptyFilterBudgetNotice";
+import { EmptyBudgetNotice } from "../components/view/EmptyBudgetNotice";
 import AddBudgetModal from "../components/modals/AddBudgetModal";
 import { useModalFormArray } from "@/hooks/useModalFormArray";
 import { PageHeader } from "@/components/common/layout/PageHeader";
@@ -35,8 +33,6 @@ const Budget = () => {
   const { budgets, unBudgets, refetchAll } = useBudgetData({
     selectedDate,
   });
-
-  const { notification, showSuccess, hideNotification } = useNotification();
 
   const { methods, isOpen, isEditing, openModal, closeModal } =
     useModalFormArray<BudgetEntity>(initialBudget());
@@ -113,17 +109,6 @@ const Budget = () => {
           unBudgets={unBudgets}
         />
       </FormProvider>
-
-      {/* 알림 모달 */}
-      <NotificationModal
-        isOpen={notification.isOpen}
-        onClose={hideNotification}
-        type={notification.type}
-        title={notification.title}
-        message={notification.message}
-        autoClose={notification.autoClose}
-        autoCloseDelay={notification.autoCloseDelay}
-      />
     </div>
   );
 };

@@ -1,6 +1,9 @@
+import { deleteItem } from "@/api/supabase/deleteItem";
+import { insertItem } from "@/api/supabase/insertItem";
+import { updateItem } from "@/api/supabase/updateItem";
 import { budgetState } from "@/recoil/atoms";
-import { BudgetEntity, UUID } from "@/types";
-import { deleteItem, insertItem, updateItem } from "@/utils/crud";
+import { BudgetEntity } from "@/types";
+import { UUID } from "@/types/ids";
 import { patchItem } from "@/utils/patchItem";
 import { useSetRecoilState } from "recoil";
 
@@ -28,15 +31,14 @@ export const useBudgetHandlers = ({
       };
 
       if (isNew) {
-        await insertItem("budgets", commonFields, userId!, (saved) => {
-          setBudget((prev) => patchItem(prev, saved));
-        });
+        const saved = await insertItem("budgets", commonFields, userId!);
+        setBudget((prev) => patchItem(prev, saved));
       } else {
         const updateFields = { ...commonFields, id: item.budgetId };
         delete updateFields.budgetId;
-        await updateItem("budgets", updateFields, userId!, (saved) => {
-          setBudget((prev) => patchItem(prev, saved));
-        });
+
+        const saved = await updateItem("budgets", updateFields, userId!);
+        setBudget((prev) => patchItem(prev, saved));
       }
     }
 
@@ -44,10 +46,8 @@ export const useBudgetHandlers = ({
   };
 
   const handleDelBudget = async (id: number) => {
-    await deleteItem("budgets", id, () => {
-      setBudget((prev) => prev.filter((item) => item.id !== id));
-    });
-
+    await deleteItem("budgets", id);
+    setBudget((prev) => prev.filter((item) => item.id !== id));
     await refetchAll();
   };
 

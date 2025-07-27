@@ -15,7 +15,7 @@ interface GenericFormModalProps<K extends FormType> {
   formTitle: string;
   isOpen: boolean;
   isEditing: boolean;
-  onSave: (data: Partial<FormMap[K]>) => void;
+  onSave: (data: Partial<FormMap[K]>) => void | Promise<void>;
   onClose: () => void;
   children: React.ReactNode;
 }

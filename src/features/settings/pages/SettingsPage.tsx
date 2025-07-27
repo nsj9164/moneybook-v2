@@ -1,19 +1,10 @@
 import { useState } from "react";
-import {
-  Bell,
-  CreditCard,
-  Globe,
-  Lock,
-  Save,
-  List,
-  Repeat,
-} from "lucide-react";
+import { Bell, CreditCard, Globe, Save, List, Repeat } from "lucide-react";
 import { GeneralSettings } from "../components/GeneralSettings";
 import { NotificationSettings } from "../components/NotificationSettings";
 import ManageCategories from "../features/manageCategories/pages/SettingCategoriesPage";
 import ManagePayMethods from "../features/managePayMethods/pages/SettingPayMethodsPage";
 import ManageRecurringExpenses from "../features/manageRecurringExpenses/pages/SettingRecurringPage";
-import { SecuritySettings } from "../components/SecuritySettings";
 
 // 설정 탭 정의
 type SettingTab =

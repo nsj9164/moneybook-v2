@@ -1,6 +1,6 @@
 import { X, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BudgetItem } from "../list/BudgetItem";
+import { BudgetItem } from "./BudgetItem";
 import { SubmitHandler, useFieldArray, useFormContext } from "react-hook-form";
 import { initialBudget } from "../../constants/BudgetConstants";
 import { BudgetEntity, UnBudgetDisplay } from "@/types";

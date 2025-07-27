@@ -13,6 +13,7 @@ import { usePagination } from "@/features/settings/utils/usePagination";
 import { PaginationFooter } from "../pagination/PaginationFooter";
 import { GenericFormModal } from "../modal/GenericFormModal";
 import { GenericFormModalFields } from "../modal/GenericFormModalFields";
+import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
 
 type GenericFormHandler<T> = {
   openModal: (row?: T) => void;
@@ -49,7 +50,12 @@ function GenericForm<K extends FormType>({
   const { methods, isOpen, isEditing, openModal, closeModal } =
     useModalForm<FormMap[K]>(defaultValues);
 
+  const [isDelete, setIsDelete] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // 모달 열기/닫기
+  const toggleModal = (type: boolean) => setIsDelete(type);
 
   // data_검색 적용
   const filteredData = fetchData.filter((item) =>
@@ -66,8 +72,12 @@ function GenericForm<K extends FormType>({
   );
 
   const handleDeleteData = async (id: number) => {
-    if (window.confirm("이 카테고리를 삭제하시겠습니까?")) {
+    try {
       await onDelete(id);
+      toggleModal(false);
+    } catch (error) {
+      console.error("삭제 실패:", error);
+      // toast.error("삭제에 실패했어요.") 등으로 사용자 알림 추가 가능
     }
   };
 
@@ -146,6 +156,12 @@ function GenericForm<K extends FormType>({
           />
         </GenericFormModal>
       </FormProvider>
+
+      <ConfirmModal
+        isOpen={isDelete}
+        onClose={toggleModal}
+        onConfirm={handleDeleteData}
+      />
     </div>
   );
 }
