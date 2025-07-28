@@ -34,6 +34,7 @@ export const formMeta: {
       emoji: payMethodEmojiOptions[0],
       defaultYn: false,
       typeId: 1,
+      userId: "",
     }),
   },
 };

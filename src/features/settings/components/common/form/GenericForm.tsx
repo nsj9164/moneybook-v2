@@ -14,6 +14,7 @@ import { PaginationFooter } from "../pagination/PaginationFooter";
 import { GenericFormModal } from "../modal/GenericFormModal";
 import { GenericFormModalFields } from "../modal/GenericFormModalFields";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
+import toast from "react-hot-toast";
 
 type GenericFormHandler<T> = {
   openModal: (row?: T) => void;
@@ -63,21 +64,40 @@ function GenericForm<K extends FormType>({
   );
 
   // data_pagination 적용
-  const { currentPage, totalPages, handlePageChange, startIndex, endIndex } =
-    usePagination(filteredData.length);
+  const {
+    currentPage,
+    totalPages,
+    handlePageChange,
+    goToLastPageIfNeeded,
+    startIndex,
+    endIndex,
+  } = usePagination(filteredData.length);
 
   const paginatedData = filteredData.slice(
     (currentPage - 1) * 10,
     currentPage * 10
   );
 
-  const handleDeleteData = async (id: number) => {
+  const paginateAfterAdd = () => {
+    const nextTotal = filteredData.length + 1;
+    goToLastPageIfNeeded(nextTotal);
+  };
+
+  const showConfirmDelete = (id: number) => {
+    setDeleteId(id);
+    toggleModal(true);
+  };
+
+  const handleDeleteData = async () => {
+    if (deleteId === null) return;
+
     try {
-      await onDelete(id);
+      await onDelete(deleteId);
+      toast.success("삭제가 완료됐어요.");
+      setDeleteId(null);
       toggleModal(false);
-    } catch (error) {
-      console.error("삭제 실패:", error);
-      // toast.error("삭제에 실패했어요.") 등으로 사용자 알림 추가 가능
+    } catch {
+      toast.error("항목 삭제에 실패했어요. 잠시 후 다시 시도해주세요.");
     }
   };
 
@@ -126,7 +146,7 @@ function GenericForm<K extends FormType>({
             renderRow={(row) =>
               renderRow(row, {
                 openModal: openModal,
-                onDelete: handleDeleteData,
+                onDelete: showConfirmDelete,
               })
             }
           />
@@ -149,6 +169,7 @@ function GenericForm<K extends FormType>({
           isEditing={isEditing}
           onClose={closeModal}
           onSave={onSave}
+          paginateAfterAdd={paginateAfterAdd}
         >
           <GenericFormModalFields
             formTitle={title}

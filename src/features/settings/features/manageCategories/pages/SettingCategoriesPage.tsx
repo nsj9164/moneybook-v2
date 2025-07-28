@@ -35,7 +35,6 @@ const ManageCategories = () => {
       headers={<TableHeader />}
       renderRow={(category, { openModal, onDelete }) => (
         <TableRow
-          key={category.id}
           category={category}
           openModal={openModal}
           onDelete={onDelete}

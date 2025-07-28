@@ -1,16 +1,14 @@
-import { CategoryEntity, PayMethodEntity, RecurringEntity } from "@/types";
+import { CategoryEntity, PayMethodEntity } from "@/types";
 import { FieldValues, Path } from "react-hook-form";
 
 export enum FormType {
   Categories = "categories",
   PayMethods = "payMethods",
-  Recurring = "recurring",
 }
 
 export type FormMap = {
   [FormType.Categories]: CategoryEntity;
   [FormType.PayMethods]: PayMethodEntity;
-  [FormType.Recurring]: RecurringEntity;
 };
 
 export type FieldConfig<K extends FieldValues = FieldValues> =

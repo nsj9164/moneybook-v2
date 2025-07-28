@@ -17,6 +17,7 @@ interface GenericFormModalProps<K extends FormType> {
   isEditing: boolean;
   onSave: (data: Partial<FormMap[K]>) => void | Promise<void>;
   onClose: () => void;
+  paginateAfterAdd: () => void;
   children: React.ReactNode;
 }
 
@@ -26,6 +27,7 @@ export function GenericFormModal<K extends FormType>({
   isEditing,
   onSave,
   onClose,
+  paginateAfterAdd,
   children,
 }: GenericFormModalProps<K>) {
   const methods = useFormContext<FormMap[K]>();
@@ -47,6 +49,7 @@ export function GenericFormModal<K extends FormType>({
     } else {
       const saveData = filterEmptyFields(data);
       await onSave(saveData);
+      paginateAfterAdd();
     }
 
     onClose();

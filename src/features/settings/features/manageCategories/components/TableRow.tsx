@@ -8,7 +8,7 @@ interface TableRowProps {
   onDelete: (id: number) => void;
 }
 
-export const TableRow = ({ category, openModal, onDelsete }: TableRowProps) => {
+export const TableRow = ({ category, openModal, onDelete }: TableRowProps) => {
   return (
     <tr key={category.id} className="hover:bg-gray-50">
       <td className="whitespace-nowrap px-6 py-4 text-center text-xl">
@@ -53,10 +53,7 @@ export const TableRow = ({ category, openModal, onDelsete }: TableRowProps) => {
           </button>
           {!category.defaultYn && (
             <button
-              onClick={() => {
-                setDeleteId(category.id);
-                toggleModal(true);
-              }}
+              onClick={() => onDelete(category.id)}
               className="text-red-600 hover:text-red-900"
             >
               <Trash2 className="h-4 w-4" />
