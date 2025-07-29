@@ -1,6 +1,7 @@
 import { UUID } from "@/types/ids";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
+import { omit } from "lodash";
 
 export const insertItem = async <T extends object>(
   table: string,
@@ -8,8 +9,7 @@ export const insertItem = async <T extends object>(
   userId: UUID
 ): Promise<T> => {
   const snakeItem = formatKeyCase(item, "snake");
-  const { id, ...rest } = snakeItem;
-  const insertData = { ...rest, user_id: userId };
+  const insertData = { ...omit(snakeItem, ["id"]), user_id: userId };
 
   const { data, error } = await supabase
     .from(table)
