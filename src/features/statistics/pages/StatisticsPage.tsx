@@ -69,12 +69,6 @@ const Statistics = () => {
     selectedPeriod === "month" ? summaryQuery.data : yearlySummaryQuery.data;
 
   const isEmpty = !summaryData || summaryData.expenseData?.expense === 0;
-  console.log(
-    "isEmpty!!!!",
-    selectedPeriod,
-    summaryQuery.data,
-    yearlySummaryQuery.data
-  );
 
   if (isEmpty) {
     return (

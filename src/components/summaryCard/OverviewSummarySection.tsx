@@ -14,7 +14,6 @@ export const OverviewSummarySection = ({
   summaryData,
 }: OverviewSummaryProps) => {
   const { expenseData, incomeData, savingData, budgetData } = summaryData;
-  console.log("###########", summaryData);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

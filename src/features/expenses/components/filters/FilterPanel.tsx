@@ -1,4 +1,4 @@
-import { ExpenseFiltersState } from "@/pages/Expenses/types/filters";
+import { ExpenseFiltersState } from "../../types/filters";
 import { CategoryEntity, PayMethodEntity } from "@/types";
 import { Filter, Settings, X } from "lucide-react";
 import { FilterCheckbox } from "./inputs/FilterCheckbox";

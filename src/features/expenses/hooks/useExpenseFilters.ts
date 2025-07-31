@@ -14,8 +14,8 @@ export const useExpenseFilters = (expenses: IExpense[]) => {
     filterPayMethod: 0,
     filterDifferentAmountOnly: false,
     filterRecurringOnly: false,
-    filterStartDate: format(subMonthToday, "yyyy-MM-dd"),
-    filterEndDate: format(today, "yyyy-MM-dd"),
+    startDate: format(subMonthToday, "yyyy-MM-dd"),
+    endDate: format(today, "yyyy-MM-dd"),
   };
 
   const [filters, setFilters] = useState(initialFilters);
@@ -46,8 +46,7 @@ export const useExpenseFilters = (expenses: IExpense[]) => {
         : true;
 
       const matchDateRange =
-        expense.date >= filters.filterStartDate &&
-        expense.date <= filters.filterEndDate;
+        expense.date >= filters.startDate && expense.date <= filters.endDate;
 
       return (
         matchQuery &&
@@ -68,9 +67,10 @@ export const useExpenseFilters = (expenses: IExpense[]) => {
     const key = e.currentTarget.name;
     const rawValue = e.currentTarget.value;
 
-    const parsedValue = numbericFields.includes(key)
-      ? Number(rawValue)
-      : rawValue;
+    const parsedValue =
+      numbericFields.includes(key) && rawValue !== ""
+        ? Number(rawValue)
+        : rawValue;
 
     setFilters((prev) => ({ ...prev, [key]: parsedValue }));
   };

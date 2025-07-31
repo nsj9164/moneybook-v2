@@ -4,8 +4,8 @@ export interface ExpenseFiltersState {
   filterPayMethod: number;
   filterDifferentAmountOnly: boolean;
   filterRecurringOnly: boolean;
-  filterStartDate: string;
-  filterEndDate: string;
+  startDate: string;
+  endDate: string;
 }
 
 export type FilterKey = keyof ExpenseFiltersState;
