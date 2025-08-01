@@ -19,8 +19,6 @@ export const SummarySection = ({
     remainingDay,
     remainingPercent,
     averagePerDay,
-    isCurrentMonth,
-    isPastMonth,
   } = summary;
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

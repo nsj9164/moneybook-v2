@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { TransactionItem } from "./TransactionItem";
 import { AlertCircle, ArrowRight, BarChart3, TrendingUp } from "lucide-react";

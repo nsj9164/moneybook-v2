@@ -23,13 +23,6 @@ export const DashboardMain = ({
   return (
     <div className="p-6 space-y-6">
       {/* 핵심 지표 카드 */}
-      {/* <OverviewSection
-        expenseData={expenseData}
-        incomeData={incomeData}
-        savingData={savingData}
-        budgetData={budgetData}
-      /> */}
-
       <OverviewSummarySection summaryData={summaryData} />
 
       {/* 요약 차트 섹션 */}

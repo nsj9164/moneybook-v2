@@ -21,7 +21,7 @@ export function SocialButton({
       icon: GoogleIcon,
       className:
         "w-full py-6 flex items-center justify-center gap-3 hover:bg-gray-50 transition-all duration-300 border-gray-200",
-      variant: "outline" as const,
+      variant: "outlineWhite" as const,
     },
     kakao: {
       text: "카카오로 계속하기",
