@@ -13,6 +13,7 @@ import { useFetchRpcQuery } from "@/hooks/fetchData/useFetchRpcQuery";
 import { ChartSummary } from "../types/DashboardSummary";
 import { OverviewSummary } from "@/types/OverviewSummary";
 import { Loading } from "@/components/common/loading/Loading";
+import { ErrorBox } from "@/components/common/error/ErrorBox";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -32,8 +33,9 @@ const Dashboard = () => {
   const { userId } = useAuth();
   const {
     data: chartData,
-    loading: chartLoading,
+    isLoading: chartLoading,
     error: chartError,
+    refetch: refetchChart,
   } = useFetchRpcQuery<ChartSummary>(
     "get_dashboard_chart_data",
     targetDate,
@@ -41,8 +43,9 @@ const Dashboard = () => {
   );
   const {
     data: summaryData,
-    loading: summaryLoading,
+    isLoading: summaryLoading,
     error: summaryError,
+    refetch: refetchSummary,
   } = useFetchRpcQuery<OverviewSummary>(
     "get_overview_summary",
     targetDate,
@@ -50,14 +53,25 @@ const Dashboard = () => {
   );
 
   const recentExpenses = useFetchRecentExpenses(targetDate, userId!);
-
   const hasDataThisMonth = summaryData && summaryData.expenseData.expense > 0;
 
-  if (chartLoading || summaryLoading) return <Loading />;
+  const isLoading = chartLoading || summaryLoading;
+  const isError = chartError || summaryError;
+  const hasData = chartData && summaryData;
 
-  if (!firstExpenseYear) {
-    return <DashboardOnboarding />;
-  }
+  if (isLoading) return <Loading />;
+  if (isError)
+    return (
+      <ErrorBox
+        message="대시보드 데이터를 불러오는 데 실패했어요."
+        onRetry={() => {
+          refetchChart();
+          refetchSummary();
+        }}
+      />
+    );
+  if (!hasData) return null;
+  if (!firstExpenseYear) return <DashboardOnboarding />;
 
   return (
     <div className="h-full">

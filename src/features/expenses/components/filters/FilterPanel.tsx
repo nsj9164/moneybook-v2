@@ -71,8 +71,8 @@ export const FilterPanel = ({
         />
 
         <FilterDateRange
-          startDate={filters.filterStartDate}
-          endDate={filters.filterEndDate}
+          startDate={filters.startDate}
+          endDate={filters.endDate}
           onChange={(e) => handleFiltersChange(e)}
         />
       </div>
