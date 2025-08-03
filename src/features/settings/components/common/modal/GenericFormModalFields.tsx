@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { FieldValues, Path, PathValue, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { FieldConfig } from "../../../types/GenericFormTypes";
 
 interface ModalFieldsProps {
@@ -11,12 +11,7 @@ export function GenericFormModalFields({
   formTitle,
   fieldConfigs,
 }: ModalFieldsProps) {
-  const {
-    register,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useFormContext();
+  const { register, setValue, watch } = useFormContext();
   const formValues = watch();
 
   return (

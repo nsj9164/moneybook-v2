@@ -31,6 +31,7 @@ const ExpenseFormPage = () => {
       paymentMethodId: 0,
       categoryId: 0,
       isDifferentAmount: false,
+      transactionType: 2,
     };
     setNewExpenses((prev) => [...prev, newItem]);
   };

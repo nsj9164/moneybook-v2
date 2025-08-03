@@ -1,5 +1,5 @@
-import { ExpenseColumns } from "@/pages/Expenses/types/filters";
 import { formatCurrency } from "@/utils/format";
+import { ExpenseColumns } from "../../types/filters";
 
 interface FooterProps {
   columns: ExpenseColumns[];

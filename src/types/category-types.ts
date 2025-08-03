@@ -1,7 +1,6 @@
 import { EntityId, UUID } from "@/types/ids";
 
-export interface CategoryEntity {
-  id: EntityId;
+export interface CategoryBase {
   name: string;
   budget: number;
   transactionType: number;
@@ -9,4 +8,12 @@ export interface CategoryEntity {
   color: string;
   defaultYn: boolean;
   userId: UUID;
+}
+
+export interface CategorySaved extends CategoryBase {
+  id: number;
+}
+
+export interface CategoryDraft extends CategoryBase {
+  id: EntityId;
 }

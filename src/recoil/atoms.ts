@@ -2,8 +2,7 @@ import {
   PayMethodEntity,
   RecurringDisplay,
   IExpense,
-  CategoryEntity,
-  CategoryStatDisplay,
+  CategoryDraft,
 } from "@/types";
 import { atom } from "recoil";
 
@@ -12,7 +11,7 @@ export const expensesState = atom<IExpense[]>({
   default: [],
 });
 
-export const categoriesState = atom<CategoryEntity[]>({
+export const categoriesState = atom<CategoryDraft[]>({
   key: "categoriesState",
   default: [],
 });

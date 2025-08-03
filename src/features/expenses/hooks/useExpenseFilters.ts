@@ -94,7 +94,6 @@ export const useExpenseFilters = (expenses: IExpense[]) => {
 
   return {
     filters,
-    setFilters,
     filteredExpenses,
     handleFiltersChange,
     resetField,

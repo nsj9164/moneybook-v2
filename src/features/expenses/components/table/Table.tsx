@@ -1,9 +1,10 @@
-import { ExpenseColumns } from "@/pages/Expenses/types/filters";
-import { IExpense, UUID } from "@/types";
+import { IExpense } from "@/types";
 import { useNavigate } from "react-router-dom";
 import { TableFooter } from "./TableFooter";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
+import { ExpenseColumns } from "../../types/filters";
+import { UUID } from "@/types/ids";
 
 interface ExpensesTableProps {
   columns: ExpenseColumns[];
@@ -23,6 +24,7 @@ export const ExpensesTable = ({
   const navigate = useNavigate();
   const editExpense = (id: UUID) => {
     // id를 가져가야하는데 그 방법은 조금 더 생각이 필요함!!
+    console.log(id);
     navigate("/expenses/edit");
   };
 

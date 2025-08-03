@@ -6,24 +6,24 @@ import { TableRow } from "../components/TableRow";
 import { TableHeader } from "../components/TableHeader";
 import GenericForm from "@/features/settings/components/common/form/GenericForm";
 import { FormType } from "@/features/settings/types/GenericFormTypes";
-import { CategoryEntity } from "@/types";
 import {
   createDeleteItemHandler,
   createUpsertHandler,
 } from "@/utils/crudHandlers";
+import { CategoryDraft, CategorySaved } from "@/types";
 
 const ManageCategories = () => {
   const { userId } = useAuth();
   const categories = useFetchCategories();
   const setCategories = useSetRecoilState(categoriesState);
 
-  const handleSaveCategory = createUpsertHandler<CategoryEntity>(
+  const handleSaveCategory = createUpsertHandler<CategoryDraft>(
     "categories",
     userId!,
     setCategories
   );
 
-  const handleDeleteCategory = createDeleteItemHandler<CategoryEntity>(
+  const handleDeleteCategory = createDeleteItemHandler<CategorySaved>(
     "categories",
     setCategories
   );

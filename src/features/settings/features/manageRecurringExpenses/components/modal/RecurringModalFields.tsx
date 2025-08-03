@@ -4,22 +4,17 @@ import { useCycleOptions } from "../../hooks/useCycleOptions";
 import { InputField } from "./InputField";
 import { SelectField } from "./SelectField";
 import { addMonths, format, setDate } from "date-fns";
-import { CategoryEntity, PayMethodEntity } from "@/types";
+import { CategorySaved, PayMethodEntity } from "@/types";
 
 interface RecurringModalFieldsProps {
-  categories: CategoryEntity[];
+  categories: CategorySaved[];
   payMethods: PayMethodEntity[];
 }
 export const RecurringModalFields = ({
   categories,
   payMethods,
 }: RecurringModalFieldsProps) => {
-  const {
-    register,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useFormContext();
+  const { register, setValue, watch } = useFormContext();
   // const isActive = watch("isActive");
   const cycleOptions = useCycleOptions();
 

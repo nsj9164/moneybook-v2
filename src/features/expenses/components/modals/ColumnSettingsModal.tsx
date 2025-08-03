@@ -1,4 +1,4 @@
-import { ExpenseColumns } from "@/pages/Expenses/types/filters";
+import { ExpenseColumns } from "../../types/filters";
 import {
   Dialog,
   DialogPanel,

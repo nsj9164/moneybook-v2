@@ -1,16 +1,16 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { categoryColorOptions } from "../constants/CategoryConstants";
-import { CategoryEntity } from "@/types";
+import { CategorySaved } from "@/types";
 
 interface TableRowProps {
-  category: CategoryEntity;
-  openModal: (category: CategoryEntity) => void;
+  category: CategorySaved;
+  openModal: (category: CategorySaved) => void;
   onDelete: (id: number) => void;
 }
 
 export const TableRow = ({ category, openModal, onDelete }: TableRowProps) => {
   return (
-    <tr key={category.id} className="hover:bg-gray-50">
+    <tr className="hover:bg-gray-50">
       <td className="whitespace-nowrap px-6 py-4 text-center text-xl">
         <span role="img" aria-label={category.name}>
           {category.emoji}

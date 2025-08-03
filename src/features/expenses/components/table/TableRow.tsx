@@ -1,7 +1,8 @@
-import { ExpenseColumns } from "@/pages/Expenses/types/filters";
-import { IExpense, UUID } from "@/types";
+import { IExpense } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import { Pencil } from "lucide-react";
+import { ExpenseColumns } from "../../types/filters";
+import { UUID } from "@/types/ids";
 
 interface RowProps {
   expense: IExpense;

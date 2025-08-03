@@ -1,11 +1,11 @@
-import { CategoryEntity, PayMethodEntity } from "@/types";
+import { CategorySaved, PayMethodEntity } from "@/types";
 import { ChevronDown } from "lucide-react";
 
 interface FilterSelectProps {
   label: string;
   name: string;
   value: number;
-  options: CategoryEntity[] | PayMethodEntity[];
+  options: CategorySaved[] | PayMethodEntity[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 

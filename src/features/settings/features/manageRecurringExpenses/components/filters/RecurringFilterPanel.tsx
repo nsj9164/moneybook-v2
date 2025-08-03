@@ -1,11 +1,11 @@
-import { CategoryEntity } from "@/types";
+import { CategorySaved } from "@/types";
 
 interface RecurringFilterPanelProps {
   filters: { search: string; category: string; active: string };
   updateFilter: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
-  categories: CategoryEntity[];
+  categories: CategorySaved[];
 }
 export const RecurringFilterPanel = ({
   filters,

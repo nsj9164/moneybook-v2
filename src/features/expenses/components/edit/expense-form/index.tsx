@@ -1,13 +1,12 @@
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { IExpense, UUID } from "@/types";
+import { IExpense } from "@/types";
 import { parseCurrency } from "@/utils/format";
-import { CardForm } from "./card-form";
 import { TableForm } from "./table-form";
 import { ExpensesProps } from "./types/types";
+import { UUID } from "@/types/ids";
 
 export const ExpenseForm = (props: ExpensesProps) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const FormComponent = isMobile ? CardForm : TableForm;
+  // const isMobile = useMediaQuery("(max-width: 768px)");
+  // const FormComponent = isMobile ? CardForm : TableForm;
 
   // newExpenses update
   const handleUpdExpense = (
@@ -71,5 +70,5 @@ export const ExpenseForm = (props: ExpensesProps) => {
     updateActualAmount,
   };
 
-  return <FormComponent {...FormComponentProps} />;
+  return <TableForm {...FormComponentProps} />;
 };

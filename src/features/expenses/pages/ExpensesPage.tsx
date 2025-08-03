@@ -24,7 +24,6 @@ const Expenses = () => {
   const payMethods = useFetchPayMethods();
   const {
     filters,
-    setFilters,
     filteredExpenses,
     handleFiltersChange,
     resetField,

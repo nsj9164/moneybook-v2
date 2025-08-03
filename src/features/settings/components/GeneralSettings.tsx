@@ -1,4 +1,4 @@
-import { Globe, Moon, Wallet } from "lucide-react";
+import { Moon } from "lucide-react";
 
 export const GeneralSettings = () => {
   return (
