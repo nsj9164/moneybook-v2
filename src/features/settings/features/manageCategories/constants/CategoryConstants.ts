@@ -1,3 +1,5 @@
+import { FieldConfig } from "@/features/settings/types/GenericFormTypes";
+
 export const categoryEmojiOptions = [
   "🍔",
   "🚗",
@@ -32,4 +34,20 @@ export const categoryColorOptions = [
   { name: "보라", value: "#8b5cf6" },
   { name: "분홍", value: "#ec4899" },
   { name: "회색", value: "#6b7280" },
+];
+
+export const categoryFormFieldConfigs: FieldConfig[] = [
+  { name: "name", type: "text", label: "카테고리명" },
+  {
+    name: "emoji",
+    type: "emoji",
+    label: "아이콘",
+    options: categoryEmojiOptions,
+  },
+  {
+    name: "color",
+    type: "color",
+    label: "색상",
+    options: categoryColorOptions,
+  },
 ];

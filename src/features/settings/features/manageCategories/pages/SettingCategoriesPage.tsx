@@ -10,7 +10,7 @@ import {
   createDeleteItemHandler,
   createUpsertHandler,
 } from "@/utils/crudHandlers";
-import { CategoryDraft, CategorySaved } from "@/types";
+import { CategoryDraft } from "@/types";
 
 const ManageCategories = () => {
   const { userId } = useAuth();
@@ -23,7 +23,7 @@ const ManageCategories = () => {
     setCategories
   );
 
-  const handleDeleteCategory = createDeleteItemHandler<CategorySaved>(
+  const handleDeleteCategory = createDeleteItemHandler<CategoryDraft>(
     "categories",
     setCategories
   );
