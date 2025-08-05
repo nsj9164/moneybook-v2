@@ -1,11 +1,12 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { categoriesState } from "@/recoil/atoms";
+import { CategorySaved } from "@/types";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 
-export const useFetchCategories = () => {
+export const useFetchCategories = (): CategorySaved[] => {
   const [categories, setCategories] = useRecoilState(categoriesState);
   const { userId } = useAuth();
 

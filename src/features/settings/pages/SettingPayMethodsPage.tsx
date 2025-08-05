@@ -1,11 +1,11 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useSetRecoilState } from "recoil";
 import { payMethodsState } from "@/recoil/atoms";
-import { PayMethodEntity } from "@/types";
+import { PayMethodBase, PayMethodSaved } from "@/types";
 import GenericForm from "@/features/settings/components/common/form/GenericForm";
 import { FormType } from "@/features/settings/types/GenericFormTypes";
-import { TableHeader } from "../components/TableHeader";
-import { TableRow } from "../components/TableRow";
+import { TableHeader } from "../managePayMethods/components/TableHeader";
+import { TableRow } from "../managePayMethods/components/TableRow";
 import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
 import {
   createUpsertHandler,
@@ -17,13 +17,12 @@ const ManagePayMethods = () => {
   const payMethods = useFetchPayMethods();
   const setPayMethods = useSetRecoilState(payMethodsState);
 
-  const handleSavePayMethod = createUpsertHandler<PayMethodEntity>(
-    "payment_methods",
-    userId!,
-    setPayMethods
-  );
+  const handleSavePayMethod = createUpsertHandler<
+    PayMethodBase,
+    PayMethodSaved
+  >("payment_methods", userId!, setPayMethods);
 
-  const handleDeletePayMethod = createDeleteItemHandler<PayMethodEntity>(
+  const handleDeletePayMethod = createDeleteItemHandler<PayMethodSaved>(
     "payment_methods",
     setPayMethods
   );

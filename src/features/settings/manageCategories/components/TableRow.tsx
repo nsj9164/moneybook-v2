@@ -1,6 +1,6 @@
 import { Pencil, Trash2 } from "lucide-react";
-import { categoryColorOptions } from "../constants/CategoryConstants";
 import { CategorySaved } from "@/types";
+import { categoryColorOptions } from "../constants/categoryColorOptions";
 
 interface TableRowProps {
   category: CategorySaved;

@@ -2,34 +2,35 @@ import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSetRecoilState } from "recoil";
 import { categoriesState } from "@/recoil/atoms";
-import { TableRow } from "../components/TableRow";
-import { TableHeader } from "../components/TableHeader";
 import GenericForm from "@/features/settings/components/common/form/GenericForm";
 import { FormType } from "@/features/settings/types/GenericFormTypes";
 import {
   createDeleteItemHandler,
   createUpsertHandler,
 } from "@/utils/crudHandlers";
-import { CategoryDraft } from "@/types";
+import { CategoryBase, CategorySaved } from "@/types";
+import { TableHeader } from "../manageCategories/components/TableHeader";
+import { TableRow } from "../manageCategories/components/TableRow";
 
 const ManageCategories = () => {
   const { userId } = useAuth();
   const categories = useFetchCategories();
+
   const setCategories = useSetRecoilState(categoriesState);
 
-  const handleSaveCategory = createUpsertHandler<CategoryDraft>(
+  const handleSaveCategory = createUpsertHandler<CategoryBase, CategorySaved>(
     "categories",
     userId!,
     setCategories
   );
 
-  const handleDeleteCategory = createDeleteItemHandler<CategoryDraft>(
+  const handleDeleteCategory = createDeleteItemHandler<CategorySaved>(
     "categories",
     setCategories
   );
 
   return (
-    <GenericForm<FormType.Categories>
+    <GenericForm<CategorySaved>
       formType={FormType.Categories}
       fetchData={categories}
       headers={<TableHeader />}

@@ -1,8 +1,9 @@
 import {
-  PayMethodEntity,
   RecurringDisplay,
   IExpense,
-  CategoryDraft,
+  CategorySaved,
+  PayMethodSaved,
+  BudgetEntity,
 } from "@/types";
 import { atom } from "recoil";
 
@@ -11,12 +12,12 @@ export const expensesState = atom<IExpense[]>({
   default: [],
 });
 
-export const categoriesState = atom<CategoryDraft[]>({
+export const categoriesState = atom<CategorySaved[]>({
   key: "categoriesState",
   default: [],
 });
 
-export const payMethodsState = atom<PayMethodEntity[]>({
+export const payMethodsState = atom<PayMethodSaved[]>({
   key: "payMethodsState",
   default: [],
 });
@@ -31,7 +32,7 @@ export const recurringState = atom<RecurringDisplay[]>({
   default: [],
 });
 
-export const budgetState = atom<CategoryStatDisplay[]>({
+export const budgetState = atom<BudgetEntity[]>({
   key: "budgetState",
   default: [],
 });

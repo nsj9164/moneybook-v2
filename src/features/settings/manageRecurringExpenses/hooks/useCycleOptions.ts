@@ -2,7 +2,7 @@ import { useFetchCommonCodes } from "@/hooks/fetchData/useFetchCommonCodes";
 import { useMemo } from "react";
 import { CommonCode } from "../types/common";
 
-interface Option {
+export interface Option {
   label: string;
   value: string | number;
 }

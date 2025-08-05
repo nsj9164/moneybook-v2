@@ -1,7 +1,4 @@
-import { EntityId } from "./ids";
-
-export interface RecurringEntity {
-  id: EntityId;
+export interface RecurringBase {
   name: string;
   amount: number;
   cycle: number;
@@ -15,7 +12,11 @@ export interface RecurringEntity {
   paymentMethodId: number;
 }
 
-export interface RecurringDisplay extends RecurringEntity {
+export interface RecurringSaved extends RecurringBase {
+  id: number;
+}
+
+export interface RecurringDisplay extends RecurringSaved {
   categoryName?: string;
   categoryColor?: string;
   categoryEmoji?: string;

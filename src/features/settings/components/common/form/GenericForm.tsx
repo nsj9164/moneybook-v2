@@ -3,7 +3,11 @@ import { matchHangul } from "@/utils/matchHangul";
 import { GenericFormHeader } from "./GenericFormHeader";
 import { DefaultValues, FormProvider } from "react-hook-form";
 import { GenericFormTable } from "@/components/common/table/GenericFormTable";
-import { FormMap, FormType } from "@/features/settings/types/GenericFormTypes";
+import {
+  BaseMap,
+  FormType,
+  SavedMap,
+} from "@/features/settings/types/GenericFormTypes";
 import {
   formFieldConfigs,
   formMeta,
@@ -24,13 +28,13 @@ type GenericFormHandler<T> = {
 interface GenericFormProps<K extends FormType> {
   formType: K;
   headers: React.ReactNode;
-  fetchData: FormMap[K][];
+  fetchData: SavedMap[K][];
   renderRow: (
-    row: FormMap[K],
-    handler: GenericFormHandler<FormMap[K]>
+    row: SavedMap[K],
+    handler: GenericFormHandler<SavedMap[K]>
   ) => React.ReactNode;
-  onDelete: GenericFormHandler<FormMap[K]>["onDelete"];
-  onSave: (row: Partial<FormMap[K]>) => void;
+  onDelete: GenericFormHandler<SavedMap[K]>["onDelete"];
+  onSave: (row: Partial<BaseMap[K]>) => void;
 }
 
 function GenericForm<K extends FormType>({
@@ -45,11 +49,11 @@ function GenericForm<K extends FormType>({
   const fieldConfigs = formFieldConfigs[formType];
 
   const defaultValues = useMemo(
-    () => initial() as DefaultValues<FormMap[K]>,
+    () => initial() as DefaultValues<BaseMap[K]>,
     [formType]
   );
   const { methods, isOpen, isEditing, openModal, closeModal } =
-    useModalForm<FormMap[K]>(defaultValues);
+    useModalForm<BaseMap[K]>(defaultValues);
 
   const [isDelete, setIsDelete] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);

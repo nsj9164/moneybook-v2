@@ -1,30 +1,32 @@
 import { insertItem } from "@/api/supabase/insertItem";
 import { updateItem } from "@/api/supabase/updateItem";
-import { patchOrAddItem } from "./patchOrAddItem";
 import { deleteItem } from "@/api/supabase/deleteItem";
-import { UUID } from "@/types/ids";
+import { patchOrAddItem } from "./patchOrAddItem";
 
-export function createUpsertHandler<T extends { id: UUID | number }>(
+export function createUpsertHandler<
+  Draft extends Partial<Saved>,
+  Saved extends { id: number }
+>(
   table: string,
   userId: string,
-  setState: React.Dispatch<React.SetStateAction<T[]>>
+  setState: React.Dispatch<React.SetStateAction<Saved[]>>
 ) {
-  return async (item: Partial<T>) => {
+  return async (item: Draft | Saved) => {
     const isEditing = "id" in item && typeof item.id === "number";
 
-    const saved: T = isEditing
-      ? await updateItem<T>(table, item, userId)
-      : await insertItem<T>(table, item, userId);
+    const saved: Saved = isEditing
+      ? await updateItem<Saved>(table, item, userId)
+      : await insertItem<Saved>(table, item, userId);
 
     setState((prev) => patchOrAddItem(prev, saved));
   };
 }
 
-export function createDeleteItemHandler<T extends { id: UUID | number }>(
+export function createDeleteItemHandler<T extends { id: number }>(
   table: string,
   setState: React.Dispatch<React.SetStateAction<T[]>>
 ) {
-  return async (id: UUID | number) => {
+  return async (id: number) => {
     await deleteItem(table, id);
     setState((prev) => prev.filter((item) => item.id !== id));
   };

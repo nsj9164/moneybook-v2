@@ -1,4 +1,9 @@
-import { CategoryDraft, PayMethodEntity } from "@/types";
+import {
+  CategoryBase,
+  CategorySaved,
+  PayMethodBase,
+  PayMethodSaved,
+} from "@/types";
 import { FieldValues, Path } from "react-hook-form";
 
 export enum FormType {
@@ -6,9 +11,14 @@ export enum FormType {
   PayMethods = "payMethods",
 }
 
-export type FormMap = {
-  [FormType.Categories]: CategoryDraft;
-  [FormType.PayMethods]: PayMethodEntity;
+export type BaseMap = {
+  [FormType.Categories]: CategoryBase;
+  [FormType.PayMethods]: PayMethodBase;
+};
+
+export type SavedMap = {
+  [FormType.Categories]: CategorySaved;
+  [FormType.PayMethods]: PayMethodSaved;
 };
 
 export type FieldConfig<K extends FieldValues = FieldValues> =

@@ -1,10 +1,8 @@
 import { createTempEntityId } from "@/types/ids";
-import {
-  categoryColorOptions,
-  categoryEmojiOptions,
-} from "../features/manageCategories/constants/CategoryConstants";
-import { payMethodEmojiOptions } from "../features/managePayMethods/constants/PayMethodConstants";
+import { categoryEmojiOptions } from "../manageCategories/constants/categoryEmojiOptions";
+import { payMethodEmojiOptions } from "../managePayMethods/constants/PayMethodConstants";
 import { FieldConfig, FormMap, FormType } from "../types/GenericFormTypes";
+import { categoryColorOptions } from "../manageCategories/constants/categoryColorOptions";
 
 export const formMeta: {
   [K in FormType]: {
@@ -15,7 +13,6 @@ export const formMeta: {
   [FormType.Categories]: {
     title: "카테고리",
     initial: () => ({
-      id: createTempEntityId(),
       name: "",
       color: categoryColorOptions[0].value,
       emoji: categoryEmojiOptions[0],
