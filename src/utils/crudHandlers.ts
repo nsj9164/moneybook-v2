@@ -2,21 +2,22 @@ import { insertItem } from "@/api/supabase/insertItem";
 import { updateItem } from "@/api/supabase/updateItem";
 import { deleteItem } from "@/api/supabase/deleteItem";
 import { patchOrAddItem } from "./patchOrAddItem";
+import { UUID } from "@/types/ids";
 
 export function createUpsertHandler<
-  Draft extends Partial<Saved>,
+  Base extends object,
   Saved extends { id: number }
 >(
   table: string,
-  userId: string,
+  userId: UUID,
   setState: React.Dispatch<React.SetStateAction<Saved[]>>
-) {
-  return async (item: Draft | Saved) => {
-    const isEditing = "id" in item && typeof item.id === "number";
+): (formData: Partial<Saved> & { id?: number }) => Promise<void> {
+  return async (formData) => {
+    const isEditing = typeof formData.id === "number";
 
     const saved: Saved = isEditing
-      ? await updateItem<Saved>(table, item, userId)
-      : await insertItem<Saved>(table, item, userId);
+      ? await updateItem<Saved>(table, formData, userId)
+      : await insertItem<Base, Saved>(table, formData as Base, userId);
 
     setState((prev) => patchOrAddItem(prev, saved));
   };
@@ -25,7 +26,7 @@ export function createUpsertHandler<
 export function createDeleteItemHandler<T extends { id: number }>(
   table: string,
   setState: React.Dispatch<React.SetStateAction<T[]>>
-) {
+): (id: number) => Promise<void> {
   return async (id: number) => {
     await deleteItem(table, id);
     setState((prev) => prev.filter((item) => item.id !== id));

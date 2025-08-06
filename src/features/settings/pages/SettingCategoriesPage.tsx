@@ -30,7 +30,7 @@ const ManageCategories = () => {
   );
 
   return (
-    <GenericForm<CategorySaved>
+    <GenericForm<FormType.Categories>
       formType={FormType.Categories}
       fetchData={categories}
       headers={<TableHeader />}

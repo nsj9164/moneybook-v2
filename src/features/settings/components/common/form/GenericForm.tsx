@@ -19,6 +19,7 @@ import { GenericFormModal } from "../modal/GenericFormModal";
 import { GenericFormModalFields } from "../modal/GenericFormModalFields";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
 import toast from "react-hot-toast";
+import { createPaginateAfterAdd } from "@/features/settings/utils/createPaginateAfterAdd";
 
 type GenericFormHandler<T> = {
   openModal: (row?: T) => void;
@@ -34,7 +35,7 @@ interface GenericFormProps<K extends FormType> {
     handler: GenericFormHandler<SavedMap[K]>
   ) => React.ReactNode;
   onDelete: GenericFormHandler<SavedMap[K]>["onDelete"];
-  onSave: (row: Partial<BaseMap[K]>) => void;
+  onSave: (row: Partial<BaseMap[K]>) => void | Promise<void>;
 }
 
 function GenericForm<K extends FormType>({
@@ -82,10 +83,10 @@ function GenericForm<K extends FormType>({
     currentPage * 10
   );
 
-  const paginateAfterAdd = () => {
-    const nextTotal = filteredData.length + 1;
-    goToLastPageIfNeeded(nextTotal);
-  };
+  const paginateAfterAdd = createPaginateAfterAdd(
+    () => filteredData.length + 1,
+    goToLastPageIfNeeded
+  );
 
   const showConfirmDelete = (id: number) => {
     setDeleteId(id);

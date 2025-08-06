@@ -1,13 +1,13 @@
 import { createTempEntityId } from "@/types/ids";
 import { categoryEmojiOptions } from "../manageCategories/constants/categoryEmojiOptions";
 import { payMethodEmojiOptions } from "../managePayMethods/constants/PayMethodConstants";
-import { FieldConfig, FormMap, FormType } from "../types/GenericFormTypes";
+import { BaseMap, FieldConfig, FormType } from "../types/GenericFormTypes";
 import { categoryColorOptions } from "../manageCategories/constants/categoryColorOptions";
 
 export const formMeta: {
   [K in FormType]: {
     title: string;
-    initial: () => FormMap[K];
+    initial: () => BaseMap[K];
   };
 } = {
   [FormType.Categories]: {

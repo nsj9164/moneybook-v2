@@ -25,6 +25,7 @@ import { updateItem } from "@/api/supabase/updateItem";
 import { insertItem } from "@/api/supabase/insertItem";
 import { createDeleteItemHandler } from "@/utils/crudHandlers";
 import { enrichRecurring } from "../manageRecurringExpenses/libs/enrichRecurring";
+import { createPaginateAfterAdd } from "../utils/createPaginateAfterAdd";
 
 const ManageRecurringExpenses = () => {
   const { userId } = useAuth();
@@ -35,7 +36,7 @@ const ManageRecurringExpenses = () => {
   const cycleOptions = useCycleOptions();
 
   const { methods, isOpen, isEditing, openModal, closeModal } =
-    useModalForm<Rec>(initialRecurrings);
+    useModalForm<RecurringBase>(initialRecurrings);
 
   const [filters, setFilters] = useState({
     search: "",
@@ -67,12 +68,23 @@ const ManageRecurringExpenses = () => {
   });
 
   const itemsPerPage = 6;
-  const { currentPage, totalPages, handlePageChange, startIndex, endIndex } =
-    usePagination(filteredExpenses.length, itemsPerPage);
+  const {
+    currentPage,
+    totalPages,
+    handlePageChange,
+    goToLastPageIfNeeded,
+    startIndex,
+    endIndex,
+  } = usePagination(filteredExpenses.length, itemsPerPage);
 
   const paginatedExpenses = filteredExpenses.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
+  );
+
+  const paginateAfterAdd = createPaginateAfterAdd(
+    () => filteredExpenses.length + 1,
+    goToLastPageIfNeeded
   );
 
   const handleSaveRecurring = async (recurring: Partial<RecurringSaved>) => {
@@ -153,6 +165,7 @@ const ManageRecurringExpenses = () => {
           isEditing={isEditing}
           onClose={closeModal}
           onSave={handleSaveRecurring}
+          paginateAfterAdd={paginateAfterAdd}
         >
           <RecurringModalFields
             categories={categories}

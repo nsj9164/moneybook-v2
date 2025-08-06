@@ -1,9 +1,9 @@
-import { RecurringDisplay } from "@/types";
+import { RecurringDisplay, RecurringSaved } from "@/types";
 import { RecurringCardItem } from "./RecurringCardItem";
 
 interface RecurringCardListProps {
   data: RecurringDisplay[];
-  openModal: (expense: RecurringDisplay) => void;
+  openModal: (expense: RecurringSaved) => void;
   onDelete: (id: number) => void;
 }
 

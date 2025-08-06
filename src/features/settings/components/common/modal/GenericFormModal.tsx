@@ -8,14 +8,16 @@ import {
 import { Fragment, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { SubmitHandler, useFormContext } from "react-hook-form";
-import { FormMap, FormType } from "../../../types/GenericFormTypes";
+import { BaseMap, FormType, SavedMap } from "../../../types/GenericFormTypes";
 import { diffFields, filterEmptyFields } from "@/utils/form";
 
 interface GenericFormModalProps<K extends FormType> {
   formTitle: string;
   isOpen: boolean;
   isEditing: boolean;
-  onSave: (data: Partial<FormMap[K]>) => void | Promise<void>;
+  onSave: (
+    data: Partial<BaseMap[K]> | Partial<SavedMap[K]>
+  ) => void | Promise<void>;
   onClose: () => void;
   paginateAfterAdd: () => void;
   children: React.ReactNode;
@@ -30,13 +32,13 @@ export function GenericFormModal<K extends FormType>({
   paginateAfterAdd,
   children,
 }: GenericFormModalProps<K>) {
-  const methods = useFormContext<FormMap[K]>();
-  const [currentData, setCurrentData] = useState<Partial<FormMap[K]>>({});
+  const methods = useFormContext<SavedMap[K]>();
+  const [currentData, setCurrentData] = useState<Partial<SavedMap[K]>>({});
   useEffect(() => {
     if (isEditing && isOpen) setCurrentData(methods.getValues());
   }, [isEditing, isOpen]);
 
-  const handleSubmitData: SubmitHandler<FormMap[K]> = async (data) => {
+  const handleSubmitData: SubmitHandler<SavedMap[K]> = async (data) => {
     if (isEditing) {
       const diffed = diffFields(currentData, data);
       if (Object.keys(diffed).length === 0) {

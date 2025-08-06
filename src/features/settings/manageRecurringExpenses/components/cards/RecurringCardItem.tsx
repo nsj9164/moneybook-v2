@@ -1,11 +1,11 @@
-import { RecurringDisplay } from "@/types";
+import { RecurringDisplay, RecurringSaved } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import { format } from "date-fns";
 import { Calendar, CreditCard, Pencil, Trash2 } from "lucide-react";
 
 interface RecurringCardItemProps {
   expense: RecurringDisplay;
-  openModal: (expense: RecurringDisplay) => void;
+  openModal: (expense: RecurringSaved) => void;
   onDelete: (id: number) => void;
 }
 
