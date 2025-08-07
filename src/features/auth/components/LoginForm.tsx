@@ -1,22 +1,32 @@
-import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/Card";
 import { SocialButton } from "./SocialButton";
-import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
+import { supabase } from "@/utils/supabase";
 
 export function LoginForm() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { loginWithGoogle, loginWithKakao } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleGoogleLogin = async () => {
-    setIsLoading(true);
-    await loginWithGoogle();
-    setIsLoading(false);
+  const loginWithGoogle = async () => {
+    console.log("구글 로그인함");
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        queryParams: { prompt: "select_account" },
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) console.error("Google login error:", error.message);
   };
 
-  const handleKakaoLogin = async () => {
-    setIsLoading(true);
-    await loginWithKakao();
-    setIsLoading(false);
+  const loginWithKakao = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "kakao",
+      options: {
+        queryParams: { prompt: "select_account" },
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) console.error("Kakao login error:", error.message);
   };
 
   return (
@@ -24,12 +34,12 @@ export function LoginForm() {
       <CardContent className="p-6 space-y-4">
         <SocialButton
           provider="google"
-          onClick={handleGoogleLogin}
+          onClick={() => loginWithGoogle()}
           disabled={isLoading}
         />
         <SocialButton
           provider="kakao"
-          onClick={handleKakaoLogin}
+          onClick={() => loginWithKakao()}
           disabled={isLoading}
         />
       </CardContent>

@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -9,6 +10,7 @@ import { supabase } from "@/utils/supabase";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import { UUID } from "@/types/ids";
 import { getOrCreateUser } from "@/features/auth/api/user";
+import toast from "react-hot-toast";
 
 interface User {
   id: UUID;
@@ -23,8 +25,8 @@ interface AuthContextType {
   userId: UUID | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  loginWithGoogle: () => void;
-  loginWithKakao: () => void;
+  // loginWithGoogle: () => void;
+  // loginWithKakao: () => void;
   logout: () => void;
 }
 
@@ -32,89 +34,108 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const loginWithProvider = async (provider: "google" | "kakao") => {
-    await supabase.auth.signOut({ scope: "global" });
+  const userId = user?.id ?? null;
+  const isAuthenticated = !!user;
 
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?provider=${provider}`,
-      },
-    });
+  // const loginWithProvider = async (provider: "google" | "kakao") => {
+  //   console.log("######", provider);
+  //   try {
+  //     await supabase.auth.signOut({ scope: "global" }); // 🔥 기존 세션 제거
+  //     console.log("signOut 성공!");
+  //     await supabase.auth.signInWithOAuth({
+  //       provider,
+  //       options: {
+  //         queryParams: { access_type: "offline", prompt: "consent" },
+  //         redirectTo: `${window.location.origin}/auth/callback?provider=${provider}`,
+  //       },
+  //     });
+  //     console.log("signInWithOAuth 성공!");
+  //   } catch (err) {
+  //     console.error("OAuth 로그인 실패:", err);
+  //     throw err; // 🔥 LoginForm에서 catch로 처리하도록 re-throw
+  //   }
+  // };
 
-    if (error) {
-      console.error("❌ OAuth error", error.message);
-    } else {
-      console.log("✅ OAuth redirect initiated", data);
-    }
-  };
-
-  const loginWithGoogle = () => loginWithProvider("google");
-  const loginWithKakao = () => loginWithProvider("kakao");
+  // const loginWithGoogle = () => loginWithProvider("google");
+  // const loginWithKakao = () => loginWithProvider("kakao");
 
   const logout = async () => {
-    await supabase.auth.signOut({ scope: "global" });
+    await supabase.auth.signOut();
     setUser(null);
-    setIsAuthenticated(false);
     window.location.reload();
   };
 
-  const syncUserSession = async (supabaseUser: SupabaseUser | null) => {
+  const loadUser = async (supabaseUser: SupabaseUser | null) => {
+    console.log("loadUser 실행됨 - SupabaseUser:", supabaseUser);
     if (!supabaseUser) {
       setUser(null);
-      setIsAuthenticated(false);
-      setIsLoading(false);
       return;
     }
 
-    const result = await getOrCreateUser(supabaseUser);
-
-    if (!result) {
+    try {
+      const result = await getOrCreateUser(supabaseUser);
+      console.log("getOrCreateUser 반환값:", result);
+      if (!result) {
+        toast.error("사용자 정보를 불러오지 못했습니다.");
+        setUser(null);
+      } else {
+        console.log("###result:::", result);
+        setUser(result);
+      }
+    } catch (err) {
+      console.error("loadUser 오류:", err);
+      toast.error("사용자 정보 로드 실패");
       setUser(null);
-      setIsAuthenticated(true);
-      setIsLoading(false);
-      return;
     }
-
-    setUser(result);
-    setIsAuthenticated(true);
-    setIsLoading(false);
   };
 
   useEffect(() => {
+    const init = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        await loadUser(session?.user ?? null);
+      } catch (err) {
+        console.error("초기 세션 로드 실패:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    init();
+
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
-        await syncUserSession(session?.user ?? null);
+        setIsLoading(true);
+        await loadUser(session?.user ?? null);
+        setIsLoading(false);
       }
     );
 
     return () => listener.subscription.unsubscribe();
   }, []);
 
+  const contextValue = useMemo(
+    () => ({
+      user,
+      userId,
+      isAuthenticated,
+      isLoading,
+      logout,
+    }),
+    [user, userId, isAuthenticated, isLoading]
+  );
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        userId: user ? user.id : null,
-        isAuthenticated,
-        isLoading,
-        loginWithGoogle,
-        loginWithKakao,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
   return context;
 }
