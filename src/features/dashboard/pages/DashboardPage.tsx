@@ -16,7 +16,6 @@ import { Loading } from "@/components/common/loading/Loading";
 import { ErrorBox } from "@/components/common/error/ErrorBox";
 
 const Dashboard = () => {
-  console.log("????????, DashboardPage입니다!");
   const navigate = useNavigate();
   const dateFilter = useDateFilter();
   const {

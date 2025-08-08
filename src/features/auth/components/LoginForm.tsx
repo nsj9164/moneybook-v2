@@ -7,7 +7,6 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   const loginWithGoogle = async () => {
-    console.log("구글 로그인함");
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {

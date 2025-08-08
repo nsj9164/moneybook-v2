@@ -9,7 +9,6 @@ interface RequireAuthProps {
 
 function RequireAuth({ children }: RequireAuthProps) {
   const { user, isLoading } = useAuth();
-  console.log("@@@@@@", user, isLoading);
   if (isLoading) return <Loading />;
   if (!user) return <Navigate to="/login" replace />;
 

@@ -15,24 +15,14 @@ export async function getOrCreateUser(supabaseUser: SupabaseUser) {
     .select("*")
     .eq("email", email)
     .eq("provider", provider)
-    .maybeSingle();
+    .single();
 
   if (checkError) {
     console.error("Error checking user:", checkError.message);
     return null;
   }
 
-  console.log(
-    "!!!!!existingUser??",
-    existing,
-    email,
-    name,
-    profileImage,
-    provider
-  );
-
   if (existing) {
-    console.log("🟢 existingUser:", existing);
     return existing;
   }
 
@@ -46,8 +36,6 @@ export async function getOrCreateUser(supabaseUser: SupabaseUser) {
     })
     .select("*")
     .single();
-
-  console.log("!!!!!inserted??", inserted);
 
   if (insertError) {
     console.error("Error inserting user:", insertError);

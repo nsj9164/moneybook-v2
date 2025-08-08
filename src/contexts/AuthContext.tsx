@@ -9,8 +9,8 @@ import {
 import { supabase } from "@/utils/supabase";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import { UUID } from "@/types/ids";
-import { getOrCreateUser } from "@/features/auth/api/user";
 import toast from "react-hot-toast";
+import { getOrCreateUser } from "@/features/auth/api/user";
 
 interface User {
   id: UUID;
@@ -25,8 +25,6 @@ interface AuthContextType {
   userId: UUID | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  // loginWithGoogle: () => void;
-  // loginWithKakao: () => void;
   logout: () => void;
 }
 
@@ -39,55 +37,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const userId = user?.id ?? null;
   const isAuthenticated = !!user;
 
-  // const loginWithProvider = async (provider: "google" | "kakao") => {
-  //   console.log("######", provider);
-  //   try {
-  //     await supabase.auth.signOut({ scope: "global" }); // 🔥 기존 세션 제거
-  //     console.log("signOut 성공!");
-  //     await supabase.auth.signInWithOAuth({
-  //       provider,
-  //       options: {
-  //         queryParams: { access_type: "offline", prompt: "consent" },
-  //         redirectTo: `${window.location.origin}/auth/callback?provider=${provider}`,
-  //       },
-  //     });
-  //     console.log("signInWithOAuth 성공!");
-  //   } catch (err) {
-  //     console.error("OAuth 로그인 실패:", err);
-  //     throw err; // 🔥 LoginForm에서 catch로 처리하도록 re-throw
-  //   }
-  // };
-
-  // const loginWithGoogle = () => loginWithProvider("google");
-  // const loginWithKakao = () => loginWithProvider("kakao");
-
   const logout = async () => {
     await supabase.auth.signOut();
     setUser(null);
-    window.location.reload();
   };
 
-  const loadUser = async (supabaseUser: SupabaseUser | null) => {
-    console.log("loadUser 실행됨 - SupabaseUser:", supabaseUser);
+  const loadUser = async (
+    supabaseUser: SupabaseUser | null,
+    isNewLogin: boolean
+  ) => {
     if (!supabaseUser) {
       setUser(null);
       return;
     }
 
-    try {
+    // 새로 로그인한 경우에만 getOrCreateUser 호출
+    if (isNewLogin) {
       const result = await getOrCreateUser(supabaseUser);
-      console.log("getOrCreateUser 반환값:", result);
+
       if (!result) {
         toast.error("사용자 정보를 불러오지 못했습니다.");
         setUser(null);
       } else {
-        console.log("###result:::", result);
         setUser(result);
       }
-    } catch (err) {
-      console.error("loadUser 오류:", err);
-      toast.error("사용자 정보 로드 실패");
-      setUser(null);
+    } else {
+      setUser({
+        id: supabaseUser.id,
+        email: supabaseUser.email ?? "",
+        provider: supabaseUser.app_metadata?.provider ?? "unknown",
+        name:
+          supabaseUser.user_metadata?.full_name ||
+          supabaseUser.user_metadata?.name,
+        profileImage: supabaseUser.user_metadata?.avatar_url || "",
+      });
     }
   };
 
@@ -97,7 +80,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const {
           data: { session },
         } = await supabase.auth.getSession();
-        await loadUser(session?.user ?? null);
+        if (session?.user) {
+          loadUser(session.user, false);
+        }
       } catch (err) {
         console.error("초기 세션 로드 실패:", err);
       } finally {
@@ -107,10 +92,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     init();
 
+    // auth 상태 변화 시 유저 정보 업데이트
     const { data: listener } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      async (event, session) => {
         setIsLoading(true);
-        await loadUser(session?.user ?? null);
+
+        if (session?.user) {
+          if (event === "SIGNED_IN") {
+            loadUser(session.user, false);
+          } else if (event === "INITIAL_SESSION") {
+            if (!user) {
+              await loadUser(session.user, true);
+            }
+          }
+        }
+
         setIsLoading(false);
       }
     );
