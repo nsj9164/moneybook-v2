@@ -4,11 +4,13 @@ import { SocialAccountCard } from "./SocialAccountCard";
 interface ProfileSocialSectionProps {
   provider: "kakao" | "google";
   email: string;
+  toggleModal: (type: boolean) => void;
 }
 
 export const ProfileSocialSection = ({
   provider,
   email,
+  toggleModal,
 }: ProfileSocialSectionProps) => {
   return (
     <div className="mt-6 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
@@ -16,7 +18,11 @@ export const ProfileSocialSection = ({
         연결된 소셜 계정
       </h3>
       <div className="space-y-4">
-        <SocialAccountCard provider={provider} email={email} />
+        <SocialAccountCard
+          provider={provider}
+          email={email}
+          toggleModal={toggleModal}
+        />
       </div>
 
       {/* 소셜 로그인 안내 */}

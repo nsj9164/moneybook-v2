@@ -4,7 +4,7 @@ import { supabase } from "@/utils/supabase";
 import { UUID } from "@/types/ids";
 import { formatKeyCase } from "@/utils/caseConverter";
 
-export const useUserProfile = (userId: UUID | null, provider?: string) => {
+export const useUserProfile = (userId: UUID | null) => {
   const [profile, setProfile] = useState<IUserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -16,8 +16,7 @@ export const useUserProfile = (userId: UUID | null, provider?: string) => {
         .from("users")
         .select("*")
         .eq("id", userId)
-        .eq("provider", provider)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error("user profile loading failed:", error.message);

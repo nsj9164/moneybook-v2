@@ -1,11 +1,13 @@
 interface SocialAccountCardProps {
   provider: "kakao" | "google";
   email: string;
+  toggleModal: (type: boolean) => void;
 }
 
 export const SocialAccountCard = ({
   provider,
   email,
+  toggleModal,
 }: SocialAccountCardProps) => {
   const isKakao = provider === "kakao";
 
@@ -49,6 +51,7 @@ export const SocialAccountCard = ({
             ? "border-yellow-300 text-yellow-700 hover:bg-yellow-50"
             : "border-blue-300 text-blue-700 hover:bg-blue-50"
         } bg-white px-4 py-2 text-xs font-medium shadow-sm`}
+        onClick={() => toggleModal(true)}
       >
         연결 해제
       </button>

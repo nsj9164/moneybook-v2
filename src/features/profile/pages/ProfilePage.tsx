@@ -6,15 +6,40 @@ import { ProfileInfoSection } from "../components/profileInfoSection/ProfileInfo
 import { ProfileStats } from "../components/profileStats/ProfileStats";
 import { ProfileSocialSection } from "../components/ProfileSocialSection";
 import { useFetchUserSummary } from "../hooks/useFetchUserSummary";
+import { deleteAccount } from "../api/deleteAccount";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
 
 const Profile = () => {
-  const { userId, user, logout } = useAuth();
-  const { profile } = useUserProfile(
-    userId,
-    user && user.provider ? user.provider : undefined
-  );
+  const [open, setOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleModal = (type: boolean) => setOpen(type);
+
+  const { userId, logout } = useAuth();
+  const { profile } = useUserProfile(userId);
 
   const totalSummary = useFetchUserSummary({ userId: userId! });
+
+  const handleConfirmDelete = async () => {
+    try {
+      setIsDeleting(true);
+      await deleteAccount();
+      toast.success("탈퇴가 완료되었습니다.");
+      setOpen(false);
+      navigate("/login", { replace: true });
+      await deleteAccount();
+    } catch (e: any) {
+      toast.error(
+        e?.message ?? "탈퇴에 실패했어요. 잠시 후 다시 시도해 주세요."
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   if (!profile) return null;
 
@@ -47,10 +72,22 @@ const Profile = () => {
             <ProfileSocialSection
               provider={profile.provider}
               email={profile.email}
+              toggleModal={toggleModal}
             />
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={open}
+        onClose={toggleModal}
+        onConfirm={handleConfirmDelete}
+        title="정말 탈퇴하시겠어요?"
+        description="모든 데이터가 삭제되고 복구할 수 없어요."
+        confirmText="탈퇴하기"
+        cancelText="취소"
+        disabled={isDeleting}
+      />
     </div>
   );
 };
