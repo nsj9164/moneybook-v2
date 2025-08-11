@@ -15,7 +15,7 @@ export async function getOrCreateUser(supabaseUser: SupabaseUser) {
     .select("*")
     .eq("email", email)
     .eq("provider", provider)
-    .single();
+    .maybeSingle();
 
   if (checkError) {
     console.error("Error checking user:", checkError.message);

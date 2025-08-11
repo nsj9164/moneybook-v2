@@ -1,20 +1,19 @@
-import { supabase } from "@/utils/supabase";
+// deleteAccount.ts — (선택) invoke 대신 fetch로 더 안정적으로
+export const deleteAccount = async (accessToken: string): Promise<void> => {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const deleteAccount = async (): Promise<void> => {
-  const {
-    data: { session },
-    error,
-  } = await supabase.auth.getSession();
-  if (error || !session) throw new Error("세션이 없습니다.");
-
-  const { error: fnError } = await supabase.functions.invoke("delete-account", {
+  const res = await fetch(`${supabaseUrl}/functions/v1/delete-account`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${session.access_token}`,
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+      apikey: anonKey, // 권장
     },
   });
 
-  if (fnError) throw new Error(fnError.message);
-
-  await supabase.auth.signOut();
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(text || `delete-account failed: ${res.status}`);
+  }
 };
