@@ -1,45 +1,29 @@
+import { useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { formatKeyCase } from "@/utils/caseConverter";
-import { supabase } from "@/utils/supabase";
-import { useCallback, useEffect, useState } from "react";
-
-interface BudgetCategoriesOptions {
-  selectedDate: { year: number; month: number };
-}
+import { useFetchRpcQuery } from "@/hooks/fetchData/useFetchRpcQuery";
+import { BudgetCategoriesOptions, UnBudgetDisplay } from "@/types";
 
 export const useUnBudgetedCategories = ({
   selectedDate,
 }: BudgetCategoriesOptions) => {
   const { userId } = useAuth();
-  const [unBudgets, setUnBudgets] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  const fetchUnbudgeted = useCallback(async () => {
-    if (!userId) return;
+  const targetDate = useMemo(
+    () => `${selectedDate.year}-${String(selectedDate.month).padStart(2, "0")}`,
+    [selectedDate.year, selectedDate.month]
+  );
 
-    setLoading(true);
-    const { data, error } = await supabase.rpc(
-      "get_unbudgeted_categories_by_date",
-      {
-        input_user_id: userId,
-        input_year: selectedDate.year,
-        input_month: selectedDate.month,
-      }
-    );
+  const query = useFetchRpcQuery<UnBudgetDisplay[]>(
+    "get_unbudgeted_categories_by_date",
+    targetDate,
+    userId!
+  );
 
-    if (error) {
-      console.error("fetch error:", error.message);
-      setUnBudgets([]);
-    } else {
-      setUnBudgets(formatKeyCase(data, "camel"));
-    }
-
-    setLoading(false);
-  }, [selectedDate, userId]);
-
-  useEffect(() => {
-    fetchUnbudgeted();
-  }, [fetchUnbudgeted]);
-
-  return { unBudgets, loading, refetch: fetchUnbudgeted };
+  return {
+    unBudgets: query.data ?? [],
+    loading: query.isLoading,
+    fetching: query.isFetching,
+    refetch: query.refetch,
+    error: query.error,
+  };
 };

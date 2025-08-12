@@ -1,6 +1,5 @@
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { BudgetEntity } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
@@ -16,6 +15,7 @@ import { EmptyBudgetNotice } from "../components/view/EmptyBudgetNotice";
 import AddBudgetModal from "../components/modals/AddBudgetModal";
 import { useModalFormArray } from "@/hooks/useModalFormArray";
 import { PageHeader } from "@/components/common/layout/PageHeader";
+import { BudgetBase } from "@/types";
 
 const Budget = () => {
   const { userId } = useAuth();
@@ -35,7 +35,7 @@ const Budget = () => {
   });
 
   const { methods, isOpen, isEditing, openModal, closeModal } =
-    useModalFormArray<BudgetEntity>(initialBudget());
+    useModalFormArray<BudgetBase>(initialBudget());
 
   const { handleSaveBudget, handleDelBudget } = useBudgetHandlers({
     userId: userId!,

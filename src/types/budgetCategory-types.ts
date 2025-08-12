@@ -1,14 +1,32 @@
-import { EntityId } from "./ids";
-
-export interface BudgetEntity {
-  id: EntityId;
-  budgetId?: number;
+export interface BudgetBase {
   categoryId: number | undefined;
   year: number;
   month: number;
   amount: number;
-  copiedFromId?: number;
 }
+
+export interface BudgetSaved extends BudgetBase {
+  id: number;
+}
+
+export type BudgetRow = {
+  budgetId: number;
+  categoryId: number;
+  year: number;
+  month: number;
+  amount: number;
+  spent?: number | null;
+  name: string;
+  emoji: string;
+  color: string;
+};
+
+export type UnBudgetRow = {
+  categoryId: number;
+  name: string;
+  emoji: string;
+  color: string;
+};
 
 export interface UnBudgetDisplay {
   categoryId: number;
@@ -18,9 +36,13 @@ export interface UnBudgetDisplay {
 }
 
 export interface BudgetDisplay extends UnBudgetDisplay {
-  id: EntityId;
+  id: number;
   year: number;
   month: number;
   amount: number;
   spent: number;
+}
+
+export interface BudgetCategoriesOptions {
+  selectedDate: { year: number; month: number };
 }

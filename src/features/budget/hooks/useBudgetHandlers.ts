@@ -2,10 +2,14 @@ import { deleteItem } from "@/api/supabase/deleteItem";
 import { insertItem } from "@/api/supabase/insertItem";
 import { updateItem } from "@/api/supabase/updateItem";
 import { budgetState } from "@/recoil/atoms";
-import { BudgetEntity } from "@/types";
+import { BudgetBase, BudgetSaved } from "@/types";
 import { UUID } from "@/types/ids";
 import { patchItem } from "@/utils/patchItem";
 import { useSetRecoilState } from "recoil";
+import {
+  createDeleteItemHandler,
+  createUpsertHandler,
+} from "../../../utils/crudHandlers";
 
 interface useBudgetProps {
   userId: UUID;
@@ -20,36 +24,16 @@ export const useBudgetHandlers = ({
 }: useBudgetProps) => {
   const setBudget = useSetRecoilState(budgetState);
 
-  const handleSaveBudget = async (budgetItems: BudgetEntity[]) => {
-    for (const item of budgetItems) {
-      const isNew = typeof item.id === "string";
+  const handleSaveBudget = createUpsertHandler<BudgetBase, BudgetSaved>(
+    "budget",
+    userId!,
+    setBudget
+  );
 
-      const commonFields = {
-        ...item,
-        year: selectedDate.year,
-        month: selectedDate.month,
-      };
+  const handleDeleteBudget = createDeleteItemHandler<BudgetSaved>(
+    "budget",
+    setBudget
+  );
 
-      if (isNew) {
-        const saved = await insertItem("budgets", commonFields, userId!);
-        setBudget((prev) => patchItem(prev, saved));
-      } else {
-        const updateFields = { ...commonFields, id: item.budgetId };
-        delete updateFields.budgetId;
-
-        const saved = await updateItem("budgets", updateFields, userId!);
-        setBudget((prev) => patchItem(prev, saved));
-      }
-    }
-
-    await refetchAll();
-  };
-
-  const handleDelBudget = async (id: number) => {
-    await deleteItem("budgets", id);
-    setBudget((prev) => prev.filter((item) => item.id !== id));
-    await refetchAll();
-  };
-
-  return { handleSaveBudget, handleDelBudget };
+  return { handleSaveBudget, handleDeleteBudget };
 };

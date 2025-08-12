@@ -1,30 +1,40 @@
-import { BudgetDisplay, UnBudgetDisplay } from "@/types";
+import {
+  BudgetCategoriesOptions,
+  BudgetDisplay,
+  UnBudgetDisplay,
+} from "@/types";
 import { useBudgetCategories } from "./useBudgetCategories";
 import { useUnBudgetedCategories } from "./useUnBudgetCategories";
 
-interface BudgetDataResult {
+type Result = {
   budgets: BudgetDisplay[];
   unBudgets: UnBudgetDisplay[];
+  loading: boolean;
+  fetching: boolean;
+  error: Error | null;
   refetchAll: () => Promise<void>;
-}
-
-interface BudgetCategoriesOptions {
-  selectedDate: { year: number; month: number };
-}
+  refetchBudgets: () => Promise<any>;
+  refetchUnBudgets: () => Promise<any>;
+};
 
 export const useBudgetData = ({
   selectedDate,
-}: BudgetCategoriesOptions): BudgetDataResult => {
-  const budget = useBudgetCategories({ selectedDate });
-  const unbudget = useUnBudgetedCategories({ selectedDate });
+}: BudgetCategoriesOptions): Result => {
+  const b = useBudgetCategories({ selectedDate });
+  const u = useUnBudgetedCategories({ selectedDate });
 
   const refetchAll = async () => {
-    await Promise.all([budget.refetch(), unbudget.refetch()]);
+    await Promise.all([b.refetch(), u.refetch()]);
   };
 
   return {
-    ...budget,
-    ...unbudget,
+    budgets: b.budgets,
+    unBudgets: u.unBudgets,
+    loading: b.loading || u.loading,
+    fetching: b.fetching || u.fetching,
+    error: (b.error as Error | null) ?? (u.error as Error | null) ?? null,
     refetchAll,
+    refetchBudgets: b.refetch,
+    refetchUnBudgets: u.refetch,
   };
 };
