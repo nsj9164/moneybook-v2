@@ -1,10 +1,6 @@
-import { deleteItem } from "@/api/supabase/deleteItem";
-import { insertItem } from "@/api/supabase/insertItem";
-import { updateItem } from "@/api/supabase/updateItem";
 import { budgetState } from "@/recoil/atoms";
-import { BudgetBase, BudgetSaved } from "@/types";
+import { BudgetDraft, BudgetSaved } from "@/types";
 import { UUID } from "@/types/ids";
-import { patchItem } from "@/utils/patchItem";
 import { useSetRecoilState } from "recoil";
 import {
   createDeleteItemHandler,
@@ -24,7 +20,7 @@ export const useBudgetHandlers = ({
 }: useBudgetProps) => {
   const setBudget = useSetRecoilState(budgetState);
 
-  const handleSaveBudget = createUpsertHandler<BudgetBase, BudgetSaved>(
+  const handleSaveBudget = createUpsertHandler<BudgetDraft, BudgetSaved>(
     "budget",
     userId!,
     setBudget

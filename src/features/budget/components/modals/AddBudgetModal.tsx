@@ -1,18 +1,18 @@
 import { X, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BudgetItem } from "./BudgetItem";
 import { SubmitHandler, useFieldArray, useFormContext } from "react-hook-form";
 import { initialBudget } from "../../constants/BudgetConstants";
-import { BudgetEntity, UnBudgetDisplay } from "@/types";
+import { BudgetDisplay, BudgetEntity, BudgetRecord } from "@/types";
 import { diffFields } from "@/utils/form";
 import { useRef, useLayoutEffect } from "react";
+import { BudgetItem } from "./BudgetItem";
 
 interface AddBudgetModalProps {
   isOpen: boolean;
   isEditing: boolean;
   onClose: () => void;
   onSave: (budgetItems: BudgetEntity[]) => void;
-  unBudgets: UnBudgetDisplay[];
+  unBudgets: BudgetDisplay[];
 }
 
 const AddBudgetModal = ({
@@ -23,15 +23,15 @@ const AddBudgetModal = ({
   unBudgets,
 }: AddBudgetModalProps) => {
   const { handleSubmit, control, getValues } = useFormContext<{
-    items: BudgetEntity[];
+    items: BudgetRecord[];
   }>();
 
-  const { fields, append } = useFieldArray<{ items: BudgetEntity[] }>({
+  const { fields, append } = useFieldArray<{ items: BudgetRecord[] }>({
     name: "items",
     control,
   });
 
-  const prevDataRef = useRef<{ items: BudgetEntity[] }>({ items: [] });
+  const prevDataRef = useRef<{ items: BudgetRecord[] }>({ items: [] });
 
   useLayoutEffect(() => {
     if (isOpen && isEditing) {
@@ -43,7 +43,7 @@ const AddBudgetModal = ({
   }, [isOpen, isEditing]);
 
   const onSubmit: SubmitHandler<{
-    items: BudgetEntity[];
+    items: BudgetRecord[];
   }> = async ({ items }) => {
     const prevItems = prevDataRef.current.items;
     const toSave: BudgetEntity[] = [];
@@ -53,13 +53,14 @@ const AddBudgetModal = ({
       const prev = prevItems[i];
 
       const baseFields = {
+        id: item.id,
         categoryId: item.categoryId,
         year: item.year,
         month: item.month,
         amount: item.amount,
       };
 
-      if (isEditing && typeof item.budgetId === "number") {
+      if (isEditing && typeof item.id === "number") {
         const diffed = diffFields(prev, item);
 
         if (Object.keys(diffed).length === 0) {
@@ -70,11 +71,9 @@ const AddBudgetModal = ({
         toSave.push({
           ...baseFields,
           ...diffed,
-          id: item.id,
-          budgetId: item.budgetId,
         });
       } else {
-        toSave.push({ ...baseFields, id: item.id });
+        toSave.push({ ...baseFields });
       }
     }
 

@@ -1,9 +1,9 @@
-import { BudgetDisplay, BudgetEntity } from "@/types";
+import { BudgetDisplay, BudgetSaved } from "@/types";
 import { BudgetCategoryItem } from "./BudgetCategoryItem";
 
 interface BudgetCategoryListProps {
   budgets: BudgetDisplay[];
-  openModal: (budget?: BudgetEntity) => void;
+  openModal: (budget?: BudgetSaved) => void;
   onDelete: (id: number) => void;
 }
 

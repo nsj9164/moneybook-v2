@@ -37,7 +37,7 @@ const Budget = () => {
   const { methods, isOpen, isEditing, openModal, closeModal } =
     useModalFormArray<BudgetBase>(initialBudget());
 
-  const { handleSaveBudget, handleDelBudget } = useBudgetHandlers({
+  const { handleSaveBudget, handleDeleteBudget } = useBudgetHandlers({
     userId: userId!,
     selectedDate,
     refetchAll,
@@ -82,7 +82,7 @@ const Budget = () => {
               <BudgetOverview
                 budgets={budgets}
                 openModal={openModal}
-                onDelete={handleDelBudget}
+                onDelete={handleDeleteBudget}
                 selectedDate={selectedDate}
               />
             </motion.div>
