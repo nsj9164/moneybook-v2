@@ -1,4 +1,4 @@
-import { isEqual } from "lodash";
+import equal from "fast-deep-equal";
 
 export function filterEmptyFields<T extends object>(form: T): Partial<T> {
   const result: Partial<T> = {};
@@ -13,13 +13,13 @@ export function filterEmptyFields<T extends object>(form: T): Partial<T> {
 }
 
 export function diffFields<T extends object>(prev: T, next: T): Partial<T> {
-  const result: Partial<T> = {};
+  const out = {} as Partial<T>;
 
-  for (const key in next) {
-    if (!isEqual(prev[key], next[key])) {
-      result[key] = next[key];
-    }
+  for (const k of Object.keys(next) as (keyof T)[]) {
+    const nv = next[k];
+    if (nv === undefined) continue;
+    if (!equal(prev[k], nv)) out[k] = nv;
   }
 
-  return result;
+  return out;
 }

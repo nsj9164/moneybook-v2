@@ -1,11 +1,10 @@
 import { useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFetchRpcQuery } from "@/hooks/fetchData/useFetchRpcQuery";
-import { BudgetCategoriesOptions, UnBudgetDisplay } from "@/types";
+import { BudgetDisplay } from "../types/budget.display";
+import { YearMonth } from "@/types/common";
 
-export const useUnBudgetedCategories = ({
-  selectedDate,
-}: BudgetCategoriesOptions) => {
+export const useUnBudgetedCategories = ({ selectedDate }: YearMonth) => {
   const { userId } = useAuth();
 
   const targetDate = useMemo(
@@ -13,7 +12,7 @@ export const useUnBudgetedCategories = ({
     [selectedDate.year, selectedDate.month]
   );
 
-  const query = useFetchRpcQuery<UnBudgetDisplay[]>(
+  const query = useFetchRpcQuery<BudgetDisplay[]>(
     "get_unbudgeted_categories_by_date",
     targetDate,
     userId!

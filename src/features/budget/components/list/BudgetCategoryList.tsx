@@ -1,4 +1,5 @@
-import { BudgetDisplay, BudgetSaved } from "@/types";
+import { BudgetDisplay } from "../../types/budget.display";
+import { BudgetSaved } from "../../types/budget.entity";
 import { BudgetCategoryItem } from "./BudgetCategoryItem";
 
 interface BudgetCategoryListProps {

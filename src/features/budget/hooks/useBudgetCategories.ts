@@ -1,11 +1,10 @@
 import { useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { BudgetCategoriesOptions, BudgetDisplay } from "@/types";
 import { useFetchRpcQuery } from "@/hooks/fetchData/useFetchRpcQuery";
+import { BudgetDisplay } from "../types/budget.display";
+import { YearMonth } from "@/types/common";
 
-export const useBudgetCategories = ({
-  selectedDate,
-}: BudgetCategoriesOptions) => {
+export const useBudgetCategories = ({ selectedDate }: YearMonth) => {
   const { userId } = useAuth();
 
   const targetDate = useMemo(

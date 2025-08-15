@@ -1,5 +1,5 @@
-import { BudgetDraft } from "@/types";
 import { createTempEntityId } from "@/types/ids";
+import { BudgetDraft } from "../types/budget.entity";
 
 export const adviceStyleMap = {
   normal: {

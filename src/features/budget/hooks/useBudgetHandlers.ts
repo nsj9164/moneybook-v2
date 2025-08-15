@@ -1,11 +1,11 @@
 import { budgetState } from "@/recoil/atoms";
-import { BudgetDraft, BudgetSaved } from "@/types";
 import { UUID } from "@/types/ids";
 import { useSetRecoilState } from "recoil";
 import {
   createDeleteItemHandler,
   createUpsertHandler,
 } from "../../../utils/crudHandlers";
+import { BudgetDraft, BudgetSaved } from "../types/budget.entity";
 
 interface useBudgetProps {
   userId: UUID;

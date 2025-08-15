@@ -1,14 +1,11 @@
-import {
-  BudgetCategoriesOptions,
-  BudgetDisplay,
-  UnBudgetDisplay,
-} from "@/types";
+import { YearMonth } from "@/types/common";
+import { BudgetDisplay } from "../types/budget.display";
 import { useBudgetCategories } from "./useBudgetCategories";
 import { useUnBudgetedCategories } from "./useUnBudgetCategories";
 
 type Result = {
   budgets: BudgetDisplay[];
-  unBudgets: UnBudgetDisplay[];
+  unBudgets: BudgetDisplay[];
   loading: boolean;
   fetching: boolean;
   error: Error | null;
@@ -17,9 +14,7 @@ type Result = {
   refetchUnBudgets: () => Promise<any>;
 };
 
-export const useBudgetData = ({
-  selectedDate,
-}: BudgetCategoriesOptions): Result => {
+export const useBudgetData = ({ selectedDate }: YearMonth): Result => {
   const b = useBudgetCategories({ selectedDate });
   const u = useUnBudgetedCategories({ selectedDate });
 

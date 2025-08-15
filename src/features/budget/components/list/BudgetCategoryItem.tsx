@@ -1,7 +1,7 @@
 import { formatCurrency } from "@/utils/format";
 import { Edit2, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { BudgetDisplay } from "@/types";
+import { BudgetDisplay } from "../../types/budget.display";
 
 interface BudgetCategoryItemProps {
   budget: BudgetDisplay;

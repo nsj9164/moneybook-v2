@@ -1,19 +1,30 @@
 import { X, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { SubmitHandler, useFieldArray, useFormContext } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { initialBudget } from "../../constants/BudgetConstants";
-import { BudgetDisplay, BudgetEntity, BudgetRecord } from "@/types";
-import { diffFields } from "@/utils/form";
 import { useRef, useLayoutEffect } from "react";
 import { BudgetItem } from "./BudgetItem";
+import { toast } from "react-hot-toast";
+import { BudgetInsertDTO, BudgetUpdateDTO } from "../../types/budget.dto";
+import { BudgetDisplay } from "../../types/budget.display";
+import { BudgetRecord, isSaved } from "../../types/budget.guards";
+import {
+  BudgetDraft,
+  BudgetEntity,
+  BudgetSaved,
+} from "../../types/budget.entity";
 
 interface AddBudgetModalProps {
   isOpen: boolean;
   isEditing: boolean;
   onClose: () => void;
-  onSave: (budgetItems: BudgetEntity[]) => void;
+  onSave: (
+    budgetItems: (BudgetInsertDTO | BudgetUpdateDTO)[]
+  ) => void | Promise<void>;
   unBudgets: BudgetDisplay[];
 }
+
+type FormShape = { items: BudgetRecord[] };
 
 const AddBudgetModal = ({
   isOpen,
@@ -22,19 +33,17 @@ const AddBudgetModal = ({
   onSave,
   unBudgets,
 }: AddBudgetModalProps) => {
-  const { handleSubmit, control, getValues } = useFormContext<{
-    items: BudgetRecord[];
-  }>();
+  const { handleSubmit, control, getValues } = useFormContext<FormShape>();
 
-  const { fields, append } = useFieldArray<{ items: BudgetRecord[] }>({
+  const { fields, append } = useFieldArray<FormShape>({
     name: "items",
     control,
   });
 
-  const prevDataRef = useRef<{ items: BudgetRecord[] }>({ items: [] });
+  const prevDataRef = useRef<FormShape>({ items: [] });
 
   useLayoutEffect(() => {
-    if (isOpen && isEditing) {
+    if (isOpen) {
       const snapshot = getValues();
       prevDataRef.current = {
         items: snapshot.items.map((item) => ({ ...item })),
@@ -42,47 +51,45 @@ const AddBudgetModal = ({
     }
   }, [isOpen, isEditing]);
 
-  const onSubmit: SubmitHandler<{
-    items: BudgetRecord[];
-  }> = async ({ items }) => {
+  const onSubmit = async ({ items }: FormShape) => {
     const prevItems = prevDataRef.current.items;
-    const toSave: BudgetEntity[] = [];
 
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      const prev = prevItems[i];
+    const prevById = new Map<number, BudgetSaved>(
+      prevItems.filter(isSaved).map((p) => [p.id, p])
+    );
 
-      const baseFields = {
-        id: item.id,
-        categoryId: item.categoryId,
-        year: item.year,
-        month: item.month,
-        amount: item.amount,
-      };
+    const toSave: (BudgetDraft | BudgetUpdateDTO)[] = [];
 
-      if (isEditing && typeof item.id === "number") {
-        const diffed = diffFields(prev, item);
-
-        if (Object.keys(diffed).length === 0) {
-          console.log(`변경 사항 없음 (index ${i})`);
+    for (const item of items) {
+      if (isSaved(item)) {
+        const prev = prevById.get(item.id);
+        if (!prev) {
+          toSave.push(item);
           continue;
         }
 
-        toSave.push({
-          ...baseFields,
-          ...diffed,
-        });
+        const patch: Partial<Pick<BudgetEntity, "categoryId" | "amount">> = {};
+        if (item.categoryId !== prev.categoryId)
+          patch.categoryId = item.categoryId;
+        if (item.amount !== prev.amount) patch.amount = item.amount;
+
+        if (Object.keys(patch).length === 0) {
+          toast.error("저장할 변경 사항이 없습니다.");
+          continue;
+        }
+
+        toSave.push({ id: item.id, ...patch });
       } else {
-        toSave.push({ ...baseFields });
+        toSave.push(item);
       }
     }
 
-    if (toSave.length > 0) {
-      await onSave(toSave);
-    } else {
-      console.log("변경 사항 없음, 저장 생략됨!");
+    if (toSave.length === 0) {
+      onClose();
+      return;
     }
 
+    await onSave(toSave);
     onClose();
   };
 

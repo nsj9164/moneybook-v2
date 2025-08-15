@@ -10,6 +10,7 @@ import { X } from "lucide-react";
 import { SubmitHandler, useFormContext } from "react-hook-form";
 import { BaseMap, FormType, SavedMap } from "../../../types/GenericFormTypes";
 import { diffFields, filterEmptyFields } from "@/utils/form";
+import { toast } from "react-hot-toast";
 
 interface GenericFormModalProps<K extends FormType> {
   formTitle: string;
@@ -42,7 +43,7 @@ export function GenericFormModal<K extends FormType>({
     if (isEditing) {
       const diffed = diffFields(currentData, data);
       if (Object.keys(diffed).length === 0) {
-        console.log("변경 사항 없음");
+        toast.error("저장할 변경 사항이 없습니다.");
         return;
       }
 
