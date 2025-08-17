@@ -1,4 +1,4 @@
-import { BudgetRecord } from "@/features/budget/types/budget.guards";
+import { BudgetSaved } from "@/features/budget/types/budget.entity";
 import {
   RecurringDisplay,
   IExpense,
@@ -32,7 +32,7 @@ export const recurringState = atom<RecurringDisplay[]>({
   default: [],
 });
 
-export const budgetState = atom<BudgetRecord[]>({
+export const budgetState = atom<BudgetSaved[]>({
   key: "budgetState",
   default: [],
 });

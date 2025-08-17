@@ -5,6 +5,7 @@ import {
   createDeleteItemHandler,
   createUpsertHandler,
 } from "../../../utils/crudHandlers";
+import { BudgetInsertDTO, BudgetUpdateDTO } from "../types/budget.dto";
 import { BudgetDraft, BudgetSaved } from "../types/budget.entity";
 
 interface useBudgetProps {
@@ -20,11 +21,24 @@ export const useBudgetHandlers = ({
 }: useBudgetProps) => {
   const setBudget = useSetRecoilState(budgetState);
 
-  const handleSaveBudget = createUpsertHandler<BudgetDraft, BudgetSaved>(
-    "budget",
-    userId!,
-    setBudget
-  );
+  const handleSaveBudget = async (
+    budgetItems: (BudgetInsertDTO | BudgetUpdateDTO)[]
+  ) => {
+    const upsert = createUpsertHandler<BudgetInsertDTO, BudgetSaved>(
+      "budget",
+      userId!,
+      setBudget
+    );
+
+    for (const item of budgetItems) {
+      if ("id" in item && typeof item.id === "string") {
+        const { id: _tempId, ...draft } = item;
+        await upsert(draft);
+      } else {
+        await upsert(item);
+      }
+    }
+  };
 
   const handleDeleteBudget = createDeleteItemHandler<BudgetSaved>(
     "budget",

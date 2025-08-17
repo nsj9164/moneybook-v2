@@ -25,13 +25,14 @@ const Budget = () => {
     selectedDate,
     years,
     showDateSelector,
+    targetDate,
     toggleDateSelector,
     handleChangeYear,
     handleChangeMonth,
   } = useDateFilter();
 
   const { budgets, unBudgets, refetchAll } = useBudgetData({
-    selectedDate,
+    targetDate,
   });
 
   const { methods, isOpen, isEditing, openModal, closeModal } =

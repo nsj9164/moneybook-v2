@@ -5,7 +5,7 @@ import { patchOrAddItem } from "./patchOrAddItem";
 import { UUID } from "@/types/ids";
 
 export function createUpsertHandler<
-  Base extends object,
+  Draft extends object,
   Saved extends { id: number }
 >(
   table: string,
@@ -16,8 +16,8 @@ export function createUpsertHandler<
     const isEditing = typeof formData.id === "number";
 
     const saved: Saved = isEditing
-      ? await updateItem<Saved>(table, formData, userId)
-      : await insertItem<Base, Saved>(table, formData as Base, userId);
+      ? await updateItem<Saved>(table, formData as Saved, userId)
+      : await insertItem<Draft, Saved>(table, formData as Draft, userId);
 
     setState((prev) => patchOrAddItem(prev, saved));
   };

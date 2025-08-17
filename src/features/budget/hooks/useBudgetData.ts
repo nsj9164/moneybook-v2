@@ -14,13 +14,20 @@ type Result = {
   refetchUnBudgets: () => Promise<any>;
 };
 
-export const useBudgetData = ({ selectedDate }: YearMonth): Result => {
-  const b = useBudgetCategories({ selectedDate });
-  const u = useUnBudgetedCategories({ selectedDate });
+export const useBudgetData = ({
+  targetDate,
+}: {
+  targetDate: string;
+}): Result => {
+  const b = useBudgetCategories({ targetDate });
+  const u = useUnBudgetedCategories({ targetDate });
 
   const refetchAll = async () => {
     await Promise.all([b.refetch(), u.refetch()]);
   };
+
+  console.log("budget???", b);
+  console.log("unbudget???", u);
 
   return {
     budgets: b.budgets,

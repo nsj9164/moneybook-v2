@@ -9,6 +9,7 @@ export const useFetchRpcQuery = <T>(
   userId: UUID,
   extraParams: Record<string, unknown> = {}
 ) => {
+  console.log("#########useFetchRpcQuery:::", targetDate, userId);
   return useQuery<T, Error, T>({
     queryKey: [rpcName, targetDate, userId, extraParams],
     queryFn: async () => {
