@@ -45,13 +45,9 @@ export const useDateFilter = () => {
         )
       : [];
 
-  const targetDate = useMemo(
-    () =>
-      format(
-        new Date(selectedDate.year, selectedDate.month - 1, 1),
-        "yyyy-MM-dd"
-      ),
-    [selectedDate.year, selectedDate.month]
+  const targetDate = format(
+    new Date(selectedDate.year, selectedDate.month - 1, 1),
+    "yyyy-MM-dd"
   );
 
   return {

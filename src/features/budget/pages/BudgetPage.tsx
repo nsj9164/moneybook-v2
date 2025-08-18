@@ -40,7 +40,6 @@ const Budget = () => {
 
   const { handleSaveBudget, handleDeleteBudget } = useBudgetHandlers({
     userId: userId!,
-    selectedDate,
     refetchAll,
   });
 

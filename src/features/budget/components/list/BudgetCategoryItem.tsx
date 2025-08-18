@@ -19,10 +19,7 @@ export const BudgetCategoryItem = ({
   onDelete,
 }: BudgetCategoryItemProps) => {
   return (
-    <div
-      key={budget.categoryId}
-      className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow"
-    >
+    <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow">
       <div className="flex justify-between items-start">
         <div className="flex items-center">
           <div

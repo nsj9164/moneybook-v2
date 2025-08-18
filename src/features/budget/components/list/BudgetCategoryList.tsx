@@ -19,6 +19,8 @@ export const BudgetCategoryList = ({
         const progress = Math.round((budget.spent / budget.amount) * 100);
         const diffAmount = budget.amount - budget.spent;
 
+        console.log("##########", budget);
+
         return (
           <BudgetCategoryItem
             key={budget.id}

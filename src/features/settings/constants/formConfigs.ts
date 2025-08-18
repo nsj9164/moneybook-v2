@@ -17,7 +17,6 @@ export const formMeta: {
       color: categoryColorOptions[0].value,
       emoji: categoryEmojiOptions[0],
       defaultYn: false,
-      budget: 0,
       transactionType: 2,
       userId: "",
     }),

@@ -15,8 +15,3 @@ export interface BudgetSaved extends BudgetBase {
   id: number;
   categoryId: number;
 }
-
-export interface BudgetDraft extends BudgetBase {
-  id: TempId;
-  categoryId?: number;
-}

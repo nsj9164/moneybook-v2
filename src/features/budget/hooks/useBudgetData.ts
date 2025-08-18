@@ -1,4 +1,3 @@
-import { YearMonth } from "@/types/common";
 import { BudgetDisplay } from "../types/budget.display";
 import { useBudgetCategories } from "./useBudgetCategories";
 import { useUnBudgetedCategories } from "./useUnBudgetCategories";
@@ -25,9 +24,6 @@ export const useBudgetData = ({
   const refetchAll = async () => {
     await Promise.all([b.refetch(), u.refetch()]);
   };
-
-  console.log("budget???", b);
-  console.log("unbudget???", u);
 
   return {
     budgets: b.budgets,

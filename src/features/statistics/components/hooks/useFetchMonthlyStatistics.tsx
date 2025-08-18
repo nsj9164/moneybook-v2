@@ -26,7 +26,6 @@ export const useFetchMonthlyStatistics = ({
       });
 
       if (error || !data) {
-        console.log("Fetch Monthly Statistics Error:", error);
         setMonthlyData(null);
         setLoading(false);
         return;

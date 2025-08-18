@@ -1,5 +1,5 @@
 import { createTempEntityId } from "@/types/ids";
-import { BudgetDraft } from "../types/budget.entity";
+import { BudgetEntity } from "../types/budget.entity";
 
 export const adviceStyleMap = {
   normal: {
@@ -21,8 +21,9 @@ export const adviceStyleMap = {
 
 export type AdviceType = keyof typeof adviceStyleMap;
 
-export const initialBudget = (now = new Date()): BudgetDraft => ({
+export const initialBudget = (now = new Date()): BudgetEntity => ({
   id: createTempEntityId(),
+  categoryId: 0,
   year: now.getFullYear(),
   month: now.getMonth() + 1,
   amount: 0,

@@ -1,9 +1,9 @@
-import { UnBudgetDisplay } from "@/types";
 import { useFormContext } from "react-hook-form";
+import { BudgetDisplay } from "../../types/budget.display";
 
 interface BudgetItemProps {
   index: number;
-  unBudgets: UnBudgetDisplay[];
+  unBudgets: BudgetDisplay[];
 }
 
 export const BudgetItem = ({ index, unBudgets }: BudgetItemProps) => {
@@ -13,8 +13,7 @@ export const BudgetItem = ({ index, unBudgets }: BudgetItemProps) => {
   const selectedId = currentItem?.categoryId;
 
   const isFixedCategory =
-    selectedId !== undefined &&
-    !unBudgets.some((b) => b.categoryId === selectedId);
+    selectedId !== 0 && !unBudgets.some((b) => b.categoryId === selectedId);
 
   const selectedCategory = {
     categoryId: selectedId,
@@ -38,7 +37,7 @@ export const BudgetItem = ({ index, unBudgets }: BudgetItemProps) => {
           disabled={isFixedCategory}
           className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
         >
-          <option value={-1}>선택하세요</option>
+          <option value="0">선택하세요</option>
           {categoryOptions.map((category) => (
             <option key={category.categoryId} value={category.categoryId}>
               {category.emoji} {category.name}

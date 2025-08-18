@@ -1,10 +1,11 @@
 import { CardSection } from "@/components/common/layout/CardSection";
-import { BudgetDisplay, BudgetEntity } from "@/types";
 import { UsageProgress } from "../progress/UsageProgress";
 import { SummarySection } from "../summary/SummarySection";
 import { BudgetCategoryList } from "../list/BudgetCategoryList";
 import { getBudgetSummaryInfo } from "../../hooks/useBudgetSummary";
 import { useMemo } from "react";
+import { BudgetDisplay } from "../../types/budget.display";
+import { BudgetEntity } from "../../types/budget.entity";
 
 interface BudgetOverviewProps {
   budgets: BudgetDisplay[];

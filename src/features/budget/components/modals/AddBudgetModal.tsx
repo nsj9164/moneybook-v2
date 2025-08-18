@@ -8,11 +8,7 @@ import { toast } from "react-hot-toast";
 import { BudgetInsertDTO, BudgetUpdateDTO } from "../../types/budget.dto";
 import { BudgetDisplay } from "../../types/budget.display";
 import { BudgetRecord, isSaved } from "../../types/budget.guards";
-import {
-  BudgetDraft,
-  BudgetEntity,
-  BudgetSaved,
-} from "../../types/budget.entity";
+import { BudgetEntity, BudgetSaved } from "../../types/budget.entity";
 
 interface AddBudgetModalProps {
   isOpen: boolean;
@@ -58,7 +54,7 @@ const AddBudgetModal = ({
       prevItems.filter(isSaved).map((p) => [p.id, p])
     );
 
-    const toSave: (BudgetDraft | BudgetUpdateDTO)[] = [];
+    const toSave: (BudgetInsertDTO | BudgetUpdateDTO)[] = [];
 
     for (const item of items) {
       if (isSaved(item)) {

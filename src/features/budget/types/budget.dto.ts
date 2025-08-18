@@ -1,6 +1,6 @@
-import { BudgetDraft, BudgetEntity } from "./budget.entity";
+import { BudgetEntity } from "./budget.entity";
 
-export type BudgetInsertDTO = Omit<BudgetDraft, "id"> & {
+export type BudgetInsertDTO = Omit<BudgetEntity, "id"> & {
   categoryId: number;
 };
 
