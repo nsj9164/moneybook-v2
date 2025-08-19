@@ -74,13 +74,6 @@ const Expenses = () => {
     setIsColumnModalOpen(false);
   };
 
-  const toggleColumnModal = (type: boolean) => {
-    setIsColumnModalOpen(type);
-  };
-
-  // 보이는 컬럼 필터링
-  const visibleColumns = columns.filter((col) => col.visible);
-
   // open & close Filter
   const toggleFilterPanel = () => {
     setIsFilterPanelOpen((prev) => !prev);

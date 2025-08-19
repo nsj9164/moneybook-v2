@@ -14,7 +14,7 @@ interface MonthlyStatsProps {
 
 export const MonthlyStats = ({ categorySummary }: MonthlyStatsProps) => {
   const [showIncome, setShowIncome] = useState(false);
-  const toggleIncomeExpenses = () => setShowIncome((prev) => !prev);
+  const toggleButton = () => setShowIncome((prev) => !prev);
 
   const { incomeOption, expenseOption } = monthlyStatsOption({
     categorySummary,
@@ -26,7 +26,7 @@ export const MonthlyStats = ({ categorySummary }: MonthlyStatsProps) => {
       action={
         <ToggleIncomeExpenses
           showIncome={showIncome}
-          toggleIncomeExpenses={toggleIncomeExpenses}
+          toggleButton={toggleButton}
         />
       }
     >

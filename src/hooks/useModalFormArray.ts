@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 
 export function useModalFormArray<T extends FieldValues>(defaultItem: T) {

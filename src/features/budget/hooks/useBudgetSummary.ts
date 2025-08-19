@@ -1,6 +1,5 @@
-import { BudgetDisplay } from "@/types";
 import { differenceInCalendarDays, lastDayOfMonth } from "date-fns";
-import { BudgetSummary } from "../types/budget";
+import { BudgetSummary, BudgetDisplay } from "../types";
 
 interface ISelectedDate {
   year: number;

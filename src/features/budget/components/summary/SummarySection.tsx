@@ -1,6 +1,6 @@
 import { formatCurrency } from "@/utils/format";
 import { SummaryCard } from "./SummaryCard";
-import { BudgetSummary } from "../../types/budget";
+import { BudgetSummary } from "../../types";
 
 interface SummarySectionProps {
   summary: BudgetSummary;

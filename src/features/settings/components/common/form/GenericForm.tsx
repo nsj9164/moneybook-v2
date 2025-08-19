@@ -17,13 +17,10 @@ import { usePagination } from "@/features/settings/utils/usePagination";
 import { PaginationFooter } from "../pagination/PaginationFooter";
 import { GenericFormModal } from "../modal/GenericFormModal";
 import { GenericFormModalFields } from "../modal/GenericFormModalFields";
-import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
-import toast from "react-hot-toast";
 import { createPaginateAfterAdd } from "@/features/settings/utils/createPaginateAfterAdd";
 
 type GenericFormHandler<T> = {
   openModal: (row?: T) => void;
-  onDelete: (id: number) => void;
 };
 
 interface GenericFormProps<K extends FormType> {
@@ -34,7 +31,6 @@ interface GenericFormProps<K extends FormType> {
     row: SavedMap[K],
     handler: GenericFormHandler<SavedMap[K]>
   ) => React.ReactNode;
-  onDelete: GenericFormHandler<SavedMap[K]>["onDelete"];
   onSave: (row: Partial<BaseMap[K]>) => void | Promise<void>;
 }
 
@@ -43,7 +39,6 @@ function GenericForm<K extends FormType>({
   headers,
   fetchData,
   renderRow,
-  onDelete,
   onSave,
 }: GenericFormProps<K>) {
   const { title, initial } = formMeta[formType];
@@ -56,12 +51,7 @@ function GenericForm<K extends FormType>({
   const { methods, isOpen, isEditing, openModal, closeModal } =
     useModalForm<BaseMap[K]>(defaultValues);
 
-  const [isDelete, setIsDelete] = useState(false);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-
-  // 모달 열기/닫기
-  const toggleModal = (type: boolean) => setIsDelete(type);
 
   // data_검색 적용
   const filteredData = fetchData.filter((item) =>
@@ -87,24 +77,6 @@ function GenericForm<K extends FormType>({
     () => filteredData.length + 1,
     goToLastPageIfNeeded
   );
-
-  const showConfirmDelete = (id: number) => {
-    setDeleteId(id);
-    toggleModal(true);
-  };
-
-  const handleDeleteData = async () => {
-    if (deleteId === null) return;
-
-    try {
-      await onDelete(deleteId);
-      toast.success("삭제가 완료됐어요.");
-      setDeleteId(null);
-      toggleModal(false);
-    } catch {
-      toast.error("항목 삭제에 실패했어요. 잠시 후 다시 시도해주세요.");
-    }
-  };
 
   return (
     <div className="bg-white h-full">
@@ -151,7 +123,6 @@ function GenericForm<K extends FormType>({
             renderRow={(row) =>
               renderRow(row, {
                 openModal: openModal,
-                onDelete: showConfirmDelete,
               })
             }
           />
@@ -182,12 +153,6 @@ function GenericForm<K extends FormType>({
           />
         </GenericFormModal>
       </FormProvider>
-
-      <ConfirmModal
-        isOpen={isDelete}
-        onClose={toggleModal}
-        onConfirm={handleDeleteData}
-      />
     </div>
   );
 }

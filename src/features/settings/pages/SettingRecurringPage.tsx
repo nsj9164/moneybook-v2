@@ -26,6 +26,8 @@ import { insertItem } from "@/api/supabase/insertItem";
 import { createDeleteItemHandler } from "@/utils/crudHandlers";
 import { enrichRecurring } from "../manageRecurringExpenses/libs/enrichRecurring";
 import { createPaginateAfterAdd } from "../utils/createPaginateAfterAdd";
+import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
+import { useConfirmModal } from "@/hooks/useConfirmModal";
 
 const ManageRecurringExpenses = () => {
   const { userId } = useAuth();
@@ -118,6 +120,9 @@ const ManageRecurringExpenses = () => {
     setRecurrings
   );
 
+  const { isConfirm, openConfirm, closeConfirm, handleConfirm } =
+    useConfirmModal<number>(handleDeleteRecurring);
+
   const totalMonthly = calcTotalMonthlyAmount(recurrings);
   const activeLen = recurrings.filter((e) => e.isActive).length;
 
@@ -143,7 +148,7 @@ const ManageRecurringExpenses = () => {
         <RecurringCardList
           data={paginatedExpenses}
           openModal={openModal}
-          onDelete={handleDeleteRecurring}
+          onDelete={openConfirm}
         />
 
         {/* 페이지네이션 */}
@@ -173,6 +178,12 @@ const ManageRecurringExpenses = () => {
           />
         </GenericFormModal>
       </FormProvider>
+
+      <ConfirmModal
+        isOpen={isConfirm}
+        onClose={closeConfirm}
+        onConfirm={handleConfirm}
+      />
     </div>
   );
 };

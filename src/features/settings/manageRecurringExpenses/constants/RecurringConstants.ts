@@ -1,12 +1,10 @@
-import { RecurringEntity } from "@/types";
-import { createTempEntityId } from "@/types/ids";
+import { RecurringBase } from "@/types";
 import { addMonths, format, startOfMonth } from "date-fns";
 
 const today = new Date();
 const startOfNextMonth = startOfMonth(addMonths(today, 1));
 
-export const initialRecurrings: RecurringEntity = {
-  id: createTempEntityId(),
+export const initialRecurrings: RecurringBase = {
   name: "",
   amount: 0,
   cycle: 4,

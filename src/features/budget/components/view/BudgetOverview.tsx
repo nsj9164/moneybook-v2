@@ -4,20 +4,19 @@ import { SummarySection } from "../summary/SummarySection";
 import { BudgetCategoryList } from "../list/BudgetCategoryList";
 import { getBudgetSummaryInfo } from "../../hooks/useBudgetSummary";
 import { useMemo } from "react";
-import { BudgetDisplay } from "../../types/budget.display";
-import { BudgetEntity } from "../../types/budget.entity";
+import { BudgetDisplay, BudgetEntity } from "../../types";
 
 interface BudgetOverviewProps {
   budgets: BudgetDisplay[];
   openModal: (budget?: BudgetEntity) => void;
-  onDelete: (id: number) => void;
+  openConfirm: (id: number) => void;
   selectedDate: { year: number; month: number };
 }
 
 export const BudgetOverview = ({
   budgets,
   openModal,
-  onDelete,
+  openConfirm,
   selectedDate,
 }: BudgetOverviewProps) => {
   const summary = useMemo(
@@ -42,7 +41,7 @@ export const BudgetOverview = ({
         <BudgetCategoryList
           budgets={budgets}
           openModal={openModal}
-          onDelete={onDelete}
+          openConfirm={openConfirm}
         />
       </CardSection>
 

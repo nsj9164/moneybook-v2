@@ -4,11 +4,11 @@ import { useCycleOptions } from "../../hooks/useCycleOptions";
 import { InputField } from "./InputField";
 import { SelectField } from "./SelectField";
 import { addMonths, format, setDate } from "date-fns";
-import { CategorySaved, PayMethodEntity } from "@/types";
+import { CategorySaved, PayMethodSaved } from "@/types";
 
 interface RecurringModalFieldsProps {
   categories: CategorySaved[];
-  payMethods: PayMethodEntity[];
+  payMethods: PayMethodSaved[];
 }
 export const RecurringModalFields = ({
   categories,
@@ -33,8 +33,6 @@ export const RecurringModalFields = ({
 
     setValue("nextPaymentDate", format(nextPaymentDate, "yyyy-MM-dd"));
   }, [watch("billingStartDate"), watch("paymentDay")]);
-
-  const value = watch("isActive");
 
   return (
     <>

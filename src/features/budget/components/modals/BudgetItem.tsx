@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { BudgetDisplay } from "../../types/budget.display";
+import { BudgetDisplay } from "../../types";
 
 interface BudgetItemProps {
   index: number;

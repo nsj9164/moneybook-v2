@@ -5,10 +5,14 @@ import { categoryColorOptions } from "../constants/categoryColorOptions";
 interface TableRowProps {
   category: CategorySaved;
   openModal: (category: CategorySaved) => void;
-  onDelete: (id: number) => void;
+  openConfirm: (id: number) => void;
 }
 
-export const TableRow = ({ category, openModal, onDelete }: TableRowProps) => {
+export const TableRow = ({
+  category,
+  openModal,
+  openConfirm,
+}: TableRowProps) => {
   return (
     <tr className="hover:bg-gray-50">
       <td className="whitespace-nowrap px-6 py-4 text-center text-xl">
@@ -53,7 +57,7 @@ export const TableRow = ({ category, openModal, onDelete }: TableRowProps) => {
           </button>
           {!category.defaultYn && (
             <button
-              onClick={() => onDelete(category.id)}
+              onClick={() => openConfirm(category.id)}
               className="text-red-600 hover:text-red-900"
             >
               <Trash2 className="h-4 w-4" />

@@ -1,5 +1,5 @@
 import { ExpenseFiltersState } from "../../types/filters";
-import { CategorySaved, PayMethodEntity } from "@/types";
+import { CategorySaved, PayMethodSaved } from "@/types";
 import { Filter, Settings, X } from "lucide-react";
 import { FilterCheckbox } from "./inputs/FilterCheckbox";
 import { FilterDateRange } from "./inputs/FilterDateRange";
@@ -14,7 +14,7 @@ interface FilterPanelProps {
   resetFilters: () => void;
   toggleFilterPanel: () => void;
   categories: CategorySaved[];
-  payMethods: PayMethodEntity[];
+  payMethods: PayMethodSaved[];
   openColumnModal: () => void;
 }
 

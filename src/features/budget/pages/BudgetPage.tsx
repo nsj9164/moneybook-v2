@@ -16,6 +16,8 @@ import AddBudgetModal from "../components/modals/AddBudgetModal";
 import { useModalFormArray } from "@/hooks/useModalFormArray";
 import { PageHeader } from "@/components/common/layout/PageHeader";
 import { BudgetBase } from "../types/budget.entity";
+import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
+import { useConfirmModal } from "@/hooks/useConfirmModal";
 
 const Budget = () => {
   const { userId } = useAuth();
@@ -42,6 +44,9 @@ const Budget = () => {
     userId: userId!,
     refetchAll,
   });
+
+  const { isConfirm, openConfirm, closeConfirm, handleConfirm } =
+    useConfirmModal<number>(handleDeleteBudget);
 
   return (
     <div className="h-full">
@@ -82,7 +87,7 @@ const Budget = () => {
               <BudgetOverview
                 budgets={budgets}
                 openModal={openModal}
-                onDelete={handleDeleteBudget}
+                openConfirm={openConfirm}
                 selectedDate={selectedDate}
               />
             </motion.div>
@@ -109,6 +114,12 @@ const Budget = () => {
           unBudgets={unBudgets}
         />
       </FormProvider>
+
+      <ConfirmModal
+        isOpen={isConfirm}
+        onClose={closeConfirm}
+        onConfirm={handleConfirm}
+      />
     </div>
   );
 };

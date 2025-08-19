@@ -11,6 +11,8 @@ import {
 import { CategoryBase, CategorySaved } from "@/types";
 import { TableHeader } from "../manageCategories/components/TableHeader";
 import { TableRow } from "../manageCategories/components/TableRow";
+import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
+import { useConfirmModal } from "@/hooks/useConfirmModal";
 
 const ManageCategories = () => {
   const { userId } = useAuth();
@@ -29,22 +31,32 @@ const ManageCategories = () => {
     setCategories
   );
 
+  const { isConfirm, openConfirm, closeConfirm, handleConfirm } =
+    useConfirmModal<number>(handleDeleteCategory);
+
   return (
-    <GenericForm<FormType.Categories>
-      formType={FormType.Categories}
-      fetchData={categories}
-      headers={<TableHeader />}
-      renderRow={(category, { openModal, onDelete }) => (
-        <TableRow
-          key={category.id}
-          category={category}
-          openModal={openModal}
-          onDelete={onDelete}
-        />
-      )}
-      onDelete={handleDeleteCategory}
-      onSave={handleSaveCategory}
-    />
+    <>
+      <GenericForm<FormType.Categories>
+        formType={FormType.Categories}
+        fetchData={categories}
+        headers={<TableHeader />}
+        renderRow={(category, { openModal }) => (
+          <TableRow
+            key={category.id}
+            category={category}
+            openModal={openModal}
+            openConfirm={openConfirm}
+          />
+        )}
+        onSave={handleSaveCategory}
+      />
+
+      <ConfirmModal
+        isOpen={isConfirm}
+        onClose={closeConfirm}
+        onConfirm={handleConfirm}
+      />
+    </>
   );
 };
 

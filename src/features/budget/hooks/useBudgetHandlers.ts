@@ -1,12 +1,9 @@
-import { budgetState } from "@/recoil/atoms";
 import { UUID } from "@/types/ids";
-import { useSetRecoilState } from "recoil";
 import {
   createDeleteItemHandler,
   createUpsertHandler,
 } from "../../../utils/crudHandlers";
-import { BudgetInsertDTO, BudgetUpdateDTO } from "../types/budget.dto";
-import { BudgetSaved } from "../types/budget.entity";
+import { BudgetInsertDTO, BudgetUpdateDTO, BudgetSaved } from "../types";
 
 interface useBudgetProps {
   userId: UUID;
@@ -14,15 +11,12 @@ interface useBudgetProps {
 }
 
 export const useBudgetHandlers = ({ userId, refetchAll }: useBudgetProps) => {
-  const setBudget = useSetRecoilState(budgetState);
-
   const handleSaveBudget = async (
     budgetItems: (BudgetInsertDTO | BudgetUpdateDTO)[]
   ) => {
     const upsert = createUpsertHandler<BudgetInsertDTO, BudgetSaved>(
       "budgets",
-      userId!,
-      setBudget
+      userId!
     );
 
     for (const item of budgetItems) {
@@ -38,10 +32,7 @@ export const useBudgetHandlers = ({ userId, refetchAll }: useBudgetProps) => {
     await refetchAll();
   };
 
-  const handleDeleteBudget = createDeleteItemHandler<BudgetSaved>(
-    "budgets",
-    setBudget
-  );
+  const handleDeleteBudget = createDeleteItemHandler<BudgetSaved>("budgets");
 
   return { handleSaveBudget, handleDeleteBudget };
 };

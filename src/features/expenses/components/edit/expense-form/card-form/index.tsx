@@ -6,10 +6,7 @@ export const CardForm = ({
   newExpenses,
   categories,
   payMethods,
-  handleUpdExpense,
   handleDelExpense,
-  getSplitAmount,
-  updateActualAmount,
 }: ExpensesFormProps) => {
   return (
     <div className="overflow-x-auto">

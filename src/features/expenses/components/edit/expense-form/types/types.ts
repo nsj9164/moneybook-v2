@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { CategorySaved, IExpense, PayMethodEntity } from "@/types";
+import { CategorySaved, IExpense, PayMethodSaved } from "@/types";
 import {
   DelTableExpenseHandler,
   SplitAmountHandler,
@@ -11,7 +11,7 @@ export interface ExpensesProps {
   newExpenses: IExpense[];
   setNewExpenses: Dispatch<SetStateAction<IExpense[]>>;
   categories: CategorySaved[];
-  payMethods: PayMethodEntity[];
+  payMethods: PayMethodSaved[];
   handleUpdExpense?: UpdTableExpenseHandler;
   handleDelExpense?: DelTableExpenseHandler;
   getSplitAmount?: SplitAmountHandler;

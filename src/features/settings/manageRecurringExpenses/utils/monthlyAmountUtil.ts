@@ -1,4 +1,4 @@
-import { RecurringEntity } from "@/types";
+import { RecurringSaved } from "@/types";
 
 // 고정지출 cycle에 따른 월 환산
 const cycleMultipliers: Record<number, number> = {
@@ -13,13 +13,13 @@ const cycleMultipliers: Record<number, number> = {
 };
 
 // 고정지출 항목_월간 환산 금액
-export function getMonthlyAmount(recurring: RecurringEntity): number {
+export function getMonthlyAmount(recurring: RecurringSaved): number {
   const multiplier = cycleMultipliers[recurring.cycle] ?? 4;
   return recurring.amount * multiplier;
 }
 
 // 모든 고정지출_총 월간 금액
-export function calcTotalMonthlyAmount(recurrings: RecurringEntity[]): number {
+export function calcTotalMonthlyAmount(recurrings: RecurringSaved[]): number {
   return recurrings
     .filter((expense) => expense.isActive)
     .reduce((sum, expense) => sum + getMonthlyAmount(expense), 0);

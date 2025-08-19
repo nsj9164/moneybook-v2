@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useFetchRpcQuery } from "@/hooks/fetchData/useFetchRpcQuery";
-import { BudgetDisplay } from "../types/budget.display";
+import { BudgetDisplay } from "../types";
 
 export const useBudgetCategories = ({ targetDate }: { targetDate: string }) => {
   const { userId } = useAuth();

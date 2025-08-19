@@ -1,15 +1,19 @@
-import { PayMethodEntity } from "@/types";
+import { PayMethodSaved } from "@/types";
 import { Pencil, Trash2 } from "lucide-react";
 
 interface TableRowProps {
-  payMethod: PayMethodEntity;
-  openModal: (payMethod: PayMethodEntity) => void;
-  onDelete: (id: number) => void;
+  payMethod: PayMethodSaved;
+  openModal: (payMethod: PayMethodSaved) => void;
+  openConfirm: (id: number) => void;
 }
 
-export const TableRow = ({ payMethod, openModal, onDelete }: TableRowProps) => {
+export const TableRow = ({
+  payMethod,
+  openModal,
+  openConfirm,
+}: TableRowProps) => {
   return (
-    <tr key={payMethod.id} className="hover:bg-gray-50">
+    <tr className="hover:bg-gray-50">
       <td className="whitespace-nowrap px-6 py-4 text-center text-xl">
         <span role="img" aria-label={payMethod.name}>
           {payMethod.emoji}
@@ -40,7 +44,7 @@ export const TableRow = ({ payMethod, openModal, onDelete }: TableRowProps) => {
           </button>
           {!payMethod.defaultYn && (
             <button
-              onClick={() => onDelete(payMethod.id)}
+              onClick={() => openConfirm(payMethod.id)}
               className="text-red-600 hover:text-red-900"
             >
               <Trash2 className="h-4 w-4" />

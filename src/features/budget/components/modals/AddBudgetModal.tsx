@@ -5,10 +5,15 @@ import { initialBudget } from "../../constants/BudgetConstants";
 import { useRef, useLayoutEffect } from "react";
 import { BudgetItem } from "./BudgetItem";
 import { toast } from "react-hot-toast";
-import { BudgetInsertDTO, BudgetUpdateDTO } from "../../types/budget.dto";
-import { BudgetDisplay } from "../../types/budget.display";
-import { BudgetRecord, isSaved } from "../../types/budget.guards";
-import { BudgetEntity, BudgetSaved } from "../../types/budget.entity";
+import {
+  BudgetInsertDTO,
+  BudgetUpdateDTO,
+  BudgetDisplay,
+  BudgetRecord,
+  isSaved,
+  BudgetEntity,
+  BudgetSaved,
+} from "../../types";
 
 interface AddBudgetModalProps {
   isOpen: boolean;
@@ -69,10 +74,7 @@ const AddBudgetModal = ({
           patch.categoryId = item.categoryId;
         if (item.amount !== prev.amount) patch.amount = item.amount;
 
-        if (Object.keys(patch).length === 0) {
-          toast.error("저장할 변경 사항이 없습니다.");
-          continue;
-        }
+        if (Object.keys(patch).length === 0) continue;
 
         toSave.push({ id: item.id, ...patch });
       } else {
@@ -81,6 +83,7 @@ const AddBudgetModal = ({
     }
 
     if (toSave.length === 0) {
+      toast.error("저장할 변경 사항이 없습니다.");
       onClose();
       return;
     }

@@ -1,17 +1,16 @@
-import { BudgetDisplay } from "../../types/budget.display";
-import { BudgetSaved } from "../../types/budget.entity";
+import { BudgetDisplay, BudgetSaved } from "../../types";
 import { BudgetCategoryItem } from "./BudgetCategoryItem";
 
 interface BudgetCategoryListProps {
   budgets: BudgetDisplay[];
   openModal: (budget?: BudgetSaved) => void;
-  onDelete: (id: number) => void;
+  openConfirm: (id: number) => void;
 }
 
 export const BudgetCategoryList = ({
   budgets,
   openModal,
-  onDelete,
+  openConfirm,
 }: BudgetCategoryListProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -28,7 +27,7 @@ export const BudgetCategoryList = ({
             progress={progress}
             diffAmount={diffAmount}
             openModal={() => openModal(budget)}
-            onDelete={onDelete}
+            openConfirm={openConfirm}
           />
         );
       })}

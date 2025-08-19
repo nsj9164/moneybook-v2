@@ -11,6 +11,8 @@ import {
   createUpsertHandler,
   createDeleteItemHandler,
 } from "@/utils/crudHandlers";
+import { useConfirmModal } from "@/hooks/useConfirmModal";
+import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
 
 const ManagePayMethods = () => {
   const { userId } = useAuth();
@@ -27,22 +29,32 @@ const ManagePayMethods = () => {
     setPayMethods
   );
 
+  const { isConfirm, openConfirm, closeConfirm, handleConfirm } =
+    useConfirmModal<number>(handleDeletePayMethod);
+
   return (
-    <GenericForm<FormType.PayMethods>
-      formType={FormType.PayMethods}
-      headers={<TableHeader />}
-      fetchData={payMethods}
-      renderRow={(payMethod, { openModal, onDelete }) => (
-        <TableRow
-          key={payMethod.id}
-          payMethod={payMethod}
-          openModal={openModal}
-          onDelete={onDelete}
-        />
-      )}
-      onDelete={handleDeletePayMethod}
-      onSave={handleSavePayMethod}
-    />
+    <>
+      <GenericForm<FormType.PayMethods>
+        formType={FormType.PayMethods}
+        headers={<TableHeader />}
+        fetchData={payMethods}
+        renderRow={(payMethod, { openModal }) => (
+          <TableRow
+            key={payMethod.id}
+            payMethod={payMethod}
+            openModal={openModal}
+            openConfirm={openConfirm}
+          />
+        )}
+        onSave={handleSavePayMethod}
+      />
+
+      <ConfirmModal
+        isOpen={isConfirm}
+        onClose={closeConfirm}
+        onConfirm={handleConfirm}
+      />
+    </>
   );
 };
 

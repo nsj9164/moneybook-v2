@@ -10,7 +10,7 @@ export function createUpsertHandler<
 >(
   table: string,
   userId: UUID,
-  setState: React.Dispatch<React.SetStateAction<Saved[]>>
+  setState?: React.Dispatch<React.SetStateAction<Saved[]>>
 ): (formData: Partial<Saved> & { id?: number }) => Promise<void> {
   return async (formData) => {
     const isEditing = typeof formData.id === "number";
@@ -19,16 +19,16 @@ export function createUpsertHandler<
       ? await updateItem<Saved>(table, formData as Saved, userId)
       : await insertItem<Draft, Saved>(table, formData as Draft, userId);
 
-    setState((prev) => patchOrAddItem(prev, saved));
+    setState?.((prev) => patchOrAddItem(prev, saved));
   };
 }
 
 export function createDeleteItemHandler<T extends { id: number }>(
   table: string,
-  setState: React.Dispatch<React.SetStateAction<T[]>>
+  setState?: React.Dispatch<React.SetStateAction<T[]>>
 ): (id: number) => Promise<void> {
   return async (id: number) => {
     await deleteItem(table, id);
-    setState((prev) => prev.filter((item) => item.id !== id));
+    setState?.((prev) => prev.filter((item) => item.id !== id));
   };
 }

@@ -1,6 +1,6 @@
 import { useFirstExpenseYear } from "@/features/budget/hooks/useFirstExpenseYear";
 import { format } from "date-fns";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 export const useDateFilter = () => {
   const { data: firstExpenseYear } = useFirstExpenseYear();

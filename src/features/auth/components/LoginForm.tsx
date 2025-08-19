@@ -1,11 +1,8 @@
 import { Card, CardContent } from "@/components/ui/Card";
 import { SocialButton } from "./SocialButton";
-import { useState } from "react";
 import { supabase } from "@/utils/supabase";
 
 export function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false);
-
   const loginWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -31,16 +28,8 @@ export function LoginForm() {
   return (
     <Card className="w-full shadow-lg border border-gray-100 overflow-hidden">
       <CardContent className="p-6 space-y-4">
-        <SocialButton
-          provider="google"
-          onClick={() => loginWithGoogle()}
-          disabled={isLoading}
-        />
-        <SocialButton
-          provider="kakao"
-          onClick={() => loginWithKakao()}
-          disabled={isLoading}
-        />
+        <SocialButton provider="google" onClick={() => loginWithGoogle()} />
+        <SocialButton provider="kakao" onClick={() => loginWithKakao()} />
       </CardContent>
     </Card>
   );

@@ -1,14 +1,14 @@
 import { formatCurrency } from "@/utils/format";
 import { Edit2, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { BudgetDisplay } from "../../types/budget.display";
+import { BudgetDisplay } from "../../types";
 
 interface BudgetCategoryItemProps {
   budget: BudgetDisplay;
   progress: number;
   diffAmount: number;
   openModal: () => void;
-  onDelete: (id: number) => void;
+  openConfirm: (id: number) => void;
 }
 
 export const BudgetCategoryItem = ({
@@ -16,7 +16,7 @@ export const BudgetCategoryItem = ({
   progress,
   diffAmount,
   openModal,
-  onDelete,
+  openConfirm,
 }: BudgetCategoryItemProps) => {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow">
@@ -46,7 +46,7 @@ export const BudgetCategoryItem = ({
           </button>
           <button
             className="text-gray-400 hover:text-red-600"
-            onClick={() => onDelete(budget.categoryId)}
+            onClick={() => openConfirm(budget.id)}
           >
             <Trash2 className="h-4 w-4" />
           </button>
