@@ -1,7 +1,6 @@
-import { UUID } from "@/types/ids";
+import { TempId, UUID } from "@/types/ids";
 
-export interface IExpense {
-  id: UUID;
+export interface ExpenseBase {
   date: string;
   itemName: string;
   amount: number;
@@ -15,4 +14,12 @@ export interface IExpense {
   numberOfPeople?: number;
   paymentMethods?: { name: string };
   categories?: { name: string };
+}
+
+export interface ExpenseEntity extends ExpenseBase {
+  id: number | TempId;
+}
+
+export interface ExpenseSaved extends ExpenseBase {
+  id: number;
 }

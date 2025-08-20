@@ -1,10 +1,10 @@
-import { IExpense } from "@/types";
+import { ExpenseSaved } from "@/types";
 import { format, sub } from "date-fns";
 import { useMemo, useState } from "react";
 import { FilterKey } from "../types/filters";
 import { matchHangul } from "@/utils/matchHangul";
 
-export const useExpenseFilters = (expenses: IExpense[]) => {
+export const useExpenseFilters = (expenses: ExpenseSaved[]) => {
   const today = new Date();
   const subMonthToday = sub(today, { months: 1 });
 

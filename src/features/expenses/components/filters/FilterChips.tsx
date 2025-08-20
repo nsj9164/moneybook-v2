@@ -1,10 +1,10 @@
-import { IExpense } from "@/types";
+import { ExpenseSaved } from "@/types";
 import { formatCurrency } from "@/utils/format";
 
 export const FilterChips = ({
   filteredExpenses,
 }: {
-  filteredExpenses: IExpense[];
+  filteredExpenses: ExpenseSaved[];
 }) => {
   return (
     <div className="mb-6">

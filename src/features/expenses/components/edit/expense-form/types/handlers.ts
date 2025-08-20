@@ -1,18 +1,17 @@
-import { IExpense } from "@/types";
-import { UUID } from "@/types/ids";
+import { ExpenseSaved } from "@/types";
 
 export type UpdTableExpenseHandler = (
-  value: IExpense[keyof IExpense],
-  id: UUID,
-  key: keyof IExpense
+  value: ExpenseSaved[keyof ExpenseSaved],
+  id: number,
+  key: keyof ExpenseSaved
 ) => void;
 
-export type DelTableExpenseHandler = (id: UUID) => void;
+export type DelTableExpenseHandler = (id: number) => void;
 
-export type SplitAmountHandler = (peoplcCnt: number, id: UUID) => void;
+export type SplitAmountHandler = (peoplcCnt: number, id: number) => void;
 
 export type UpdActualAmountHandler = (
   amount: string,
-  id: UUID,
+  id: number,
   peopleCnt: number
 ) => void;

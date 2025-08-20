@@ -1,15 +1,14 @@
-import { IExpense } from "@/types";
+import { ExpenseSaved } from "@/types";
 import { formatCurrency } from "@/utils/format";
-import { SplitAmountHandler } from "../types/handlers";
 
 interface TableFormSplitRowProps {
-  expense: IExpense;
-  getSplitAmount: SplitAmountHandler;
+  expense: ExpenseSaved;
+  onSplitAmountChange: (eopleCnt: number) => void;
 }
 
 export const TableFormSplitRow = ({
   expense,
-  getSplitAmount,
+  onSplitAmountChange,
 }: TableFormSplitRowProps) => {
   return (
     <tr className="bg-emerald-50 border-t border-emerald-100">
@@ -21,9 +20,7 @@ export const TableFormSplitRow = ({
               type="number"
               min="1"
               value={expense.numberOfPeople ?? 0}
-              onChange={(e) =>
-                getSplitAmount(Number(e.target.value), expense.id)
-              }
+              onChange={(e) => onSplitAmountChange(Number(e.target.value))}
               className="w-16 rounded-md border-emerald-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm"
             />
             <span className="text-emerald-700 ml-1">명</span>

@@ -1,12 +1,12 @@
 import {
   RecurringDisplay,
-  IExpense,
+  ExpenseSaved,
   CategorySaved,
   PayMethodSaved,
 } from "@/types";
 import { atom } from "recoil";
 
-export const expensesState = atom<IExpense[]>({
+export const expensesState = atom<ExpenseSaved[]>({
   key: "expensesState",
   default: [],
 });
@@ -18,11 +18,6 @@ export const categoriesState = atom<CategorySaved[]>({
 
 export const payMethodsState = atom<PayMethodSaved[]>({
   key: "payMethodsState",
-  default: [],
-});
-
-export const newExpensesState = atom<IExpense[]>({
-  key: "newExpensesState",
   default: [],
 });
 

@@ -22,7 +22,6 @@ export const useBudgetHandlers = ({ userId, refetchAll }: useBudgetProps) => {
     for (const item of budgetItems) {
       if ("id" in item && typeof item.id === "string") {
         const { id: _tempId, ...draft } = item;
-        console.log("draft::", draft);
         await upsert(draft);
       } else {
         await upsert(item);

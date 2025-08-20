@@ -1,9 +1,9 @@
-import { IExpense } from "@/types";
+import { ExpenseSaved } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 interface TransactionItemProps {
-  expense: IExpense;
+  expense: ExpenseSaved;
 }
 
 export const TransactionItem = ({ expense }: TransactionItemProps) => {

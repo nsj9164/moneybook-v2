@@ -1,42 +1,68 @@
-import React from "react";
-import { ExpensesFormProps } from "../types/types";
+import { calActualAmount } from "@/features/expenses/utils/expenseCalc";
+import {
+  CategorySaved,
+  ExpenseEntity,
+  ExpenseSaved,
+  PayMethodSaved,
+} from "@/types";
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
 import { TableFormHeader } from "./TableFormHeader";
 import { TableFormRow } from "./TableFormRow";
 import { TableFormSplitRow } from "./TableFormSplitRow";
 
+interface TableFormProps {
+  editExpenses: ExpenseSaved[];
+  categories: CategorySaved[];
+  payMethods: PayMethodSaved[];
+}
+
 export const TableForm = ({
-  newExpenses,
+  editExpenses,
   categories,
   payMethods,
-  handleUpdExpense,
-  handleDelExpense,
-  getSplitAmount,
-  updateActualAmount,
-}: ExpensesFormProps) => {
+}: TableFormProps) => {
+  const { handleSubmit } = useFormContext<ExpenseEntity | ExpenseSaved>();
+  const [newExpenses, setNewExpenses] = useState<ExpenseEntity[]>([]);
+
+  const handleSplitAmountChange = (id: number, peopleCnt: number) => {
+    setNewExpenses((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              numberOfPeople: peopleCnt,
+              actualAmount: calActualAmount(item.amount, peopleCnt),
+            }
+          : item
+      )
+    );
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-300">
         <TableFormHeader />
 
         <tbody className="divide-y divide-gray-200 bg-white">
-          {newExpenses?.length > 0 &&
-            newExpenses.map((expense) => (
-              <React.Fragment key={expense.id}>
+          {editExpenses?.length > 0 &&
+            editExpenses.map((expense, index) => (
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <TableFormRow
+                  index={index}
                   expense={expense}
                   categories={categories}
                   payMethods={payMethods}
-                  handleUpdExpense={handleUpdExpense}
-                  handleDelExpense={handleDelExpense}
-                  updateActualAmount={updateActualAmount}
                 />
                 {expense.isDifferentAmount && (
                   <TableFormSplitRow
                     expense={expense}
-                    getSplitAmount={getSplitAmount}
+                    onSplitAmountChange={(peopleCnt) =>
+                      handleSplitAmountChange(expense.id, peopleCnt)
+                    }
                   />
                 )}
-              </React.Fragment>
+              </form>
             ))}
         </tbody>
       </table>

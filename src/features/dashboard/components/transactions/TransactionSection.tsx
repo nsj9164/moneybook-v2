@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { TransactionItem } from "./TransactionItem";
 import { AlertCircle, ArrowRight, BarChart3, TrendingUp } from "lucide-react";
 import { DashboardSectionCard } from "../../layout/DashboardSectionCard";
-import { IExpense } from "@/types";
+import { ExpenseSaved } from "@/types";
 
 interface TransactionSectionProps {
-  recentExpenses: IExpense[];
+  recentExpenses: ExpenseSaved[];
 }
 
 export const TransactionSection = ({

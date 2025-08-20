@@ -1,17 +1,16 @@
-import { IExpense } from "@/types";
+import { ExpenseSaved } from "@/types";
 import { useNavigate } from "react-router-dom";
 import { TableFooter } from "./TableFooter";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
 import { ExpenseColumns } from "../../types/filters";
-import { UUID } from "@/types/ids";
 
 interface ExpensesTableProps {
   columns: ExpenseColumns[];
-  filteredExpenses: IExpense[];
-  selectedItems: string[];
+  filteredExpenses: ExpenseSaved[];
+  selectedItems: number[];
   toggleSelectAll: () => void;
-  toggleItemSelection: (id: UUID) => void;
+  toggleItemSelection: (id: number) => void;
 }
 
 export const ExpensesTable = ({
@@ -22,7 +21,7 @@ export const ExpensesTable = ({
   toggleItemSelection,
 }: ExpensesTableProps) => {
   const navigate = useNavigate();
-  const editExpense = (id: UUID) => {
+  const editExpense = (id: number) => {
     // id를 가져가야하는데 그 방법은 조금 더 생각이 필요함!!
     console.log(id);
     navigate("/expenses/edit");

@@ -1,8 +1,9 @@
+import { ExpenseEntity, ExpenseSaved } from "@/types";
 import { ArrowLeft, Plus, Save } from "lucide-react";
 
 interface EditHeaderProps {
   handleAddExpense: () => void;
-  handleSaveExpense: () => void;
+  handleSaveExpense: (expenseItems: (ExpenseEntity | ExpenseSaved)[]) => void;
 }
 export const EditHeader = ({
   handleAddExpense,

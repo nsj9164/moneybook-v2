@@ -1,15 +1,14 @@
-import { IExpense } from "@/types";
+import { ExpenseSaved } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import { Pencil } from "lucide-react";
 import { ExpenseColumns } from "../../types/filters";
-import { UUID } from "@/types/ids";
 
 interface RowProps {
-  expense: IExpense;
+  expense: ExpenseSaved;
   checked: boolean;
   columns: ExpenseColumns[];
-  editExpense: (id: UUID) => void;
-  toggleItemSelection: (id: UUID) => void;
+  editExpense: (id: number) => void;
+  toggleItemSelection: (id: number) => void;
 }
 export const TableRow = ({
   expense,

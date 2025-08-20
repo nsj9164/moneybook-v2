@@ -6,30 +6,22 @@ export function useConfirmModal<T>(
 ) {
   const [isConfirm, setIsConfirm] = useState(false);
   const [payload, setPayload] = useState<T | null>(null);
-  console.log("#############", payload);
 
-  useEffect(() => {
-    console.log("???????????????", payload);
-  }, [payload]);
+  useEffect(() => {}, [payload]);
 
   const openConfirm = (value: T) => {
-    console.log("openConfirm:::", payload, value);
     setPayload(value);
     setIsConfirm(true);
   };
   const closeConfirm = () => {
-    console.log("closeConfirm:::", payload);
     setIsConfirm(false);
     setPayload(null);
   };
 
   const handleConfirm = useCallback(async () => {
-    console.log("payload3:::", payload);
     if (payload == null) return;
     try {
-      console.log("#######1");
       await onConfirm(payload);
-      console.log("#######2");
       toast.success("삭제가 완료되었습니다.");
       closeConfirm();
     } catch (err) {
