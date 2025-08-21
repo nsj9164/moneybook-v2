@@ -7,7 +7,7 @@ import { FormType } from "@/features/settings/types/GenericFormTypes";
 import {
   createDeleteItemHandler,
   createUpsertHandler,
-} from "@/utils/crudHandlers";
+} from "@/utils/createUpsertHandler";
 import { CategoryBase, CategorySaved } from "@/types";
 import { TableHeader } from "../manageCategories/components/TableHeader";
 import { TableRow } from "../manageCategories/components/TableRow";

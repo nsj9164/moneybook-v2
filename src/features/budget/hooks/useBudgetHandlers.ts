@@ -2,7 +2,7 @@ import { UUID } from "@/types/ids";
 import {
   createDeleteItemHandler,
   createUpsertHandler,
-} from "../../../utils/crudHandlers";
+} from "../../../utils/createUpsertHandler";
 import { BudgetInsertDTO, BudgetUpdateDTO, BudgetSaved } from "../types";
 
 interface useBudgetProps {

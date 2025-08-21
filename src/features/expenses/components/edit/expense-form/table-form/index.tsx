@@ -1,11 +1,11 @@
-import { calActualAmount } from "@/features/expenses/utils/expenseCalc";
 import {
   CategorySaved,
   ExpenseEntity,
+  ExpenseInsertDTO,
   ExpenseSaved,
+  ExpenseUpdateDTO,
   PayMethodSaved,
 } from "@/types";
-import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { TableFormHeader } from "./TableFormHeader";
 import { TableFormRow } from "./TableFormRow";
@@ -15,29 +15,18 @@ interface TableFormProps {
   editExpenses: ExpenseSaved[];
   categories: CategorySaved[];
   payMethods: PayMethodSaved[];
+  onSave: (
+    items: (ExpenseInsertDTO | ExpenseUpdateDTO)[]
+  ) => void | Promise<void>;
 }
 
 export const TableForm = ({
   editExpenses,
   categories,
   payMethods,
+  onSave,
 }: TableFormProps) => {
-  const { handleSubmit } = useFormContext<ExpenseEntity | ExpenseSaved>();
-  const [newExpenses, setNewExpenses] = useState<ExpenseEntity[]>([]);
-
-  const handleSplitAmountChange = (id: number, peopleCnt: number) => {
-    setNewExpenses((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              numberOfPeople: peopleCnt,
-              actualAmount: calActualAmount(item.amount, peopleCnt),
-            }
-          : item
-      )
-    );
-  };
+  const { handleSubmit } = useFormContext<ExpenseEntity>();
 
   return (
     <div className="overflow-x-auto">
@@ -49,10 +38,10 @@ export const TableForm = ({
             editExpenses.map((expense, index) => (
               <form onSubmit={handleSubmit(onSubmit)}>
                 <TableFormRow
-                  index={index}
                   expense={expense}
                   categories={categories}
                   payMethods={payMethods}
+                  handleUpdExpense={handleUpdExpense}
                 />
                 {expense.isDifferentAmount && (
                   <TableFormSplitRow

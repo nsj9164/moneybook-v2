@@ -10,7 +10,7 @@ import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
 import {
   createUpsertHandler,
   createDeleteItemHandler,
-} from "@/utils/crudHandlers";
+} from "@/utils/createUpsertHandler";
 import { useConfirmModal } from "@/hooks/useConfirmModal";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
 

@@ -1,4 +1,4 @@
-import { TempId, UUID } from "@/types/ids";
+import { TempId } from "@/types/ids";
 
 export interface ExpenseBase {
   date: string;
@@ -16,10 +16,16 @@ export interface ExpenseBase {
   categories?: { name: string };
 }
 
-export interface ExpenseEntity extends ExpenseBase {
-  id: number | TempId;
+export interface ExpenseInsertDTO extends ExpenseBase {
+  id: TempId;
 }
 
 export interface ExpenseSaved extends ExpenseBase {
   id: number;
 }
+
+export type ExpenseEntity = ExpenseInsertDTO | ExpenseSaved;
+
+export type ExpenseUpdateDTO = {
+  id: number;
+} & Partial<ExpenseBase>;

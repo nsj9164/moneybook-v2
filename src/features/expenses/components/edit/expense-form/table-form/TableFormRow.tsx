@@ -1,34 +1,51 @@
-import { CategorySaved, ExpenseSaved, PayMethodSaved } from "@/types";
+import {
+  CategorySaved,
+  ExpenseEntity,
+  ExpenseSaved,
+  PayMethodSaved,
+} from "@/types";
+import { TempId } from "@/types/ids";
+import { formatCurrency, parseCurrency } from "@/utils/format";
 import { Trash2 } from "lucide-react";
-import { useFormContext } from "react-hook-form";
+import {
+  DelTableExpenseHandler,
+  UpdActualAmountHandler,
+  UpdTableExpenseHandler,
+} from "../types/handlers";
 
 interface ExpenseFormTableRow {
-  index: number;
-  expense: ExpenseSaved;
+  expense: ExpenseEntity;
   categories: CategorySaved[];
   payMethods: PayMethodSaved[];
+  handleUpdExpense: <K extends keyof ExpenseSaved>(
+    value: ExpenseSaved[K],
+    id: number | TempId,
+    key: K
+  ) => void;
 }
 
 export const TableFormRow = ({
-  index,
   expense,
   categories,
   payMethods,
+  handleUpdExpense,
 }: ExpenseFormTableRow) => {
-  const { register } = useFormContext();
   return (
     <tr>
       <td className="px-4 py-4 text-sm text-gray-700">
         <input
-          {...register(`items.${index}.date`, { required: true })}
           type="date"
           value={expense.date}
+          onChange={(e) => handleUpdExpense(e.target.value, expense.id, "date")}
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         />
       </td>
       <td className="px-4 py-4 text-sm text-gray-700">
         <select
-          {...register(`items.${index}.categoryId`, { required: true })}
+          value={expense.categoryId}
+          onChange={(e) =>
+            handleUpdExpense(Number(e.target.value), expense.id, "categoryId")
+          }
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         >
           <option value="">미분류</option>
@@ -41,8 +58,11 @@ export const TableFormRow = ({
       </td>
       <td className="px-4 py-4 text-sm text-gray-700">
         <input
-          {...register(`items.${index}.itemName`, { required: true })}
           type="text"
+          value={expense.itemName}
+          onChange={(e) =>
+            handleUpdExpense(e.target.value, expense.id, "itemName")
+          }
           placeholder="지출 항목을 입력하세요"
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         />
@@ -53,11 +73,22 @@ export const TableFormRow = ({
             <span className="text-gray-500 sm:text-sm">₩</span>
           </div>
           <input
-            {...register(`items.${index}.amount`, {
-              required: true,
-              valueAsNumber: true,
-            })}
             type="text"
+            value={formatCurrency(expense.amount)}
+            onChange={(e) =>
+              handleUpdExpense(
+                parseCurrency(e.target.value),
+                expense.id,
+                "amount"
+              )
+            }
+            onBlur={(e) =>
+              updateActualAmount(
+                e.target.value,
+                expense.id,
+                expense.numberOfPeople ?? 0
+              )
+            }
             className="w-full pl-7 pr-3 rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
           />
         </div>
@@ -69,12 +100,16 @@ export const TableFormRow = ({
               <span className="text-gray-500 sm:text-sm">₩</span>
             </div>
             <input
-              {...register(`items.${index}.actualAmount`, {
-                required: true,
-                valueAsNumber: true,
-              })}
               type="text"
+              value={formatCurrency(expense.actualAmount)}
               disabled={!expense.isDifferentAmount}
+              onChange={(e) =>
+                handleUpdExpense(
+                  parseCurrency(e.target.value),
+                  expense.id,
+                  "actualAmount"
+                )
+              }
               className={`w-full pl-7 pr-3 rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm ${
                 !expense.isDifferentAmount ? "bg-gray-100" : ""
               }`}
@@ -82,11 +117,16 @@ export const TableFormRow = ({
           </div>
           <label className="inline-flex items-center">
             <input
-              {...register(`items.${index}.isDifferentAmount`, {
-                required: true,
-              })}
               type="checkbox"
               checked={expense.isDifferentAmount}
+              onChange={(e) =>
+                handleUpdExpense(
+                  e.target.checked,
+                  expense.id,
+                  "isDifferentAmount"
+                )
+              }
+              id={`checkbox-${expense.id}`}
               className="h-4 w-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
             />
             <span className="ml-2 text-xs text-gray-500">실제 지출 다름</span>
@@ -95,9 +135,14 @@ export const TableFormRow = ({
       </td>
       <td className="px-4 py-4 text-sm text-gray-700">
         <select
-          {...register(`items.${index}.paymentMethodId`, {
-            required: true,
-          })}
+          value={expense.paymentMethodId}
+          onChange={(e) =>
+            handleUpdExpense(
+              Number(e.target.value),
+              expense.id,
+              "paymentMethodId"
+            )
+          }
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         >
           <option value="">미분류</option>
@@ -110,14 +155,19 @@ export const TableFormRow = ({
       </td>
       <td className="px-4 py-4 text-sm text-gray-700">
         <input
-          {...register(`items.${index}.note`)}
           type="text"
+          value={expense.note}
+          onChange={(e) => handleUpdExpense(e.target.value, expense.id, "note")}
           placeholder="메모"
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         />
       </td>
       <td className="px-4 py-4 text-sm text-right">
-        <button type="button" className="text-red-600 hover:text-red-900">
+        <button
+          onClick={() => handleDelExpense(expense.id)}
+          type="button"
+          className="text-red-600 hover:text-red-900"
+        >
           <Trash2 className="h-5 w-5" />
           <span className="sr-only">삭제</span>
         </button>

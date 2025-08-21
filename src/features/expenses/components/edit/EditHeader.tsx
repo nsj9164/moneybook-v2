@@ -1,14 +1,10 @@
-import { ExpenseEntity, ExpenseSaved } from "@/types";
 import { ArrowLeft, Plus, Save } from "lucide-react";
 
 interface EditHeaderProps {
   handleAddExpense: () => void;
-  handleSaveExpense: (expenseItems: (ExpenseEntity | ExpenseSaved)[]) => void;
+  onSave: () => void;
 }
-export const EditHeader = ({
-  handleAddExpense,
-  handleSaveExpense,
-}: EditHeaderProps) => {
+export const EditHeader = ({ handleAddExpense, onSave }: EditHeaderProps) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
       <div className="flex items-center mb-4 sm:mb-0">
@@ -30,7 +26,7 @@ export const EditHeader = ({
           <Plus className="mr-2 -ml-1 h-4 w-4" />새 항목 추가
         </button>
         <button
-          onClick={handleSaveExpense}
+          onClick={onSave}
           type="button"
           className="inline-flex items-center justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors"
         >

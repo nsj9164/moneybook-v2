@@ -10,13 +10,24 @@ import { expensesState } from "@/recoil/atoms";
 import { useSearchParams } from "react-router-dom";
 import { useFetchExpensesByIds } from "@/hooks/fetchData/useFetchExpensesByIds";
 import { TableForm } from "./expense-form/table-form";
+import { useExpenseHandlers } from "../../hooks/useExpenseHandlers";
+import {
+  ExpenseEntity,
+  ExpenseInsertDTO,
+  ExpenseSaved,
+  ExpenseUpdateDTO,
+} from "@/types";
+import { diffFields } from "@/utils/form";
+import { toast } from "react-hot-toast";
+import { calActualAmount } from "../../utils/expenseCalc";
+import { TempId } from "@/types/ids";
 
 const ExpenseFormPage = () => {
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
   const { userId } = useAuth();
   const setExpenses = useSetRecoilState(expensesState);
-  const [newExpenses, setNewExpenses] = useState([{}]);
+  const [newExpenses, setNewExpenses] = useState<ExpenseEntity[]>([]);
   // newExpenses add
   const handleAddExpense = () => {
     setNewExpenses((prev) => [...prev, initialExpense]);
@@ -30,32 +41,62 @@ const ExpenseFormPage = () => {
   const ids = searchParams.get("ids")?.split(",").map(Number) || [];
   const editExpenses = useFetchExpensesByIds(ids);
 
-  // const onSubmit = async () => {
-  //   const prevItems = prevDataRef.current.items;
+  const { handleSaveExpense, handleDeleteExpense } = useExpenseHandlers({
+    userId: userId!,
+    setExpenses,
+  });
 
-  //   const prevById = new Map<number, ExpenseSaved>(
-  //     prevItems.filter(isSaved).map((p) => [p.id, p])
-  //   );
-  // };
+  const onSubmit = async () => {
+    const saveData: (ExpenseInsertDTO | ExpenseUpdateDTO)[] = [];
 
-  // const handleSaveExpense = async () => {
-  //   if (newExpenses.length < 1) {
-  //     return;
-  //   }
+    for (const newItem of newExpenses) {
+      if (typeof newItem.id === "number" && editExpenses.length > 0) {
+        const prev = editExpenses.find((e) => e.id === newItem.id);
+        if (!prev) continue;
 
-  //   const saveData = newExpenses
-  //     .filter((expense) => expense.isModified)
-  //     .map((item) => formatExpenseForInsert(item));
+        const diffed = diffFields(prev, newItem);
+        if (Object.keys(diffed).length === 0) {
+          return;
+        }
 
-  //   const { error } = await supabase.from("expenses").upsert(saveData).select();
+        saveData.push({ ...diffed, id: newItem.id });
+      } else {
+        const { id, ...insertData } = newItem;
+        saveData.push(insertData as ExpenseInsertDTO);
+      }
+    }
 
-  //   if (error) {
-  //     console.error("Insert error:", error.message);
-  //     return;
-  //   }
+    if (saveData.length === 0) {
+      toast.error("저장할 변경 사항이 없습니다.");
+      return;
+    }
 
-  //   setNewExpenses([]);
-  // };
+    await handleSaveExpense(saveData);
+  };
+
+  const handleSplitAmountChange = (id: number, peopleCnt: number) => {
+    setNewExpenses((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              numberOfPeople: peopleCnt,
+              actualAmount: calActualAmount(item.amount, peopleCnt),
+            }
+          : item
+      )
+    );
+  };
+
+  const handleUpdExpense = <K extends keyof ExpenseSaved>(
+    value: ExpenseSaved[K],
+    id: number | TempId,
+    key: K
+  ) => {
+    setNewExpenses((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, [key]: value } : item))
+    );
+  };
 
   // const isMobile = useMediaQuery("(max-width: 768px)");
   // const FormComponent = isMobile ? CardForm : TableForm;
@@ -63,16 +104,14 @@ const ExpenseFormPage = () => {
   return (
     <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-sm mt-6 mb-6">
       {/* 헤더 영역 */}
-      <EditHeader
-        handleAddExpense={handleAddExpense}
-        handleSaveExpense={handleSaveExpense}
-      />
+      <EditHeader handleAddExpense={handleAddExpense} onSave={onSubmit} />
 
       {/* 데스크톱 뷰 - 테이블 형식 / 모바일 뷰 - 카드 형식*/}
       <TableForm
         editExpenses={editExpenses}
         categories={categories}
         payMethods={payMethods}
+        onSave={onSubmit}
       />
 
       {/* 요약 정보 */}
