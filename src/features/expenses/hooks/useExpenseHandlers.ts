@@ -1,13 +1,7 @@
-import {
-  ExpenseEntity,
-  ExpenseInsertDTO,
-  ExpenseSaved,
-  ExpenseUpdateDTO,
-} from "@/types";
+import { ExpenseInsertDTO, ExpenseSaved } from "@/types";
 import { UUID } from "@/types/ids";
-import { createBatchUpsertHandler } from "@/utils/createBatchUpsertHandler";
 import {
-  createDeleteItemHandler,
+  createDeleteHandler,
   createUpsertHandler,
 } from "@/utils/createUpsertHandler";
 
@@ -20,12 +14,13 @@ export const useExpenseHandlers = ({
   userId,
   setExpenses,
 }: useExpenseProps) => {
-  const handleSaveExpense = createBatchUpsertHandler<
-    ExpenseEntity,
-    ExpenseSaved
-  >("expenses", userId, setExpenses);
+  const handleSaveExpense = createUpsertHandler<ExpenseInsertDTO, ExpenseSaved>(
+    "expenses",
+    userId,
+    setExpenses
+  );
 
-  const handleDeleteExpense = createDeleteItemHandler<ExpenseSaved>("expenses");
+  const handleDeleteExpense = createDeleteHandler<ExpenseSaved>("expenses");
 
   return { handleSaveExpense, handleDeleteExpense };
 };

@@ -1,10 +1,8 @@
 import { ArrowLeft, Plus, Save } from "lucide-react";
+import { useExpenseFormContext } from "./context/ExpenseFormContext";
 
-interface EditHeaderProps {
-  handleAddExpense: () => void;
-  onSave: () => void;
-}
-export const EditHeader = ({ handleAddExpense, onSave }: EditHeaderProps) => {
+export const EditHeader = () => {
+  const { handleAddExpense, onSave } = useExpenseFormContext();
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
       <div className="flex items-center mb-4 sm:mb-0">

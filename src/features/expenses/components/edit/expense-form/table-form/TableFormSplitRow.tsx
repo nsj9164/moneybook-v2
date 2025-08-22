@@ -1,15 +1,14 @@
 import { ExpenseSaved } from "@/types";
 import { formatCurrency } from "@/utils/format";
+import { useExpenseFormContext } from "../../context/ExpenseFormContext";
 
 interface TableFormSplitRowProps {
   expense: ExpenseSaved;
-  onSplitAmountChange: (eopleCnt: number) => void;
 }
 
-export const TableFormSplitRow = ({
-  expense,
-  onSplitAmountChange,
-}: TableFormSplitRowProps) => {
+export const TableFormSplitRow = ({ expense }: TableFormSplitRowProps) => {
+  const { handleSplitAmountChange } = useExpenseFormContext();
+
   return (
     <tr className="bg-emerald-50 border-t border-emerald-100">
       <td colSpan={8} className="px-4 py-3">
@@ -20,7 +19,9 @@ export const TableFormSplitRow = ({
               type="number"
               min="1"
               value={expense.numberOfPeople ?? 0}
-              onChange={(e) => onSplitAmountChange(Number(e.target.value))}
+              onChange={(e) =>
+                handleSplitAmountChange(expense.id, Number(e.target.value))
+              }
               className="w-16 rounded-md border-emerald-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm"
             />
             <span className="text-emerald-700 ml-1">명</span>

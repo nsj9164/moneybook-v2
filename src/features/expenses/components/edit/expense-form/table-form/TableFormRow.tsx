@@ -1,4 +1,8 @@
 import {
+  UpdAmountFn,
+  UpdExpenseFn,
+} from "@/features/expenses/types/UpdExpense";
+import {
   CategorySaved,
   ExpenseEntity,
   ExpenseSaved,
@@ -7,6 +11,7 @@ import {
 import { TempId } from "@/types/ids";
 import { formatCurrency, parseCurrency } from "@/utils/format";
 import { Trash2 } from "lucide-react";
+import { useExpenseFormContext } from "../../context/ExpenseFormContext";
 import {
   DelTableExpenseHandler,
   UpdActualAmountHandler,
@@ -17,26 +22,22 @@ interface ExpenseFormTableRow {
   expense: ExpenseEntity;
   categories: CategorySaved[];
   payMethods: PayMethodSaved[];
-  handleUpdExpense: <K extends keyof ExpenseSaved>(
-    value: ExpenseSaved[K],
-    id: number | TempId,
-    key: K
-  ) => void;
 }
 
 export const TableFormRow = ({
   expense,
   categories,
   payMethods,
-  handleUpdExpense,
 }: ExpenseFormTableRow) => {
+  const { onDelete, onUpdate, updateActualAmount } = useExpenseFormContext();
+
   return (
     <tr>
       <td className="px-4 py-4 text-sm text-gray-700">
         <input
           type="date"
           value={expense.date}
-          onChange={(e) => handleUpdExpense(e.target.value, expense.id, "date")}
+          onChange={(e) => onUpdate(e.target.value, expense.id, "date")}
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         />
       </td>
@@ -44,7 +45,7 @@ export const TableFormRow = ({
         <select
           value={expense.categoryId}
           onChange={(e) =>
-            handleUpdExpense(Number(e.target.value), expense.id, "categoryId")
+            onUpdate(Number(e.target.value), expense.id, "categoryId")
           }
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         >
@@ -60,9 +61,7 @@ export const TableFormRow = ({
         <input
           type="text"
           value={expense.itemName}
-          onChange={(e) =>
-            handleUpdExpense(e.target.value, expense.id, "itemName")
-          }
+          onChange={(e) => onUpdate(e.target.value, expense.id, "itemName")}
           placeholder="지출 항목을 입력하세요"
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         />
@@ -76,11 +75,7 @@ export const TableFormRow = ({
             type="text"
             value={formatCurrency(expense.amount)}
             onChange={(e) =>
-              handleUpdExpense(
-                parseCurrency(e.target.value),
-                expense.id,
-                "amount"
-              )
+              onUpdate(parseCurrency(e.target.value), expense.id, "amount")
             }
             onBlur={(e) =>
               updateActualAmount(
@@ -104,7 +99,7 @@ export const TableFormRow = ({
               value={formatCurrency(expense.actualAmount)}
               disabled={!expense.isDifferentAmount}
               onChange={(e) =>
-                handleUpdExpense(
+                onUpdate(
                   parseCurrency(e.target.value),
                   expense.id,
                   "actualAmount"
@@ -120,11 +115,7 @@ export const TableFormRow = ({
               type="checkbox"
               checked={expense.isDifferentAmount}
               onChange={(e) =>
-                handleUpdExpense(
-                  e.target.checked,
-                  expense.id,
-                  "isDifferentAmount"
-                )
+                onUpdate(e.target.checked, expense.id, "isDifferentAmount")
               }
               id={`checkbox-${expense.id}`}
               className="h-4 w-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
@@ -137,11 +128,7 @@ export const TableFormRow = ({
         <select
           value={expense.paymentMethodId}
           onChange={(e) =>
-            handleUpdExpense(
-              Number(e.target.value),
-              expense.id,
-              "paymentMethodId"
-            )
+            onUpdate(Number(e.target.value), expense.id, "paymentMethodId")
           }
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         >
@@ -157,14 +144,14 @@ export const TableFormRow = ({
         <input
           type="text"
           value={expense.note}
-          onChange={(e) => handleUpdExpense(e.target.value, expense.id, "note")}
+          onChange={(e) => onUpdate(e.target.value, expense.id, "note")}
           placeholder="메모"
           className="w-full rounded-md border-gray-300 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
         />
       </td>
       <td className="px-4 py-4 text-sm text-right">
         <button
-          onClick={() => handleDelExpense(expense.id)}
+          onClick={() => onDelete(expense.id)}
           type="button"
           className="text-red-600 hover:text-red-900"
         >

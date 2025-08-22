@@ -1,7 +1,9 @@
-interface EditSummaryProps {
-  newExpenseCount: number;
-}
-export const EditSummary = ({ newExpenseCount }: EditSummaryProps) => {
+import { useExpenseFormContext } from "./context/ExpenseFormContext";
+
+export const EditSummary = () => {
+  const { newExpenses } = useExpenseFormContext();
+  const newExpenseCount = newExpenses.length;
+
   return (
     <div className="mt-6 bg-gray-50 p-4 rounded-lg">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
