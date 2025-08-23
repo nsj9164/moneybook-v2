@@ -1,7 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useSetRecoilState } from "recoil";
 import { payMethodsState } from "@/recoil/atoms";
-import { PayMethodBase, PayMethodSaved } from "@/types";
+import { PayMethodBase, PayMethodInsertDto, PayMethodSaved } from "@/types";
 import GenericForm from "@/features/settings/components/common/form/GenericForm";
 import { FormType } from "@/features/settings/types/GenericFormTypes";
 import { TableHeader } from "../managePayMethods/components/TableHeader";
@@ -9,7 +9,7 @@ import { TableRow } from "../managePayMethods/components/TableRow";
 import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
 import {
   createUpsertHandler,
-  createDeleteItemHandler,
+  createDeleteHandler,
 } from "@/utils/createUpsertHandler";
 import { useConfirmModal } from "@/hooks/useConfirmModal";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
@@ -19,12 +19,19 @@ const ManagePayMethods = () => {
   const payMethods = useFetchPayMethods();
   const setPayMethods = useSetRecoilState(payMethodsState);
 
-  const handleSavePayMethod = createUpsertHandler<
-    PayMethodBase,
-    PayMethodSaved
-  >("payment_methods", userId!, setPayMethods);
+  const { upsertOne } = createUpsertHandler<PayMethodInsertDto, PayMethodSaved>(
+    "payment_methods",
+    userId!,
+    setPayMethods
+  );
 
-  const handleDeletePayMethod = createDeleteItemHandler<PayMethodSaved>(
+  const handleSavePayMethod = async (
+    data: PayMethodInsertDto | Partial<PayMethodSaved>
+  ) => {
+    return await upsertOne(data);
+  };
+
+  const handleDeletePayMethod = createDeleteHandler<PayMethodSaved>(
     "payment_methods",
     setPayMethods
   );

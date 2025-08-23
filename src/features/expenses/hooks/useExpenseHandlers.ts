@@ -14,11 +14,17 @@ export const useExpenseHandlers = ({
   userId,
   setExpenses,
 }: useExpenseProps) => {
-  const handleSaveExpense = createUpsertHandler<ExpenseInsertDTO, ExpenseSaved>(
+  const { upsertMany } = createUpsertHandler<ExpenseInsertDTO, ExpenseSaved>(
     "expenses",
     userId,
     setExpenses
   );
+
+  const handleSaveExpense = async (
+    data: (ExpenseInsertDTO | Partial<ExpenseSaved>)[]
+  ) => {
+    return await upsertMany(data);
+  };
 
   const handleDeleteExpense = createDeleteHandler<ExpenseSaved>("expenses");
 

@@ -1,24 +1,29 @@
 import {
-  CategoryBase,
+  CategoryInsertDTO,
   CategorySaved,
-  PayMethodBase,
+  PayMethodInsertDTO,
   PayMethodSaved,
+  RecurringBase,
+  RecurringSaved,
 } from "@/types";
 import { FieldValues, Path } from "react-hook-form";
 
 export enum FormType {
   Categories = "categories",
   PayMethods = "payMethods",
+  Recurrings = "recurrings",
 }
 
 export type BaseMap = {
-  [FormType.Categories]: CategoryBase;
-  [FormType.PayMethods]: PayMethodBase;
+  [FormType.Categories]: CategoryInsertDTO;
+  [FormType.PayMethods]: PayMethodInsertDTO;
+  [FormType.Recurrings]: RecurringBase;
 };
 
 export type SavedMap = {
   [FormType.Categories]: CategorySaved;
   [FormType.PayMethods]: PayMethodSaved;
+  [FormType.Recurrings]: RecurringSaved;
 };
 
 export type FieldConfig<K extends FieldValues = FieldValues> =

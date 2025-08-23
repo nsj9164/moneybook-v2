@@ -19,8 +19,8 @@ import { GenericFormModal } from "../modal/GenericFormModal";
 import { GenericFormModalFields } from "../modal/GenericFormModalFields";
 import { createPaginateAfterAdd } from "@/features/settings/utils/createPaginateAfterAdd";
 
-type GenericFormHandler<T> = {
-  openModal: (row?: T) => void;
+type GenericFormHandler<Insert, Saved> = {
+  openModal: (row?: Partial<Insert> | Saved) => void;
 };
 
 interface GenericFormProps<K extends FormType> {
@@ -29,9 +29,9 @@ interface GenericFormProps<K extends FormType> {
   fetchData: SavedMap[K][];
   renderRow: (
     row: SavedMap[K],
-    handler: GenericFormHandler<SavedMap[K]>
+    handler: GenericFormHandler<BaseMap[K], SavedMap[K]>
   ) => React.ReactNode;
-  onSave: (row: Partial<BaseMap[K]>) => void | Promise<void>;
+  onSave: (row: BaseMap[K] | Partial<SavedMap[K]>) => Promise<SavedMap[K]>;
 }
 
 function GenericForm<K extends FormType>({
@@ -48,8 +48,9 @@ function GenericForm<K extends FormType>({
     () => initial() as DefaultValues<BaseMap[K]>,
     [formType]
   );
-  const { methods, isOpen, isEditing, openModal, closeModal } =
-    useModalForm<BaseMap[K]>(defaultValues);
+  const { methods, isOpen, isEditing, openModal, closeModal } = useModalForm<
+    BaseMap[K] | SavedMap[K]
+  >(defaultValues);
 
   const [searchQuery, setSearchQuery] = useState("");
 

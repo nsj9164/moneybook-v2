@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { X, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useFieldArray, useFormContext } from "react-hook-form";
@@ -34,6 +35,7 @@ const AddBudgetModal = ({
   onSave,
   unBudgets,
 }: AddBudgetModalProps) => {
+  const [loading, setLoading] = useState(false);
   const { handleSubmit, control, getValues } = useFormContext<FormShape>();
 
   const { fields, append } = useFieldArray<FormShape>({
@@ -53,6 +55,7 @@ const AddBudgetModal = ({
   }, [isOpen, isEditing]);
 
   const onSubmit = async ({ items }: FormShape) => {
+    setLoading(true);
     const prevItems = prevDataRef.current.items;
 
     const prevById = new Map<number, BudgetSaved>(
@@ -84,11 +87,13 @@ const AddBudgetModal = ({
 
     if (toSave.length === 0) {
       toast.error("저장할 변경 사항이 없습니다.");
+      setLoading(false);
       onClose();
       return;
     }
 
     await onSave(toSave);
+    setLoading(false);
     onClose();
   };
 
@@ -155,6 +160,7 @@ const AddBudgetModal = ({
                   <button
                     type="submit"
                     className="inline-flex items-center rounded-lg border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700"
+                    disabled={loading}
                   >
                     저장
                   </button>

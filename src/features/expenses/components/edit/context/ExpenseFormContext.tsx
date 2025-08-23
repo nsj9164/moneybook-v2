@@ -4,7 +4,9 @@ import { useExpenseForm } from "@/features/expenses/hooks/useExpenseForm";
 import { useExpenseHandlers } from "@/features/expenses/hooks/useExpenseHandlers";
 import { ExpenseFormContextType } from "@/features/expenses/types/ExpenseFormContextType";
 import { calActualAmount } from "@/features/expenses/utils/expenseCalc";
+import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
 import { useFetchExpensesByIds } from "@/hooks/fetchData/useFetchExpensesByIds";
+import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
 import { expensesState } from "@/recoil/atoms";
 import {
   ExpenseEntity,
@@ -15,7 +17,7 @@ import {
 import { TempId } from "@/types/ids";
 import { diffFields } from "@/utils/form";
 import { parseCurrency } from "@/utils/format";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
@@ -24,13 +26,25 @@ const ExpenseFormContext = createContext<ExpenseFormContextType | null>(null);
 
 export const ExpenseFormProvider = ({
   children,
-  editExpenses,
-}: { children: React.ReactNode; editExpenses: ExpenseSaved[] } & Parameters<
-  typeof useExpenseForm
->[0]) => {
+}: {
+  children: React.ReactNode;
+}) => {
   const { userId } = useAuth();
+  const categories = useFetchCategories();
+  const payMethods = useFetchPayMethods();
   const setExpenses = useSetRecoilState(expensesState);
   const [newExpenses, setNewExpenses] = useState<ExpenseEntity[]>([]);
+
+  const [searchParams] = useSearchParams();
+
+  const ids = searchParams.get("ids")?.split(",").map(Number) || [];
+  const editExpenses = useFetchExpensesByIds(ids);
+
+  useEffect(() => {
+    if (editExpenses.length > 0) {
+      setNewExpenses(editExpenses);
+    }
+  }, [editExpenses]);
 
   const { handleSaveExpense, handleDeleteExpense } = useExpenseHandlers({
     userId: userId!,
@@ -66,7 +80,7 @@ export const ExpenseFormProvider = ({
       return;
     }
 
-    await handleSaveExpense(saveData);
+    await handleSaveExpense.upsertMany(saveData);
   };
 
   function isTempId(id: number | TempId): id is TempId {
@@ -108,7 +122,7 @@ export const ExpenseFormProvider = ({
   // 실제지출 - 결제금액 변경 적용
   const updateActualAmount = (
     amount: string,
-    id: number,
+    id: number | TempId,
     peopleCnt: number
   ) => {
     const newActualAmount =
@@ -127,6 +141,8 @@ export const ExpenseFormProvider = ({
     <ExpenseFormContext.Provider
       value={{
         newExpenses,
+        categories,
+        payMethods,
         handleAddExpense,
         handleSplitAmountChange,
         onUpdate,

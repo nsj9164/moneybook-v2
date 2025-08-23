@@ -23,11 +23,15 @@ import { useFetchRecurringExpenses } from "@/hooks/fetchData/useFetchRecurringEx
 import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
 import { updateItem } from "@/api/supabase/updateItem";
 import { insertItem } from "@/api/supabase/insertItem";
-import { createDeleteItemHandler } from "@/utils/createUpsertHandler";
+import {
+  createDeleteHandler,
+  createUpsertHandler,
+} from "@/utils/createUpsertHandler";
 import { enrichRecurring } from "../manageRecurringExpenses/libs/enrichRecurring";
 import { createPaginateAfterAdd } from "../utils/createPaginateAfterAdd";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
 import { useConfirmModal } from "@/hooks/useConfirmModal";
+import { FormType } from "../types/GenericFormTypes";
 
 const ManageRecurringExpenses = () => {
   const { userId } = useAuth();
@@ -89,11 +93,27 @@ const ManageRecurringExpenses = () => {
     goToLastPageIfNeeded
   );
 
-  const handleSaveRecurring = async (recurring: Partial<RecurringSaved>) => {
+  const handleSaveRecurring = async (
+    recurring: RecurringBase | Partial<RecurringSaved>
+  ): Promise<RecurringSaved> => {
+    const saved = await upsertRecurring(recurring);
+    const enriched = enrichRecurring(
+      saved,
+      categories,
+      payMethods,
+      cycleOptions
+    );
+    patchRecurrings(enriched);
+    return saved;
+  };
+
+  const upsertRecurring = async (
+    recurring: RecurringBase | Partial<RecurringSaved>
+  ): Promise<RecurringDisplay> => {
     const isEdit =
       isEditing && "id" in recurring && typeof recurring.id === "number";
 
-    const saved = isEdit
+    return isEdit
       ? await updateItem<RecurringSaved>(
           "recurring_expenses",
           recurring,
@@ -104,18 +124,13 @@ const ManageRecurringExpenses = () => {
           recurring as RecurringBase,
           userId!
         );
+  };
 
-    const enriched = enrichRecurring(
-      saved,
-      categories,
-      payMethods,
-      cycleOptions
-    );
-
+  const patchRecurrings = (enriched: RecurringDisplay) => {
     setRecurrings((prev) => patchOrAddItem(prev, enriched));
   };
 
-  const handleDeleteRecurring = createDeleteItemHandler<RecurringSaved>(
+  const handleDeleteRecurring = createDeleteHandler<RecurringSaved>(
     "recurring_expenses",
     setRecurrings
   );
@@ -164,7 +179,7 @@ const ManageRecurringExpenses = () => {
       </div>
 
       <FormProvider {...methods}>
-        <GenericFormModal
+        <GenericFormModal<FormType.Recurrings>
           formTitle="고정지출"
           isOpen={isOpen}
           isEditing={isEditing}

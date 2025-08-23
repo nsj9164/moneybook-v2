@@ -5,10 +5,10 @@ import { categoriesState } from "@/recoil/atoms";
 import GenericForm from "@/features/settings/components/common/form/GenericForm";
 import { FormType } from "@/features/settings/types/GenericFormTypes";
 import {
-  createDeleteItemHandler,
+  createDeleteHandler,
   createUpsertHandler,
 } from "@/utils/createUpsertHandler";
-import { CategoryBase, CategorySaved } from "@/types";
+import { CategoryBase, CategoryInsertDTO, CategorySaved } from "@/types";
 import { TableHeader } from "../manageCategories/components/TableHeader";
 import { TableRow } from "../manageCategories/components/TableRow";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
@@ -20,13 +20,19 @@ const ManageCategories = () => {
 
   const setCategories = useSetRecoilState(categoriesState);
 
-  const handleSaveCategory = createUpsertHandler<CategoryBase, CategorySaved>(
+  const { upsertOne } = createUpsertHandler<CategoryInsertDTO, CategorySaved>(
     "categories",
     userId!,
     setCategories
   );
 
-  const handleDeleteCategory = createDeleteItemHandler<CategorySaved>(
+  const handleSaveCategory = async (
+    data: CategoryInsertDTO | Partial<CategorySaved>
+  ) => {
+    return await upsertOne(data);
+  };
+
+  const handleDeleteCategory = createDeleteHandler<CategorySaved>(
     "categories",
     setCategories
   );

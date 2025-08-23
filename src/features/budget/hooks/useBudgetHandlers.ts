@@ -1,6 +1,6 @@
 import { UUID } from "@/types/ids";
 import {
-  createDeleteItemHandler,
+  createDeleteHandler,
   createUpsertHandler,
 } from "../../../utils/createUpsertHandler";
 import { BudgetInsertDTO, BudgetUpdateDTO, BudgetSaved } from "../types";
@@ -12,26 +12,18 @@ interface useBudgetProps {
 
 export const useBudgetHandlers = ({ userId, refetchAll }: useBudgetProps) => {
   const handleSaveBudget = async (
-    budgetItems: (BudgetInsertDTO | BudgetUpdateDTO)[]
+    data: (BudgetInsertDTO | BudgetUpdateDTO)[]
   ) => {
-    const upsert = createUpsertHandler<BudgetInsertDTO, BudgetSaved>(
+    const { upsertMany } = createUpsertHandler<BudgetInsertDTO, BudgetSaved>(
       "budgets",
       userId!
     );
 
-    for (const item of budgetItems) {
-      if ("id" in item && typeof item.id === "string") {
-        const { id: _tempId, ...draft } = item;
-        await upsert(draft);
-      } else {
-        await upsert(item);
-      }
-    }
-
+    await upsertMany(data);
     await refetchAll();
   };
 
-  const handleDeleteBudget = createDeleteItemHandler<BudgetSaved>("budgets");
+  const handleDeleteBudget = createDeleteHandler<BudgetSaved>("budgets");
 
   return { handleSaveBudget, handleDeleteBudget };
 };

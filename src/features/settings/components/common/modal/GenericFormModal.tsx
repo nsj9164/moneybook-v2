@@ -16,9 +16,7 @@ interface GenericFormModalProps<K extends FormType> {
   formTitle: string;
   isOpen: boolean;
   isEditing: boolean;
-  onSave: (
-    data: Partial<BaseMap[K]> | Partial<SavedMap[K]>
-  ) => void | Promise<void>;
+  onSave: (data: BaseMap[K] | Partial<SavedMap[K]>) => Promise<SavedMap[K]>;
   onClose: () => void;
   paginateAfterAdd: () => void;
   children: React.ReactNode;
@@ -34,12 +32,14 @@ export function GenericFormModal<K extends FormType>({
   children,
 }: GenericFormModalProps<K>) {
   const methods = useFormContext<SavedMap[K]>();
+  const [loading, setLoading] = useState(false);
   const [currentData, setCurrentData] = useState<Partial<SavedMap[K]>>({});
   useEffect(() => {
     if (isEditing && isOpen) setCurrentData(methods.getValues());
   }, [isEditing, isOpen]);
 
   const handleSubmitData: SubmitHandler<SavedMap[K]> = async (data) => {
+    setLoading(true);
     if (isEditing) {
       const diffed = diffFields(currentData, data);
       if (Object.keys(diffed).length === 0) {
@@ -55,6 +55,7 @@ export function GenericFormModal<K extends FormType>({
       paginateAfterAdd();
     }
 
+    setLoading(false);
     onClose();
   };
 
@@ -117,6 +118,7 @@ export function GenericFormModal<K extends FormType>({
                     <button
                       type="submit"
                       className="rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700"
+                      disabled={loading}
                     >
                       {isEditing ? "수정" : "추가"}
                     </button>

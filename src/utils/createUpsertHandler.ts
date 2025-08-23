@@ -4,6 +4,7 @@ import { deleteItem } from "@/api/supabase/deleteItem";
 import { TempId, UUID } from "@/types/ids";
 import { patchOrAddItem } from "./patchOrAddItem";
 import { patchOrAddItems } from "./patchOrAddItems";
+import { useState } from "react";
 
 function isSaved<Saved extends { id: number }>(item: {
   id?: number | TempId;
@@ -19,6 +20,7 @@ export function createUpsertHandler<
   userId: UUID,
   setState?: React.Dispatch<React.SetStateAction<Saved[]>>
 ) {
+  const [loading, setLoading] = useState(true);
   // 단일 저장
   const upsertOne = async (item: Insert | Partial<Saved>): Promise<Saved> => {
     if (isSaved<Saved>(item)) {
@@ -35,6 +37,7 @@ export function createUpsertHandler<
       setState?.((prev) => patchOrAddItem(prev, saved));
       return saved;
     }
+    setLoading(false);
   };
 
   // 여러 개 저장

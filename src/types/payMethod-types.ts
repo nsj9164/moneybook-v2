@@ -1,3 +1,5 @@
+import { TempId } from "./ids";
+
 export interface PayMethodBase {
   name: string;
   billingStartDay?: number;
@@ -5,6 +7,10 @@ export interface PayMethodBase {
   typeId: number;
   emoji: string;
   defaultYn: boolean;
+}
+
+export interface PayMethodInsertDTO extends PayMethodBase {
+  id: TempId;
 }
 
 export interface PayMethodSaved extends PayMethodBase {

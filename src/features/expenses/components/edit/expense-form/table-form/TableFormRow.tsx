@@ -1,35 +1,16 @@
-import {
-  UpdAmountFn,
-  UpdExpenseFn,
-} from "@/features/expenses/types/UpdExpense";
-import {
-  CategorySaved,
-  ExpenseEntity,
-  ExpenseSaved,
-  PayMethodSaved,
-} from "@/types";
+import { ExpenseEntity } from "@/types";
 import { TempId } from "@/types/ids";
 import { formatCurrency, parseCurrency } from "@/utils/format";
 import { Trash2 } from "lucide-react";
 import { useExpenseFormContext } from "../../context/ExpenseFormContext";
-import {
-  DelTableExpenseHandler,
-  UpdActualAmountHandler,
-  UpdTableExpenseHandler,
-} from "../types/handlers";
 
 interface ExpenseFormTableRow {
   expense: ExpenseEntity;
-  categories: CategorySaved[];
-  payMethods: PayMethodSaved[];
 }
 
-export const TableFormRow = ({
-  expense,
-  categories,
-  payMethods,
-}: ExpenseFormTableRow) => {
-  const { onDelete, onUpdate, updateActualAmount } = useExpenseFormContext();
+export const TableFormRow = ({ expense }: ExpenseFormTableRow) => {
+  const { categories, payMethods, onDelete, onUpdate, updateActualAmount } =
+    useExpenseFormContext();
 
   return (
     <tr>
@@ -80,7 +61,7 @@ export const TableFormRow = ({
             onBlur={(e) =>
               updateActualAmount(
                 e.target.value,
-                expense.id,
+                expense.id as number | TempId,
                 expense.numberOfPeople ?? 0
               )
             }

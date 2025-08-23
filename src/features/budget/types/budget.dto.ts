@@ -1,9 +1,8 @@
-import { BudgetEntity } from "./budget.entity";
+import { TempId } from "@/types/ids";
+import { BudgetBase } from "./budget.entity";
 
-export type BudgetInsertDTO = Omit<BudgetEntity, "id"> & {
-  categoryId: number;
-};
+export type BudgetInsertDTO = { id: TempId } & BudgetBase;
 
 export type BudgetUpdateDTO = {
   id: number;
-} & Partial<Pick<BudgetEntity, "categoryId" | "amount">>;
+} & Partial<BudgetBase>;

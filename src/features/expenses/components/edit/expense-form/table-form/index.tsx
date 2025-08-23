@@ -1,28 +1,13 @@
-import {
-  CategorySaved,
-  ExpenseEntity,
-  ExpenseSaved,
-  PayMethodSaved,
-} from "@/types";
+import { ExpenseEntity } from "@/types";
 import { useFormContext } from "react-hook-form";
 import { useExpenseFormContext } from "../../context/ExpenseFormContext";
 import { TableFormHeader } from "./TableFormHeader";
 import { TableFormRow } from "./TableFormRow";
 import { TableFormSplitRow } from "./TableFormSplitRow";
 
-interface TableFormProps {
-  editExpenses: ExpenseSaved[];
-  categories: CategorySaved[];
-  payMethods: PayMethodSaved[];
-}
-
-export const TableForm = ({
-  editExpenses,
-  categories,
-  payMethods,
-}: TableFormProps) => {
+export const TableForm = () => {
   const { handleSubmit } = useFormContext<ExpenseEntity>();
-  const { onSave } = useExpenseFormContext();
+  const { onSave, newExpenses } = useExpenseFormContext();
 
   return (
     <div className="overflow-x-auto">
@@ -30,14 +15,10 @@ export const TableForm = ({
         <TableFormHeader />
 
         <tbody className="divide-y divide-gray-200 bg-white">
-          {editExpenses?.length > 0 &&
-            editExpenses.map((expense) => (
+          {newExpenses?.length > 0 &&
+            newExpenses.map((expense) => (
               <form onSubmit={handleSubmit(onSave)}>
-                <TableFormRow
-                  expense={expense}
-                  categories={categories}
-                  payMethods={payMethods}
-                />
+                <TableFormRow expense={expense} />
                 {expense.isDifferentAmount && (
                   <TableFormSplitRow expense={expense} />
                 )}

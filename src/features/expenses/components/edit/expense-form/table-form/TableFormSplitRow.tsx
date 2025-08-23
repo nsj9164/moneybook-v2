@@ -1,9 +1,9 @@
-import { ExpenseSaved } from "@/types";
+import { ExpenseEntity } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import { useExpenseFormContext } from "../../context/ExpenseFormContext";
 
 interface TableFormSplitRowProps {
-  expense: ExpenseSaved;
+  expense: ExpenseEntity;
 }
 
 export const TableFormSplitRow = ({ expense }: TableFormSplitRowProps) => {
