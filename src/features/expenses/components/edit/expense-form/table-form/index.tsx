@@ -1,4 +1,5 @@
 import { ExpenseEntity } from "@/types";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useExpenseFormContext } from "../../context/ExpenseFormContext";
 import { TableFormHeader } from "./TableFormHeader";
@@ -7,7 +8,12 @@ import { TableFormSplitRow } from "./TableFormSplitRow";
 
 export const TableForm = () => {
   const { handleSubmit } = useFormContext<ExpenseEntity>();
-  const { onSave, newExpenses } = useExpenseFormContext();
+  const { onSave, newExpenses, handleAddExpense } = useExpenseFormContext();
+
+  useEffect(() => {
+    console.log("##########", newExpenses.length);
+    if (newExpenses.length === 0) handleAddExpense();
+  }, [newExpenses]);
 
   return (
     <div className="overflow-x-auto">
@@ -17,7 +23,7 @@ export const TableForm = () => {
         <tbody className="divide-y divide-gray-200 bg-white">
           {newExpenses?.length > 0 &&
             newExpenses.map((expense) => (
-              <form onSubmit={handleSubmit(onSave)}>
+              <form key={expense.id} onSubmit={handleSubmit(onSave)}>
                 <TableFormRow expense={expense} />
                 {expense.isDifferentAmount && (
                   <TableFormSplitRow expense={expense} />

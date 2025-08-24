@@ -23,7 +23,12 @@ export const useBudgetHandlers = ({ userId, refetchAll }: useBudgetProps) => {
     await refetchAll();
   };
 
-  const handleDeleteBudget = createDeleteHandler<BudgetSaved>("budgets");
+  const deleteBudget = createDeleteHandler<BudgetSaved>("budgets");
+
+  const handleDeleteBudget = async (id: number) => {
+    await deleteBudget(id);
+    await refetchAll();
+  };
 
   return { handleSaveBudget, handleDeleteBudget };
 };
