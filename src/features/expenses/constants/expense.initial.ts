@@ -1,7 +1,7 @@
 import { ExpenseEntity } from "@/types";
 import { createTempEntityId } from "@/types/ids";
 
-export const initialExpense: ExpenseEntity = {
+export const createInitialExpense = (): ExpenseEntity => ({
   id: createTempEntityId(),
   date: new Date().toISOString().slice(0, 10),
   itemName: "",
@@ -12,4 +12,4 @@ export const initialExpense: ExpenseEntity = {
   categoryId: 0,
   isDifferentAmount: false,
   transactionType: 2,
-};
+});

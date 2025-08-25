@@ -1,22 +1,26 @@
 import { ExpenseSaved } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import { Pencil } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { ExpenseColumns } from "../../types/filters";
 
 interface RowProps {
   expense: ExpenseSaved;
   checked: boolean;
   columns: ExpenseColumns[];
-  editExpense: (id: number) => void;
   toggleItemSelection: (id: number) => void;
 }
 export const TableRow = ({
   expense,
   checked,
   columns,
-  editExpense,
   toggleItemSelection,
 }: RowProps) => {
+  const navigate = useNavigate();
+  const handleEdit = (id: number) => {
+    navigate(`/expenses/edit?ids=${id}`);
+  };
+
   return (
     <tr
       key={expense.id}
@@ -73,7 +77,7 @@ export const TableRow = ({
       )}
       {columns.find((col) => col.id === "paymentMethod")?.visible && (
         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-          {expense.paymentMethodId}
+          {expense.paymentMethods?.name}
         </td>
       )}
       {columns.find((col) => col.id === "note")?.visible && (
@@ -85,7 +89,7 @@ export const TableRow = ({
         <div className="flex justify-end space-x-2">
           <button
             type="button"
-            onClick={() => editExpense(expense.id)}
+            onClick={() => handleEdit(expense.id)}
             className="inline-flex items-center rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
           >
             <Pencil className="mr-1 h-3 w-3" />

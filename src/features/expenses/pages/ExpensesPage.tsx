@@ -81,9 +81,8 @@ const Expenses = () => {
     setIsFilterPanelOpen((prev) => !prev);
   };
 
-  const handleEdit = () => {
-    const query = `?ids=${selectedItems.join(",")}`;
-    navigate(`/expneses/edit${query}`);
+  const handleEdit = (id: number) => {
+    navigate(`/expneses/edit?ids${id}`);
   };
 
   return (

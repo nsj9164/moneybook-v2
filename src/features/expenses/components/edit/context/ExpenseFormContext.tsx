@@ -1,6 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { initialExpense } from "@/features/expenses/constants/expense.initial";
-import { useExpenseForm } from "@/features/expenses/hooks/useExpenseForm";
+import { createInitialExpense } from "@/features/expenses/constants/expense.initial";
 import { useExpenseHandlers } from "@/features/expenses/hooks/useExpenseHandlers";
 import { ExpenseFormContextType } from "@/features/expenses/types/ExpenseFormContextType";
 import { calActualAmount } from "@/features/expenses/utils/expenseCalc";
@@ -17,9 +16,10 @@ import {
 import { TempId } from "@/types/ids";
 import { diffFields } from "@/utils/form";
 import { parseCurrency } from "@/utils/format";
+import { omit } from "lodash";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 
 const ExpenseFormContext = createContext<ExpenseFormContextType | null>(null);
@@ -29,6 +29,7 @@ export const ExpenseFormProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const navigate = useNavigate();
   const { userId } = useAuth();
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
@@ -52,35 +53,41 @@ export const ExpenseFormProvider = ({
   });
 
   const handleAddExpense = () => {
-    setNewExpenses((prev) => [...prev, initialExpense]);
+    setNewExpenses((prev) => [...prev, createInitialExpense()]);
   };
+
+  useEffect(() => {
+    if (newExpenses.length === 0) handleAddExpense();
+  }, [newExpenses]);
 
   const onSave = async () => {
     const saveData: (ExpenseInsertDTO | ExpenseUpdateDTO)[] = [];
 
     for (const newItem of newExpenses) {
-      if (typeof newItem.id === "number" && editExpenses.length > 0) {
-        const prev = editExpenses.find((e) => e.id === newItem.id);
+      const cleanItem = omit(newItem, ["isDifferentAmount", "numberOfPeople"]);
+
+      if (typeof cleanItem.id === "number" && editExpenses.length > 0) {
+        const prev = editExpenses.find((e) => e.id === cleanItem.id);
         if (!prev) continue;
 
-        const diffed = diffFields(prev, newItem);
+        const diffed = diffFields(prev, cleanItem);
         if (Object.keys(diffed).length === 0) {
-          return;
+          continue;
         }
 
-        saveData.push({ ...diffed, id: newItem.id });
+        saveData.push({ ...diffed, id: cleanItem.id });
       } else {
-        const { id, ...insertData } = newItem;
+        const { id, ...insertData } = cleanItem;
         saveData.push(insertData as ExpenseInsertDTO);
       }
     }
-
     if (saveData.length === 0) {
       toast.error("저장할 변경 사항이 없습니다.");
       return;
     }
 
-    await handleSaveExpense.upsertMany(saveData);
+    await handleSaveExpense(saveData);
+    navigate("/expenses");
   };
 
   function isTempId(id: number | TempId): id is TempId {

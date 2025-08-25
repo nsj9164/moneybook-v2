@@ -1,5 +1,4 @@
 import { ExpenseSaved } from "@/types";
-import { useNavigate } from "react-router-dom";
 import { TableFooter } from "./TableFooter";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
@@ -20,13 +19,6 @@ export const ExpensesTable = ({
   toggleSelectAll,
   toggleItemSelection,
 }: ExpensesTableProps) => {
-  const navigate = useNavigate();
-  const editExpense = (id: number) => {
-    // id를 가져가야하는데 그 방법은 조금 더 생각이 필요함!!
-    console.log(id);
-    navigate("/expenses/edit");
-  };
-
   // 합계 계산
   const totalPaymentAmount = filteredExpenses.reduce(
     (sum, expense) => sum + expense.amount,
@@ -56,7 +48,6 @@ export const ExpensesTable = ({
                 expense={expense}
                 checked={selectedItems.includes(expense.id)}
                 columns={columns}
-                editExpense={editExpense}
                 toggleItemSelection={toggleItemSelection}
               />
             ))}

@@ -1,4 +1,5 @@
 import { ArrowLeft, Plus, Save } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useExpenseFormContext } from "./context/ExpenseFormContext";
 
 export const EditHeader = () => {
@@ -6,13 +7,13 @@ export const EditHeader = () => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
       <div className="flex items-center mb-4 sm:mb-0">
-        <button
-          type="button"
+        <Link
+          to="/expenses"
           className="mr-3 p-1 rounded-full text-gray-400 hover:text-gray-500 hover:bg-gray-100"
         >
           <ArrowLeft className="h-5 w-5" />
           <span className="sr-only">뒤로 가기</span>
-        </button>
+        </Link>
         <h1 className="text-2xl font-bold text-gray-900">지출 추가</h1>
       </div>
       <div className="flex flex-col sm:flex-row gap-3">
