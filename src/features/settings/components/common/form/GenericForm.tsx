@@ -18,6 +18,7 @@ import { PaginationFooter } from "../pagination/PaginationFooter";
 import { GenericFormModal } from "../modal/GenericFormModal";
 import { GenericFormModalFields } from "../modal/GenericFormModalFields";
 import { createPaginateAfterAdd } from "@/features/settings/utils/createPaginateAfterAdd";
+import { Insert, Update } from "@/types/crud";
 
 type GenericFormHandler<Insert, Saved> = {
   openModal: (row?: Partial<Insert> | Saved) => void;
@@ -31,7 +32,9 @@ interface GenericFormProps<K extends FormType> {
     row: SavedMap[K],
     handler: GenericFormHandler<BaseMap[K], SavedMap[K]>
   ) => React.ReactNode;
-  onSave: (row: BaseMap[K] | Partial<SavedMap[K]>) => Promise<SavedMap[K]>;
+  onSave: (
+    row: Insert<BaseMap[K]> | Update<SavedMap[K]>
+  ) => Promise<SavedMap[K]>;
 }
 
 function GenericForm<K extends FormType>({
@@ -150,7 +153,7 @@ function GenericForm<K extends FormType>({
         >
           <GenericFormModalFields
             formTitle={title}
-            fieldConfigs={fieldConfigs}
+            fieldConfigs={formFieldConfigs[formType] ?? []}
           />
         </GenericFormModal>
       </FormProvider>

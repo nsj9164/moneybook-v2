@@ -1,5 +1,3 @@
-import { TempId } from "./ids";
-
 export interface RecurringBase {
   name: string;
   amount: number;
@@ -12,10 +10,6 @@ export interface RecurringBase {
   note: string;
   categoryId: number;
   paymentMethodId: number;
-}
-
-export interface RecurringInsertDto extends RecurringBase {
-  id: TempId;
 }
 
 export interface RecurringSaved extends RecurringBase {

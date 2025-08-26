@@ -9,10 +9,6 @@ export interface PayMethodBase {
   defaultYn: boolean;
 }
 
-export interface PayMethodInsertDTO extends PayMethodBase {
-  id: TempId;
-}
-
 export interface PayMethodSaved extends PayMethodBase {
   id: number;
 }

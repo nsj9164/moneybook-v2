@@ -1,8 +1,11 @@
-import { createTempEntityId } from "@/types/ids";
 import { categoryEmojiOptions } from "../manageCategories/constants/categoryEmojiOptions";
 import { payMethodEmojiOptions } from "../managePayMethods/constants/PayMethodConstants";
 import { BaseMap, FieldConfig, FormType } from "../types/GenericFormTypes";
 import { categoryColorOptions } from "../manageCategories/constants/categoryColorOptions";
+import { addMonths, format, startOfMonth } from "date-fns";
+
+const today = new Date();
+const startOfNextMonth = startOfMonth(addMonths(today, 1));
 
 export const formMeta: {
   [K in FormType]: {
@@ -25,7 +28,6 @@ export const formMeta: {
   [FormType.PayMethods]: {
     title: "결제수단",
     initial: () => ({
-      id: createTempEntityId(),
       name: "",
       emoji: payMethodEmojiOptions[0],
       defaultYn: false,
@@ -33,11 +35,26 @@ export const formMeta: {
       userId: "",
     }),
   },
+
+  [FormType.Recurrings]: {
+    title: "고정지출",
+    initial: () => ({
+      name: "",
+      amount: 0,
+      cycle: 4,
+      billingStartDate: format(today, "yyyy-MM-dd"),
+      billingEndDate: undefined,
+      paymentDay: 1,
+      nextPaymentDate: format(startOfNextMonth, "yyyy-MM-dd"),
+      note: "",
+      isActive: true,
+      categoryId: 0,
+      paymentMethodId: 0,
+    }),
+  },
 };
 
-export const formFieldConfigs: {
-  [K in FormType]: FieldConfig[];
-} = {
+export const formFieldConfigs: Partial<Record<FormType, FieldConfig[]>> = {
   [FormType.Categories]: [
     { name: "name", type: "text", label: "카테고리명" },
     {

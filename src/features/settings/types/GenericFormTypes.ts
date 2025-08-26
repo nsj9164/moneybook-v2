@@ -1,7 +1,7 @@
 import {
-  CategoryInsertDTO,
+  CategoryBase,
   CategorySaved,
-  PayMethodInsertDTO,
+  PayMethodBase,
   PayMethodSaved,
   RecurringBase,
   RecurringSaved,
@@ -15,8 +15,8 @@ export enum FormType {
 }
 
 export type BaseMap = {
-  [FormType.Categories]: CategoryInsertDTO;
-  [FormType.PayMethods]: PayMethodInsertDTO;
+  [FormType.Categories]: CategoryBase;
+  [FormType.PayMethods]: PayMethodBase;
   [FormType.Recurrings]: RecurringBase;
 };
 

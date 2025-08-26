@@ -8,11 +8,12 @@ import {
   createDeleteHandler,
   createUpsertHandler,
 } from "@/utils/createUpsertHandler";
-import { CategoryBase, CategoryInsertDTO, CategorySaved } from "@/types";
+import { CategoryBase, CategorySaved } from "@/types";
 import { TableHeader } from "../manageCategories/components/TableHeader";
 import { TableRow } from "../manageCategories/components/TableRow";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
 import { useConfirmModal } from "@/hooks/useConfirmModal";
+import { Insert, Update } from "@/types/crud";
 
 const ManageCategories = () => {
   const { userId } = useAuth();
@@ -20,14 +21,14 @@ const ManageCategories = () => {
 
   const setCategories = useSetRecoilState(categoriesState);
 
-  const { upsertOne } = createUpsertHandler<CategoryInsertDTO, CategorySaved>(
+  const { upsertOne } = createUpsertHandler<CategoryBase, CategorySaved>(
     "categories",
     userId!,
     setCategories
   );
 
   const handleSaveCategory = async (
-    data: CategoryInsertDTO | Partial<CategorySaved>
+    data: Insert<CategoryBase> | Update<CategorySaved>
   ) => {
     return await upsertOne(data);
   };

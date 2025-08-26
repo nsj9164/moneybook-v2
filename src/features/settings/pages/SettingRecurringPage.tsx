@@ -23,10 +23,7 @@ import { useFetchRecurringExpenses } from "@/hooks/fetchData/useFetchRecurringEx
 import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
 import { updateItem } from "@/api/supabase/updateItem";
 import { insertItem } from "@/api/supabase/insertItem";
-import {
-  createDeleteHandler,
-  createUpsertHandler,
-} from "@/utils/createUpsertHandler";
+import { createDeleteHandler } from "@/utils/createUpsertHandler";
 import { enrichRecurring } from "../manageRecurringExpenses/libs/enrichRecurring";
 import { createPaginateAfterAdd } from "../utils/createPaginateAfterAdd";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";

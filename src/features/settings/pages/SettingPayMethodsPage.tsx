@@ -1,7 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useSetRecoilState } from "recoil";
 import { payMethodsState } from "@/recoil/atoms";
-import { PayMethodBase, PayMethodInsertDto, PayMethodSaved } from "@/types";
+import { PayMethodBase, PayMethodSaved } from "@/types";
 import GenericForm from "@/features/settings/components/common/form/GenericForm";
 import { FormType } from "@/features/settings/types/GenericFormTypes";
 import { TableHeader } from "../managePayMethods/components/TableHeader";
@@ -13,20 +13,21 @@ import {
 } from "@/utils/createUpsertHandler";
 import { useConfirmModal } from "@/hooks/useConfirmModal";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
+import { Insert, Update } from "@/types/crud";
 
 const ManagePayMethods = () => {
   const { userId } = useAuth();
   const payMethods = useFetchPayMethods();
   const setPayMethods = useSetRecoilState(payMethodsState);
 
-  const { upsertOne } = createUpsertHandler<PayMethodInsertDto, PayMethodSaved>(
+  const { upsertOne } = createUpsertHandler<PayMethodBase, PayMethodSaved>(
     "payment_methods",
     userId!,
     setPayMethods
   );
 
   const handleSavePayMethod = async (
-    data: PayMethodInsertDto | Partial<PayMethodSaved>
+    data: Insert<PayMethodBase> | Update<PayMethodSaved>
   ) => {
     return await upsertOne(data);
   };

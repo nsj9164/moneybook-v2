@@ -9,14 +9,19 @@ import { Fragment, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { SubmitHandler, useFormContext } from "react-hook-form";
 import { BaseMap, FormType, SavedMap } from "../../../types/GenericFormTypes";
-import { diffFields, filterEmptyFields } from "@/utils/form";
 import { toast } from "react-hot-toast";
+import { Insert, Update } from "@/types/crud";
+import { toUpdate } from "@/features/settings/utils/toUpdate";
+import { toInsert } from "@/features/settings/utils/toInsert";
+import { diffFields } from "@/utils/diffFields";
 
 interface GenericFormModalProps<K extends FormType> {
   formTitle: string;
   isOpen: boolean;
   isEditing: boolean;
-  onSave: (data: BaseMap[K] | Partial<SavedMap[K]>) => Promise<SavedMap[K]>;
+  onSave: (
+    row: Insert<BaseMap[K]> | Update<SavedMap[K]>
+  ) => Promise<SavedMap[K]>;
   onClose: () => void;
   paginateAfterAdd: () => void;
   children: React.ReactNode;
@@ -33,30 +38,38 @@ export function GenericFormModal<K extends FormType>({
 }: GenericFormModalProps<K>) {
   const methods = useFormContext<SavedMap[K]>();
   const [loading, setLoading] = useState(false);
-  const [currentData, setCurrentData] = useState<Partial<SavedMap[K]>>({});
+  const [currentData, setCurrentData] = useState<Partial<SavedMap[K]> | null>(
+    null
+  );
   useEffect(() => {
-    if (isEditing && isOpen) setCurrentData(methods.getValues());
+    if (isEditing && isOpen) {
+      setCurrentData(methods.getValues());
+    } else {
+      setCurrentData(null);
+    }
   }, [isEditing, isOpen]);
 
   const handleSubmitData: SubmitHandler<SavedMap[K]> = async (data) => {
     setLoading(true);
-    if (isEditing) {
-      const diffed = diffFields(currentData, data);
-      if (Object.keys(diffed).length === 0) {
-        toast.error("저장할 변경 사항이 없습니다.");
-        return;
+    try {
+      if (isEditing) {
+        if (!currentData) return; // 방어
+        const diffed = diffFields(currentData, data);
+        if (Object.keys(diffed).length === 0) {
+          toast.error("저장할 변경 사항이 없습니다.");
+          return;
+        }
+        await onSave(toUpdate(currentData.id as number, diffed));
+        toast.success("수정이 완료되었습니다.");
+      } else {
+        await onSave(toInsert(data));
+        paginateAfterAdd();
+        toast.success("추가가 완료되었습니다.");
       }
-
-      const saveData = { ...diffed, id: currentData.id };
-      await onSave(saveData);
-    } else {
-      const saveData = filterEmptyFields(data);
-      await onSave(saveData);
-      paginateAfterAdd();
+      onClose();
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
-    onClose();
   };
 
   return (

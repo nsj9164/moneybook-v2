@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
 import { useExpenseFilters } from "../hooks/useExpenseFilters";
 import { allColumns } from "../types/filters";
-import { UUID } from "@/types/ids";
 import { Button } from "@/components/ui/Button";
 import { ListHeader } from "../components/list/ListHeader";
 import { FilterPanel } from "../components/filters/FilterPanel";
@@ -17,10 +16,8 @@ import { ListFooter } from "../components/list/ListFooter";
 import { ColumnSettingsModal } from "../components/modals/ColumnSettingsModal";
 import { useFetchExpenses } from "@/hooks/fetchData/useFetchExpenses";
 import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
-import { useNavigate } from "react-router-dom";
 
 const Expenses = () => {
-  const navigate = useNavigate();
   const expenses = useFetchExpenses();
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
@@ -79,10 +76,6 @@ const Expenses = () => {
   // open & close Filter
   const toggleFilterPanel = () => {
     setIsFilterPanelOpen((prev) => !prev);
-  };
-
-  const handleEdit = (id: number) => {
-    navigate(`/expneses/edit?ids${id}`);
   };
 
   return (

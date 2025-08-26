@@ -5,33 +5,30 @@ import { TempId, UUID } from "@/types/ids";
 import { patchOrAddItem } from "./patchOrAddItem";
 import { patchOrAddItems } from "./patchOrAddItems";
 
-function isSaved<Saved extends { id: number }>(item: {
-  id?: number | TempId;
-}): item is Saved {
-  return typeof item.id === "number";
+function isUpdateTarget<Saved extends { id: number }>(
+  item: Insert<any> | Update<Saved>
+): item is Update<Saved> {
+  return typeof (item as any).id === "number";
 }
 
-export function createUpsertHandler<
-  Insert extends { id?: TempId },
-  Saved extends { id: number }
->(
+export type Insert<T> = T & { id?: TempId };
+export type Update<T extends { id: number }> = Partial<T> & { id: number };
+
+export function createUpsertHandler<Base, Saved extends { id: number }>(
   table: string,
   userId: UUID,
   setState?: React.Dispatch<React.SetStateAction<Saved[]>>
 ) {
   // 단일 저장
-  const upsertOne = async (item: Insert | Partial<Saved>): Promise<Saved> => {
-    if (isSaved<Saved>(item)) {
+  const upsertOne = async (
+    item: Insert<Base> | Update<Saved>
+  ): Promise<Saved> => {
+    if (isUpdateTarget(item)) {
       const saved = await updateItem<Saved>(table, item, userId);
       setState?.((prev) => patchOrAddItem(prev, saved));
       return saved;
     } else {
-      const insertItemData = item as Insert;
-      const saved = await insertItem<Insert, Saved>(
-        table,
-        insertItemData,
-        userId
-      );
+      const saved = await insertItem<Insert<Base>, Saved>(table, item, userId);
       setState?.((prev) => patchOrAddItem(prev, saved));
       return saved;
     }
@@ -39,7 +36,7 @@ export function createUpsertHandler<
 
   // 여러 개 저장
   const upsertMany = async (
-    items: (Insert | Partial<Saved>)[]
+    items: (Insert<Base> | Update<Saved>)[]
   ): Promise<Saved[]> => {
     const results: Saved[] = [];
     for (const item of items) {

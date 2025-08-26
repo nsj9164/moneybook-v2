@@ -1,13 +1,16 @@
+import { CategorySaved, PayMethodSaved } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import { Trash2 } from "lucide-react";
-import { ExpensesFormProps } from "../types/types";
+import { useExpenseFormContext } from "../../context/ExpenseFormContext";
 
-export const CardForm = ({
-  newExpenses,
-  categories,
-  payMethods,
-  handleDelExpense,
-}: ExpensesFormProps) => {
+interface CardFormProps {
+  categories: CategorySaved[];
+  payMethods: PayMethodSaved[];
+}
+
+export const CardForm = ({ categories, payMethods }: CardFormProps) => {
+  const { newExpenses, onDelete } = useExpenseFormContext();
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-300">
@@ -133,7 +136,7 @@ export const CardForm = ({
                   </td>
                   <td className="px-4 py-4 text-sm text-right">
                     <button
-                      onClick={() => handleDelExpense(expense.id)}
+                      onClick={() => onDelete(expense.id)}
                       type="button"
                       className="text-red-600 hover:text-red-900"
                     >

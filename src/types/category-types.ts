@@ -1,4 +1,4 @@
-import { TempId, UUID } from "@/types/ids";
+import { UUID } from "@/types/ids";
 
 export interface CategoryBase {
   name: string;
@@ -11,8 +11,4 @@ export interface CategoryBase {
 
 export interface CategorySaved extends CategoryBase {
   id: number;
-}
-
-export interface CategoryInsertDTO extends CategoryBase {
-  id: TempId;
 }
