@@ -1,5 +1,5 @@
 import { CardSection } from "@/components/common/layout/CardSection";
-import { MonthSummary } from "../../types/YearlyStatistics";
+import { MonthSummary } from "../../types/YearlyStatisticsType";
 import { formatCurrency } from "@/utils/format";
 
 interface MonthlyExpenseComparisonProps {

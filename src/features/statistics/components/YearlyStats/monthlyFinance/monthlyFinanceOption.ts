@@ -1,5 +1,5 @@
 import { EChartsOption } from "echarts";
-import { MonthlyFinance } from "@/features/statistics/types/YearlyStatistics";
+import { MonthlyFinance } from "@/features/statistics/types/YearlyStatisticsType";
 
 const DEFAULT_MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 

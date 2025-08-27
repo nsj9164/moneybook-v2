@@ -1,5 +1,5 @@
 import { CardSection } from "@/components/common/layout/CardSection";
-import { TopItem } from "../../../types/YearlyStatistics";
+import { TopItem } from "../../../types/YearlyStatisticsType";
 import { TopFrequentItem } from "./TopFrequentItem";
 
 export const TopFrequentList = ({ topItems }: { topItems: TopItem[] }) => {

@@ -10,7 +10,7 @@ import { MonthlyStatisticsResponse } from "../types/MonthlyStatisticsType";
 import { OverviewSummary } from "@/types/OverviewSummary";
 import { Loading } from "@/components/common/loading/Loading";
 import { YearlyStatistics } from "../components/views/YearlyStatistics";
-import { YearlyStatisticsResponse } from "../types/YearlyStatistics";
+import { YearlyStatisticsResponse } from "../types/YearlyStatisticsType";
 import { StatisticsNoData } from "../components/views/StatisticsNoData";
 
 const Statistics = () => {

@@ -1,4 +1,4 @@
-import { TopItem } from "@/features/statistics/types/YearlyStatistics";
+import { TopItem } from "@/features/statistics/types/YearlyStatisticsType";
 import { formatCurrency } from "@/utils/format";
 
 interface TopFrequentItemProps {

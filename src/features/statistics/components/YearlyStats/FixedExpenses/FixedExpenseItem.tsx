@@ -1,4 +1,4 @@
-import { FixedExpenseDetail } from "@/features/statistics/types/YearlyStatistics";
+import { FixedExpenseDetail } from "@/features/statistics/types/YearlyStatisticsType";
 import { formatCurrency } from "@/utils/format";
 
 export const FixedExpenseItem = ({

@@ -3,8 +3,8 @@ import { BudgetAchievementRate } from "../yearlyStats/BudgetAchievementRate";
 import { TopSpendingCategories } from "../yearlyStats/topSpendingCategories/TopSpendingCategories";
 import { TopFrequentList } from "../yearlyStats/topFrequent/TopFrequentList";
 import { TopPaymentMethods } from "../yearlyStats/topPaymentMethods/TopPaymentMethods";
-import { YearlyFixedExpenses } from "../yearlyStats/FixedExpenses/YearlyFixedExpenses";
-import { YearlyStatisticsResponse } from "../../types/YearlyStatistics";
+import { YearlyFixedExpenses } from "../yearlyStats/fixedExpenses/YearlyFixedExpenses";
+import { YearlyStatisticsResponse } from "../../types/YearlyStatisticsType";
 import { YearlyFinanceTrend } from "../yearlyStats/yearlyFinance/YearlyFinanceTrend";
 import { MonthlyExpenseComparison } from "../yearlyStats/MonthlyExpenseComparison";
 

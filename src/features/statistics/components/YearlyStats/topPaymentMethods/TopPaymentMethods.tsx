@@ -1,5 +1,5 @@
 import { CardSection } from "@/components/common/layout/CardSection";
-import { TopPaymentMethod } from "../../../types/YearlyStatistics";
+import { TopPaymentMethod } from "../../../types/YearlyStatisticsType";
 import { TopPaymentMethodItem } from "./TopPaymentMethodItem";
 
 export const TopPaymentMethods = ({

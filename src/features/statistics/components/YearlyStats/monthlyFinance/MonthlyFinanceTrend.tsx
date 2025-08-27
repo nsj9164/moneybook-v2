@@ -1,6 +1,6 @@
 import EChartsReact from "echarts-for-react";
 import { CardSection } from "@/components/common/layout/CardSection";
-import { MonthlyFinance } from "../../../types/YearlyStatistics";
+import { MonthlyFinance } from "../../../types/YearlyStatisticsType";
 import { monthlyFinanceOption } from "./monthlyFinanceOption";
 
 export const MonthlyFinanceTrend = ({

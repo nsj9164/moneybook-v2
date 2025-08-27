@@ -1,4 +1,4 @@
-import { TopCategory } from "@/features/statistics/types/YearlyStatistics";
+import { TopCategory } from "@/features/statistics/types/YearlyStatisticsType";
 import { formatCurrency } from "@/utils/format";
 import { motion } from "framer-motion";
 

@@ -1,5 +1,5 @@
 import { CardSection } from "@/components/common/layout/CardSection";
-import { YearlyFixedExpense } from "../../../types/YearlyStatistics";
+import { YearlyFixedExpense } from "../../../types/YearlyStatisticsType";
 import { FixedExpenseItem } from "./FixedExpenseItem";
 import { formatCurrency } from "@/utils/format";
 export const YearlyFixedExpenses = ({

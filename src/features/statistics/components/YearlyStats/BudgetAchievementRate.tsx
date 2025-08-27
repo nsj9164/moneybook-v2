@@ -1,5 +1,5 @@
 import { CardSection } from "@/components/common/layout/CardSection";
-import { BudgetAchievement } from "../../types/YearlyStatistics";
+import { BudgetAchievement } from "../../types/YearlyStatisticsType";
 import { motion } from "framer-motion";
 
 export const BudgetAchievementRate = ({

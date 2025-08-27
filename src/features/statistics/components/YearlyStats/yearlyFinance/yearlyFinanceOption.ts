@@ -1,5 +1,5 @@
 import { EChartsOption } from "echarts";
-import { YearlyFinance } from "@/features/statistics/types/YearlyStatistics";
+import { YearlyFinance } from "@/features/statistics/types/YearlyStatisticsType";
 
 export function yearlyFinanceOption(
   yearlyData: YearlyFinance[]

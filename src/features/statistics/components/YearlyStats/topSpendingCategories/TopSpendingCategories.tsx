@@ -1,5 +1,5 @@
 import { CardSection } from "@/components/common/layout/CardSection";
-import { TopCategory } from "../../../types/YearlyStatistics";
+import { TopCategory } from "../../../types/YearlyStatisticsType";
 import { TopSpendingCategoriesItem } from "./TopSpendingCategoriesItem";
 
 export const TopSpendingCategories = ({
