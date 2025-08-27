@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { formatCurrency } from "@/utils/format";
-import { WeekdaySummary } from "@/features/statistics/types/MonthlyStatistics";
+import { WeekdaySummary } from "@/features/statistics/types/MonthlyStatisticsType";
 
 type TooltipParam = {
   dataIndex: number;

@@ -1,4 +1,5 @@
 import { ExpenseInsertDTO, ExpenseSaved } from "@/types";
+import { Insert, Update } from "@/types/crud";
 import { UUID } from "@/types/ids";
 import {
   createDeleteHandler,
@@ -21,7 +22,7 @@ export const useExpenseHandlers = ({
   );
 
   const handleSaveExpense = async (
-    data: (ExpenseInsertDTO | Partial<ExpenseSaved>)[]
+    data: (Insert<ExpenseInsertDTO> | Update<ExpenseSaved>)[]
   ) => {
     return await upsertMany(data);
   };

@@ -14,7 +14,7 @@ import {
   ExpenseUpdateDTO,
 } from "@/types";
 import { TempId } from "@/types/ids";
-import { diffFields } from "@/utils/form";
+import { diffFields } from "@/utils/diffFields";
 import { parseCurrency } from "@/utils/format";
 import { omit } from "lodash";
 import { createContext, useContext, useEffect, useState } from "react";

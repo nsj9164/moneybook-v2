@@ -1,4 +1,4 @@
-import { CategorySummary } from "./MonthlyStatistics";
+import { CategorySummary } from "./MonthlyStatisticsType";
 
 export interface MonthlyStatsProps {
   categorySummary: {

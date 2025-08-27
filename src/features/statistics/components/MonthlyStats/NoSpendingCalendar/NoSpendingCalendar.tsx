@@ -1,6 +1,6 @@
 import { Calendar } from "lucide-react";
 import { ChangeIndicator } from "../../../../../components/summaryCard/ChangeIndicator";
-import { NoSpendingDaysSummary } from "../../../types/MonthlyStatistics";
+import { NoSpendingDaysSummary } from "../../../types/MonthlyStatisticsType";
 import clsx from "clsx";
 import { eachDayOfInterval, endOfMonth, format, startOfMonth } from "date-fns";
 

@@ -1,5 +1,3 @@
-import { TempId } from "./ids";
-
 export interface PayMethodBase {
   name: string;
   billingStartDay?: number;

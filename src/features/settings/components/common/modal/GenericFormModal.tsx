@@ -53,7 +53,7 @@ export function GenericFormModal<K extends FormType>({
     setLoading(true);
     try {
       if (isEditing) {
-        if (!currentData) return; // 방어
+        if (!currentData) return;
         const diffed = diffFields(currentData, data);
         if (Object.keys(diffed).length === 0) {
           toast.error("저장할 변경 사항이 없습니다.");

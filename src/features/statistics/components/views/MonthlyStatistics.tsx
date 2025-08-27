@@ -1,11 +1,11 @@
 import { formatCurrency } from "@/utils/format";
-import { MonthlyStatisticsResponse } from "../../types/MonthlyStatistics";
-import { MonthlyStats } from "../monthlyStats/monthlyExpenses/MonthlyStats";
+import { MonthlyStatisticsResponse } from "../../types/MonthlyStatisticsType";
+import { MonthlyStats } from "../MonthlyStats/monthlyExpenses/MonthlyStats";
 import { MonthlyExpensesByDay } from "../monthlyStats/monthlyExpensesByDay/MonthlyExpensesByDay";
-import { WeeklyExpenses } from "../monthlyStats/weeklyExpenses/WeeklyExpenses";
+import { WeeklyExpenses } from "../MonthlyStats/weeklyExpenses/WeeklyExpenses";
 import { StatisticsCard } from "../layout/StatisticsCard";
-import { NoSpendingCalendar } from "../monthlyStats/noSpendingCalendar/NoSpendingCalendar";
-import { MonthlyPayment } from "../monthlyStats/monthlyPayment/MonthlyPayment";
+import { NoSpendingCalendar } from "../MonthlyStats/noSpendingCalendar/NoSpendingCalendar";
+import { MonthlyPayment } from "../MonthlyStats/monthlyPayment/MonthlyPayment";
 import { MonthlyRecurrings } from "../monthlyStats/monthlyRecurrings/MonthlyRecurrings";
 import { format } from "date-fns";
 

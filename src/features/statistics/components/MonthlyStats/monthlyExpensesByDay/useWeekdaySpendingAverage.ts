@@ -1,4 +1,4 @@
-import { WeekdaySummary } from "@/features/statistics/types/MonthlyStatistics";
+import { WeekdaySummary } from "@/features/statistics/types/MonthlyStatisticsType";
 import { useMemo } from "react";
 
 export const useWeekdaySpendingAverage = (

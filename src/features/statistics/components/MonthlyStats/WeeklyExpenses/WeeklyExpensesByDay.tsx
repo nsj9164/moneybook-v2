@@ -1,4 +1,4 @@
-import { WeeklySummary } from "@/features/statistics/types/MonthlyStatistics";
+import { WeeklySummary } from "@/features/statistics/types/MonthlyStatisticsType";
 import { formatCurrency } from "@/utils/format";
 import { motion } from "framer-motion";
 

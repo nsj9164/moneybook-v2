@@ -1,6 +1,6 @@
 import { CardSection } from "@/components/common/layout/CardSection";
 import { formatCurrency } from "@/utils/format";
-import { WeekdaySummary } from "../../../types/MonthlyStatistics";
+import { WeekdaySummary } from "../../../types/MonthlyStatisticsType";
 import EChartsReact from "echarts-for-react";
 import { useWeekdaySpendingChart } from "./useWeekdaySpendingChart";
 import { useWeekdaySpendingAverage } from "./useWeekdaySpendingAverage";

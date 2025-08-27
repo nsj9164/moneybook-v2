@@ -1,5 +1,5 @@
 import { CardSection } from "@/components/common/layout/CardSection";
-import { PaymentMethodSummary } from "../../../types/MonthlyStatistics";
+import { PaymentMethodSummary } from "../../../types/MonthlyStatisticsType";
 import { MonthlyPaymentItem } from "./MonthlyPaymentItem";
 
 export const MonthlyPayment = ({

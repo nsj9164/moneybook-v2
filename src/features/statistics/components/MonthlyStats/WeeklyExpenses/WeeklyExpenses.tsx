@@ -1,5 +1,5 @@
 import { CardSection } from "@/components/common/layout/CardSection";
-import { WeeklySummary } from "../../../types/MonthlyStatistics";
+import { WeeklySummary } from "../../../types/MonthlyStatisticsType";
 import { WeeklyExpensesByDay } from "./WeeklyExpensesByDay";
 
 export const WeeklyExpenses = ({

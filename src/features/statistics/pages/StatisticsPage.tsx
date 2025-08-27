@@ -6,7 +6,7 @@ import { useState } from "react";
 import { DashboardHeader } from "../components/header/DashboardHeader";
 import { OverviewSummarySection } from "@/components/summaryCard/OverviewSummarySection";
 import { useFetchRpcQuery } from "@/hooks/fetchData/useFetchRpcQuery";
-import { MonthlyStatisticsResponse } from "../types/MonthlyStatistics";
+import { MonthlyStatisticsResponse } from "../types/MonthlyStatisticsType";
 import { OverviewSummary } from "@/types/OverviewSummary";
 import { Loading } from "@/components/common/loading/Loading";
 import { YearlyStatistics } from "../components/views/YearlyStatistics";

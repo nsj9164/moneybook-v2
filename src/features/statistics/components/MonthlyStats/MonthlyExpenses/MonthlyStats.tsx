@@ -1,5 +1,5 @@
 import { CardSection } from "@/components/common/layout/CardSection";
-import { CategorySummary } from "@/features/statistics/types/MonthlyStatistics";
+import { CategorySummary } from "@/features/statistics/types/MonthlyStatisticsType";
 import { useState } from "react";
 import { ToggleIncomeExpenses } from "../ToggleIncomeExpenses";
 import EChartsReact from "echarts-for-react";

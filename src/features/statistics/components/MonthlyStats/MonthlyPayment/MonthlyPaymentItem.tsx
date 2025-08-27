@@ -1,5 +1,5 @@
 import { CreditCard } from "lucide-react";
-import { PaymentMethodSummary } from "../../../types/MonthlyStatistics";
+import { PaymentMethodSummary } from "../../../types/MonthlyStatisticsType";
 import { motion } from "framer-motion";
 import { formatCurrency } from "@/utils/format";
 import { ChangeIndicator } from "../../../../../components/summaryCard/ChangeIndicator";

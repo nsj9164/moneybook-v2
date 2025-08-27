@@ -45,7 +45,7 @@ function GenericForm<K extends FormType>({
   onSave,
 }: GenericFormProps<K>) {
   const { title, initial } = formMeta[formType];
-  const fieldConfigs = formFieldConfigs[formType];
+  const fieldConfigs = formFieldConfigs[formType] ?? [];
 
   const defaultValues = useMemo(
     () => initial() as DefaultValues<BaseMap[K]>,
@@ -153,7 +153,7 @@ function GenericForm<K extends FormType>({
         >
           <GenericFormModalFields
             formTitle={title}
-            fieldConfigs={formFieldConfigs[formType] ?? []}
+            fieldConfigs={fieldConfigs}
           />
         </GenericFormModal>
       </FormProvider>
