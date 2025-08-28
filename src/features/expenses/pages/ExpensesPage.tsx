@@ -16,9 +16,11 @@ import { ListFooter } from "../components/list/ListFooter";
 import { ColumnSettingsModal } from "../components/modals/ColumnSettingsModal";
 import { useFetchExpenses } from "@/hooks/fetchData/useFetchExpenses";
 import { useFetchPayMethods } from "@/hooks/fetchData/useFetchPayMethods";
+import { Loading } from "@/components/common/loading/Loading";
+import { ErrorBox } from "@/components/common/error/ErrorBox";
 
 const Expenses = () => {
-  const expenses = useFetchExpenses();
+  const { expenses, loading, error } = useFetchExpenses();
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
   const {
@@ -77,6 +79,9 @@ const Expenses = () => {
   const toggleFilterPanel = () => {
     setIsFilterPanelOpen((prev) => !prev);
   };
+
+  if (loading) return <Loading />;
+  if (error) return <ErrorBox message={error} />;
 
   return (
     <div className="flex-1 overflow-auto bg-gray-50 p-6">

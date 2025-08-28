@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { expensesState } from "@/recoil/atoms";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 export const expenseKeys = [
@@ -20,29 +20,39 @@ export const expenseKeys = [
 export const useFetchExpenses = () => {
   const [expenses, setExpenses] = useRecoilState(expensesState);
   const { userId } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const joinColumns = ["categories(name)", "payment_methods(name)"];
-
   const selectColumns = [...expenseKeys, ...joinColumns].join(", ");
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+
       const { data, error } = await supabase
         .from("expenses")
         .select(selectColumns)
         .eq("user_id", userId)
         .order("date", { ascending: false });
 
-      if (error) console.error("Fetch Error:", error.message);
-
+      if (error) {
+        console.error("Fetch Error:", error.message);
+        setError(error.message);
+      }
       if (data) {
         const mappedData = formatKeyCase(data, "camel");
         setExpenses(mappedData ?? []);
       }
+
+      setLoading(false);
     };
 
-    fetchData();
-  }, []);
+    if (userId) {
+      fetchData();
+    }
+  }, [userId]);
 
-  return expenses;
+  return { expenses, loading, error };
 };

@@ -93,7 +93,7 @@ const Dashboard = () => {
         </div>
       </PageHeader>
 
-      {!hasDataThisMonth ? (
+      {!summaryLoading && !hasDataThisMonth ? (
         <DashboardNoData
           selectedDate={selectedDate}
           goBackOneMonth={goBackOneMonth}
