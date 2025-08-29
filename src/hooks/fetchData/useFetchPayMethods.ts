@@ -21,7 +21,7 @@ export const useFetchPayMethods = () => {
 
       if (error) console.error("Insert Error:", error.message);
 
-      if (data) {
+      if (data && data.length > 0) {
         const mappedData = formatKeyCase(data, "camel");
         setPayMethods(mappedData ?? []);
       }

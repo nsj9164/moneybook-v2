@@ -18,9 +18,12 @@ import { PageHeader } from "@/components/common/layout/PageHeader";
 import { BudgetBase } from "../types/budget.entity";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
 import { useConfirmModal } from "@/hooks/useConfirmModal";
+import { Loading } from "@/components/common/loading/Loading";
+import { ErrorBox } from "@/components/common/error/ErrorBox";
 
 const Budget = () => {
   const { userId } = useAuth();
+  console.log("##############", userId);
 
   const {
     firstExpenseYear,
@@ -33,9 +36,10 @@ const Budget = () => {
     handleChangeMonth,
   } = useDateFilter();
 
-  const { budgets, unBudgets, refetchAll } = useBudgetData({
+  const { budgets, unBudgets, refetchAll, loading, error } = useBudgetData({
     targetDate,
   });
+  console.log("?????????????", budgets);
 
   const { methods, isOpen, isEditing, openModal, closeModal } =
     useModalFormArray<BudgetBase>(initialBudget());
@@ -47,6 +51,15 @@ const Budget = () => {
 
   const { isConfirm, openConfirm, closeConfirm, handleConfirm } =
     useConfirmModal<number>(handleDeleteBudget);
+
+  if (loading) return <Loading />;
+  if (error)
+    return (
+      <ErrorBox
+        message="예산 데이터를 불러오는 데 실패했어요."
+        onRetry={refetchAll}
+      />
+    );
 
   return (
     <div className="h-full">
@@ -75,7 +88,7 @@ const Budget = () => {
       {/* 메인 콘텐츠 영역 */}
       <div className="p-6 space-y-6">
         <AnimatePresence mode="wait">
-          {budgets.length > 0 ? (
+          {!loading && budgets.length > 0 ? (
             <motion.div
               key="budget-content"
               initial={{ opacity: 0 }}

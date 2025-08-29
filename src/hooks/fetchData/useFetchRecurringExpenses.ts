@@ -19,7 +19,7 @@ export const useFetchRecurringExpenses = () => {
 
       if (error) console.error("Fetch Error:", error.message);
 
-      if (data) {
+      if (data && data.length > 0) {
         const mappedData = formatKeyCase(data, "camel");
         setRecurrings(mappedData ?? []);
       }

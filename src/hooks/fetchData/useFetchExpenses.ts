@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { expensesState } from "@/recoil/atoms";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 export const expenseKeys = [
@@ -26,33 +26,35 @@ export const useFetchExpenses = () => {
   const joinColumns = ["categories(name)", "payment_methods(name)"];
   const selectColumns = [...expenseKeys, ...joinColumns].join(", ");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
+  const fetchData = useCallback(async () => {
+    if (!userId) return;
 
-      const { data, error } = await supabase
-        .from("expenses")
-        .select(selectColumns)
-        .eq("user_id", userId)
-        .order("date", { ascending: false });
+    setLoading(true);
+    setError(null);
 
-      if (error) {
-        console.error("Fetch Error:", error.message);
-        setError(error.message);
-      }
-      if (data) {
-        const mappedData = formatKeyCase(data, "camel");
-        setExpenses(mappedData ?? []);
-      }
+    const { data, error } = await supabase
+      .from("expenses")
+      .select(selectColumns)
+      .eq("user_id", userId)
+      .order("date", { ascending: false });
 
-      setLoading(false);
-    };
-
-    if (userId) {
-      fetchData();
+    if (error) {
+      console.error("Fetch Error:", error.message);
+      setError(error.message);
     }
-  }, [userId]);
 
-  return { expenses, loading, error };
+    if (data && data.length > 0) {
+      console.log("??????????????", data);
+      const mappedData = formatKeyCase(data, "camel");
+      setExpenses(mappedData ?? []);
+    }
+
+    setLoading(false);
+  }, [userId, selectColumns, setExpenses]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  return { expenses, loading, error, refetch: fetchData };
 };

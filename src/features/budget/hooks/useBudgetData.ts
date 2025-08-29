@@ -9,8 +9,6 @@ type Result = {
   fetching: boolean;
   error: Error | null;
   refetchAll: () => Promise<void>;
-  refetchBudgets: () => Promise<any>;
-  refetchUnBudgets: () => Promise<any>;
 };
 
 export const useBudgetData = ({
@@ -32,7 +30,5 @@ export const useBudgetData = ({
     fetching: b.fetching || u.fetching,
     error: (b.error as Error | null) ?? (u.error as Error | null) ?? null,
     refetchAll,
-    refetchBudgets: b.refetch,
-    refetchUnBudgets: u.refetch,
   };
 };

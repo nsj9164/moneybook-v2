@@ -20,7 +20,7 @@ import { Loading } from "@/components/common/loading/Loading";
 import { ErrorBox } from "@/components/common/error/ErrorBox";
 
 const Expenses = () => {
-  const { expenses, loading, error } = useFetchExpenses();
+  const { expenses, loading, error, refetch } = useFetchExpenses();
   const categories = useFetchCategories();
   const payMethods = useFetchPayMethods();
   const {
@@ -81,7 +81,13 @@ const Expenses = () => {
   };
 
   if (loading) return <Loading />;
-  if (error) return <ErrorBox message={error} />;
+  if (error)
+    return (
+      <ErrorBox
+        message="지출 데이터를 불러오는 데 실패했어요."
+        onRetry={refetch}
+      />
+    );
 
   return (
     <div className="flex-1 overflow-auto bg-gray-50 p-6">
