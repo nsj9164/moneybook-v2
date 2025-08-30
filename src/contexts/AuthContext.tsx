@@ -34,6 +34,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  console.log("########################", user);
+
   const userId = user?.id ?? null;
   const isAuthenticated = !!user;
 

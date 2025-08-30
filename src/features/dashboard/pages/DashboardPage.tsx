@@ -31,6 +31,7 @@ const Dashboard = () => {
   } = dateFilter;
 
   const { userId } = useAuth();
+  console.log("✨✨userId:::", userId);
   const {
     data: chartData,
     isLoading: chartLoading,
@@ -51,6 +52,7 @@ const Dashboard = () => {
     targetDate,
     userId!
   );
+  console.log("#########", chartData, summaryData);
 
   const recentExpenses = useFetchRecentExpenses(targetDate, userId!);
   const hasDataThisMonth = summaryData && summaryData.expenseData.expense > 0;

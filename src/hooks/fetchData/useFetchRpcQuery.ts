@@ -9,9 +9,18 @@ export const useFetchRpcQuery = <T>(
   userId: UUID,
   extraParams: Record<string, unknown> = {}
 ) => {
+  console.log("얍얍얍얍!!!");
+  console.log(rpcName, targetDate, userId, extraParams);
   return useQuery<T, Error, T>({
-    queryKey: [rpcName, targetDate, userId, extraParams],
+    queryKey: [rpcName, targetDate, userId, JSON.stringify(extraParams)],
     queryFn: async () => {
+      console.log(
+        "🔥 queryFn 실행됨:",
+        rpcName,
+        targetDate,
+        userId,
+        extraParams
+      );
       if (!userId || !targetDate) throw new Error("Invalid params");
 
       const params = {
@@ -21,15 +30,19 @@ export const useFetchRpcQuery = <T>(
       };
 
       const { data, error } = await supabase.rpc(rpcName, params);
+      console.log("앗! data가 있네???", data);
 
       if (error || !data) {
         throw error || new Error("No data returned");
       }
 
-      return formatKeyCase(data, "camel") as T;
+      return formatKeyCase(data ?? ["앙"], "camel") as T;
     },
     enabled: Boolean(userId && targetDate),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    staleTime: 1000 * 60 * 60,
+    gcTime: Infinity,
+    placeholderData: (prev) => prev,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 };
