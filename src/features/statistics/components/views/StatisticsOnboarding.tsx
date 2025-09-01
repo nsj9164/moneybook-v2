@@ -10,8 +10,11 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 export const StatisticsOnboarding = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6">
       <motion.div
@@ -150,10 +153,7 @@ export const StatisticsOnboarding = () => {
         {/* 액션 버튼 */}
         <div className="flex justify-center mb-12">
           <button
-            onClick={() => {
-              // 실제로는 지출 추가 페이지로 이동
-              console.log("지출 추가 페이지로 이동");
-            }}
+            onClick={() => navigate("/expenses/add")}
             className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-lg hover:shadow-xl"
           >
             <Plus className="w-5 h-5 mr-2" />첫 번째 지출 추가하기

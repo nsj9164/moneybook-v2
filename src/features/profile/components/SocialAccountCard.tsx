@@ -1,5 +1,7 @@
+import { ProviderType } from "@/features/auth/types/auth";
+
 interface SocialAccountCardProps {
-  provider: "kakao" | "google";
+  provider: ProviderType;
   email: string;
   toggleModal: (type: boolean) => void;
 }

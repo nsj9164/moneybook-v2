@@ -1,36 +1,20 @@
 import { useState } from "react";
-import { Bell, CreditCard, Globe, Save, List, Repeat } from "lucide-react";
-import { GeneralSettings } from "../components/GeneralSettings";
-import { NotificationSettings } from "../components/NotificationSettings";
+import { CreditCard, Save, List, Repeat } from "lucide-react";
 import ManageCategories from "./SettingCategoriesPage";
 import ManagePayMethods from "./SettingPayMethodsPage";
 import ManageRecurringExpenses from "./SettingRecurringPage";
 
 // 설정 탭 정의
 type SettingTab =
-  | "general"
-  | "notifications"
   | "categories"
   | "paymentMethods"
   | "recurringExpenses"
   | "security";
 
 const Settings = () => {
-  const [activeTab, setActiveTab] = useState<SettingTab>("general");
+  const [activeTab, setActiveTab] = useState<SettingTab>("categories");
 
   const settingTabs = [
-    {
-      key: "general",
-      label: "일반 설정",
-      icon: <Globe />,
-      content: <GeneralSettings />,
-    },
-    {
-      key: "notifications",
-      label: "알림 설정",
-      icon: <Bell />,
-      content: <NotificationSettings />,
-    },
     {
       key: "categories",
       label: "카테고리 관리",

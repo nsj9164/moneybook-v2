@@ -9,12 +9,12 @@ export const loadUser = async (
   setUser: (user: User | null) => void,
   isNewLogin: boolean
 ) => {
-  console.log("??????????", supabaseUser, loginProvider);
   if (!supabaseUser) {
     setUser(null);
     return;
   }
 
+  const createdAt = supabaseUser.user_metadata?.created_at;
   // 새로 로그인한 경우에만 getOrCreateUser 호출
   if (isNewLogin) {
     const result = await getOrCreateUser(supabaseUser, loginProvider);
@@ -23,7 +23,7 @@ export const loadUser = async (
       toast.error("사용자 정보를 불러오지 못했습니다.");
       setUser(null);
     } else {
-      setUser({ ...result, provider: loginProvider });
+      setUser({ ...result, provider: loginProvider, createdAt });
     }
   } else {
     setUser({
@@ -34,6 +34,7 @@ export const loadUser = async (
         supabaseUser.user_metadata?.full_name ||
         supabaseUser.user_metadata?.name,
       profileImage: supabaseUser.user_metadata?.avatar_url || "",
+      createdAt,
     });
   }
 };

@@ -14,9 +14,8 @@ export interface UserEntity {
 
 export async function getOrCreateUser(
   supabaseUser: SupabaseUser,
-  loginProvider: "kakao" | "google" | null
+  loginProvider: string | null
 ): Promise<UserEntity | null> {
-  console.log("#############", supabaseUser, loginProvider);
   const { id, email, user_metadata } = supabaseUser;
 
   if (!email) return null;

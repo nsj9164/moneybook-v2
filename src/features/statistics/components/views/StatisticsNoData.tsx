@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { AlertCircle, Plus } from "lucide-react";
 import { NoDataOverviewSummary } from "../layout/NoDataOverviewSummary";
 import { getPreviousMonth } from "@/utils/getPreviousMonth";
+import { useNavigate } from "react-router-dom";
 
 interface StatisticsNoDataProps {
   selectedDate: { year: number; month: number };
@@ -15,6 +16,7 @@ export const StatisticsNoData = ({
   summaryData,
   goBackOneMonth,
 }: StatisticsNoDataProps) => {
+  const navigate = useNavigate();
   const { year, month } = selectedDate;
 
   return (
@@ -40,9 +42,7 @@ export const StatisticsNoData = ({
             </p>
             <div className="flex flex-wrap gap-3">
               <button
-                onClick={() => {
-                  console.log("지출 추가 페이지로 이동");
-                }}
+                onClick={() => navigate("/expenses/add")}
                 className="inline-flex items-center px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />

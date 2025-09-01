@@ -8,6 +8,7 @@ export interface User {
   name?: string;
   profileImage?: string;
   provider: ProviderType;
+  createdAt: Date;
 }
 
 export interface AuthContextType {

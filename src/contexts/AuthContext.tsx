@@ -1,18 +1,13 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 import { supabase } from "@/utils/supabase";
 import { useAuthListener } from "@/features/auth/hooks/useAuthListener";
-import {
-  AuthContextType,
-  ProviderType,
-  User,
-} from "@/features/auth/types/auth";
+import { AuthContextType, User } from "@/features/auth/types/auth";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

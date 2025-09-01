@@ -1,6 +1,6 @@
 import { supabase } from "@/utils/supabase";
 import { useEffect } from "react";
-import { ProviderType, User } from "../types/auth";
+import { User } from "../types/auth";
 import { loadUser } from "./useLoadUser";
 
 export const useAuthListener = (

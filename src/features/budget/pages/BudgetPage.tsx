@@ -23,7 +23,6 @@ import { ErrorBox } from "@/components/common/error/ErrorBox";
 
 const Budget = () => {
   const { userId } = useAuth();
-  console.log("##############", userId);
 
   const {
     firstExpenseYear,
@@ -39,7 +38,6 @@ const Budget = () => {
   const { budgets, unBudgets, refetchAll, loading, error } = useBudgetData({
     targetDate,
   });
-  console.log("?????????????", budgets);
 
   const { methods, isOpen, isEditing, openModal, closeModal } =
     useModalFormArray<BudgetBase>(initialBudget());

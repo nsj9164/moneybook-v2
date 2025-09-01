@@ -1,14 +1,15 @@
+import { ProviderType } from "@/features/auth/types/auth";
 import { AlertCircle } from "lucide-react";
 import { SocialAccountCard } from "./SocialAccountCard";
 
 interface ProfileSocialSectionProps {
-  provider: "kakao" | "google";
+  providers: ProviderType[];
   email: string;
   toggleModal: (type: boolean) => void;
 }
 
 export const ProfileSocialSection = ({
-  provider,
+  providers,
   email,
   toggleModal,
 }: ProfileSocialSectionProps) => {
@@ -18,11 +19,14 @@ export const ProfileSocialSection = ({
         연결된 소셜 계정
       </h3>
       <div className="space-y-4">
-        <SocialAccountCard
-          provider={provider}
-          email={email}
-          toggleModal={toggleModal}
-        />
+        {providers.map((provider, index) => (
+          <SocialAccountCard
+            key={index}
+            provider={provider}
+            email={email}
+            toggleModal={toggleModal}
+          />
+        ))}
       </div>
 
       {/* 소셜 로그인 안내 */}

@@ -1,3 +1,4 @@
+import { ProviderType } from "@/features/auth/types/auth";
 import { UUID } from "@/types/ids";
 
 export interface IUserProfile {
@@ -6,6 +7,6 @@ export interface IUserProfile {
   name: string;
   profileImage?: string;
   note?: string;
-  provider: "kakao" | "google";
+  provider: ProviderType;
   createdAt: Date;
 }

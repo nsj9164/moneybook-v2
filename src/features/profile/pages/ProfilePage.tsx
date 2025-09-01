@@ -6,55 +6,18 @@ import { ProfileInfoSection } from "../components/profileInfoSection/ProfileInfo
 import { ProfileStats } from "../components/profileStats/ProfileStats";
 import { ProfileSocialSection } from "../components/ProfileSocialSection";
 import { useFetchUserSummary } from "../hooks/useFetchUserSummary";
-import { deleteAccount } from "../api/deleteAccount";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
 import { ConfirmModal } from "@/components/common/modal/ConfirmModal";
-import { supabase } from "@/utils/supabase";
+import { useProviders } from "../hooks/useProviders";
+import { useDeleteAccount } from "../hooks/useDeleteAccount";
 
 const Profile = () => {
-  const [open, setOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const navigate = useNavigate();
-
-  const toggleModal = (type: boolean) => setOpen(type);
-
   const { userId, logout } = useAuth();
   const { profile } = useUserProfile(userId);
-
   const totalSummary = useFetchUserSummary({ userId: userId! });
 
-  const handleConfirmDelete = async () => {
-    if (isDeleting) return;
-    setIsDeleting(true);
-
-    try {
-      const {
-        data: { session },
-        error: sessionErr,
-      } = await supabase.auth.getSession();
-      if (sessionErr || !session) throw new Error("세션 정보가 없습니다.");
-
-      const accessToken = session.access_token;
-
-      await deleteAccount(accessToken);
-
-      try {
-        await supabase.auth.signOut({ scope: "local" });
-      } catch {}
-
-      setOpen(false);
-      navigate("/login", { replace: true });
-      toast.success("탈퇴가 완료되었습니다.");
-    } catch (e: any) {
-      toast.error(
-        e?.message ?? "탈퇴에 실패했어요.\n잠시 후 다시 시도해 주세요."
-      );
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+  const providers = useProviders();
+  const { open, toggleModal, isDeleting, handleConfirmDelete } =
+    useDeleteAccount();
 
   if (!profile) return null;
 
@@ -85,7 +48,7 @@ const Profile = () => {
 
             {/* 연결된 소셜 계정 */}
             <ProfileSocialSection
-              provider={profile.provider}
+              providers={providers}
               email={profile.email}
               toggleModal={toggleModal}
             />
