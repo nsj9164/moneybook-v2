@@ -1,26 +1,25 @@
 import { ExpenseSaved } from "@/types";
 import { format, sub } from "date-fns";
 import { useMemo, useState } from "react";
-import { FilterKey } from "../types/filters";
+import { ExpenseFiltersState, FilterKey } from "../types/filters";
 import { matchHangul } from "@/utils/matchHangul";
 
 export const useExpenseFilters = (expenses: ExpenseSaved[]) => {
-  const today = new Date();
-  const subMonthToday = sub(today, { months: 1 });
-
-  const initialFilters = {
-    filterQuery: "",
-    filterCategory: 0,
-    filterPayMethod: 0,
-    filterDifferentAmountOnly: false,
-    filterRecurringOnly: false,
-    startDate: format(subMonthToday, "yyyy-MM-dd"),
-    endDate: format(today, "yyyy-MM-dd"),
+  const makeInitial = (): ExpenseFiltersState => {
+    const today = new Date();
+    const subMonthToday = sub(today, { months: 1 });
+    return {
+      filterQuery: "",
+      filterCategory: 0,
+      filterPayMethod: 0,
+      filterDifferentAmountOnly: false,
+      filterRecurringOnly: false,
+      startDate: format(subMonthToday, "yyyy-MM-dd"),
+      endDate: format(today, "yyyy-MM-dd"),
+    };
   };
 
-  const [filters, setFilters] = useState(initialFilters);
-
-  // 초성 검색
+  const [filters, setFilters] = useState(makeInitial());
 
   // expenses에 검색 적용
   const filteredExpenses = useMemo(() => {
@@ -60,37 +59,44 @@ export const useExpenseFilters = (expenses: ExpenseSaved[]) => {
   }, [expenses, filters]);
 
   // 검색 적용
-  const numbericFields = ["filterCategory", "filterPayMethod"];
+  const numericFields: FilterKey[] = ["filterCategory", "filterPayMethod"];
+
   const handleFiltersChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const key = e.currentTarget.name;
-    const rawValue = e.currentTarget.value;
+    const target = e.currentTarget;
+    const { name, type, value } = target;
 
-    const parsedValue =
-      numbericFields.includes(key) && rawValue !== ""
-        ? Number(rawValue)
-        : rawValue;
+    let next: unknown;
+    if (type === "checkbox") {
+      next = (target as HTMLInputElement).checked;
+    } else if (numericFields.includes(name as FilterKey)) {
+      next = Number(value); // "0" -> 0
+    } else {
+      next = value;
+    }
 
-    setFilters((prev) => ({ ...prev, [key]: parsedValue }));
+    setFilters((prev) => ({ ...prev, [name]: next }));
   };
 
   // 개별 검색 초기화
   const resetField = (e: React.MouseEvent<HTMLButtonElement>) => {
     const key = e.currentTarget.name as FilterKey;
-    setFilters((prev) => ({ ...prev, [key]: initialFilters[key] }));
+    const fresh = makeInitial();
+    setFilters((prev) => ({ ...prev, [key]: fresh[key] }));
   };
 
   // 전체 검색 초기화
   const resetFilters = () => {
-    setFilters(initialFilters);
+    setFilters(makeInitial());
   };
 
-  const isAcitveFilters = Object.keys(filters).some(
-    (key) =>
-      filters[key as keyof typeof filters] !==
-      initialFilters[key as keyof typeof filters]
-  );
+  const isActiveFilters = useMemo(() => {
+    const fresh = makeInitial();
+    return (Object.keys(filters) as (keyof ExpenseFiltersState)[]).some(
+      (k) => filters[k] !== fresh[k]
+    );
+  }, [filters]);
 
   return {
     filters,
@@ -98,6 +104,6 @@ export const useExpenseFilters = (expenses: ExpenseSaved[]) => {
     handleFiltersChange,
     resetField,
     resetFilters,
-    isAcitveFilters,
+    isActiveFilters,
   };
 };

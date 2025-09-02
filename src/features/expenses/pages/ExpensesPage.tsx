@@ -29,7 +29,7 @@ const Expenses = () => {
     handleFiltersChange,
     resetField,
     resetFilters,
-    isAcitveFilters,
+    isActiveFilters,
   } = useExpenseFilters(expenses);
 
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
@@ -121,7 +121,7 @@ const Expenses = () => {
       )}
 
       {/* 적용된 필터 표시 영역 */}
-      {isAcitveFilters && (
+      {isActiveFilters && (
         <FilterSummary
           filters={filters}
           resetFilters={resetFilters}
@@ -130,7 +130,7 @@ const Expenses = () => {
       )}
 
       {/* 필터링 결과 요약 */}
-      {filteredExpenses.length > 0 && isAcitveFilters && (
+      {filteredExpenses.length > 0 && isActiveFilters && (
         <FilterChips filteredExpenses={filteredExpenses} />
       )}
 

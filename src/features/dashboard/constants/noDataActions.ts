@@ -3,7 +3,7 @@ import { ActionCard } from "../types/noDataActions";
 
 export const actionCards: ActionCard[] = [
   {
-    to: "/expenses/add",
+    to: "/expenses/edit",
     title: "지출 추가",
     description: "오늘의 지출을 빠르게 기록하세요",
     icon: Plus,

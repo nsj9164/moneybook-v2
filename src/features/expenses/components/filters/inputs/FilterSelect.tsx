@@ -32,6 +32,7 @@ export const FilterSelect = ({
           value={value}
           onChange={onChange}
         >
+          <option value={0}>전체</option>
           {options.map((opt) => (
             <option key={opt.id} value={opt.id}>
               {opt.name}
