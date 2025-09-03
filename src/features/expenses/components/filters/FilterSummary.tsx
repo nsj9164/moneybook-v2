@@ -5,12 +5,16 @@ interface FilterSummaryProps {
   filters: ExpenseFiltersState;
   resetFilters: () => void;
   resetField: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  categoryLabel: string;
+  payMethodLabel: string;
 }
 
 export const FilterSummary = ({
   filters,
   resetFilters,
   resetField,
+  categoryLabel,
+  payMethodLabel,
 }: FilterSummaryProps) => {
   return (
     <div className="mb-6 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
@@ -41,7 +45,7 @@ export const FilterSummary = ({
         {filters.filterCategory !== 0 && (
           <div className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1.5 text-sm">
             <span className="font-medium text-blue-700 mr-1">카테고리:</span>
-            <span className="text-blue-600">{filters.filterCategory}</span>
+            <span className="text-blue-600">{categoryLabel}</span>
             <button
               type="button"
               onClick={resetField}
@@ -54,7 +58,7 @@ export const FilterSummary = ({
         {filters.filterPayMethod !== 0 && (
           <div className="inline-flex items-center rounded-full bg-purple-50 px-3 py-1.5 text-sm">
             <span className="font-medium text-purple-700 mr-1">결제수단:</span>
-            <span className="text-purple-600">{filters.filterPayMethod}</span>
+            <span className="text-purple-600">{payMethodLabel}</span>
             <button
               type="button"
               onClick={resetField}

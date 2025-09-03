@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Download, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
@@ -31,6 +31,18 @@ const Expenses = () => {
     resetFilters,
     isActiveFilters,
   } = useExpenseFilters(expenses);
+
+  const categoryMap = useMemo(
+    () => new Map(categories.map((c) => [c.id, c.name])),
+    [categories]
+  );
+  const payMethodMap = useMemo(
+    () => new Map(payMethods.map((p) => [p.id, p.name])),
+    [payMethods]
+  );
+
+  const categoryLabel = categoryMap.get(filters.filterCategory) ?? "전체";
+  const payMethodLabel = payMethodMap.get(filters.filterPayMethod) ?? "전체";
 
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
@@ -94,8 +106,6 @@ const Expenses = () => {
       {/* 페이지 헤더 */}
       <ListHeader
         chkListCnt={expenses.length}
-        filterQuery={filters.filterQuery}
-        handleFiltersChange={handleFiltersChange}
         toggleFilterPanel={toggleFilterPanel}
       />
 
@@ -126,6 +136,8 @@ const Expenses = () => {
           filters={filters}
           resetFilters={resetFilters}
           resetField={resetField}
+          categoryLabel={categoryLabel}
+          payMethodLabel={payMethodLabel}
         />
       )}
 
