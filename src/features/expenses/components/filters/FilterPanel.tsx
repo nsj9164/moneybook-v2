@@ -1,6 +1,6 @@
 import { ExpenseFiltersState } from "../../types/filters";
 import { CategorySaved, PayMethodSaved } from "@/types";
-import { Filter, Settings, X } from "lucide-react";
+import { Filter, X } from "lucide-react";
 import { FilterCheckbox } from "./inputs/FilterCheckbox";
 import { FilterDateRange } from "./inputs/FilterDateRange";
 import { FilterInputText } from "./inputs/FilterInputText";
@@ -15,7 +15,6 @@ interface FilterPanelProps {
   toggleFilterPanel: () => void;
   categories: CategorySaved[];
   payMethods: PayMethodSaved[];
-  openColumnModal: () => void;
 }
 
 export const FilterPanel = ({
@@ -25,7 +24,6 @@ export const FilterPanel = ({
   toggleFilterPanel,
   categories,
   payMethods,
-  openColumnModal,
 }: FilterPanelProps) => {
   return (
     <div className="p-5">
@@ -95,14 +93,6 @@ export const FilterPanel = ({
       </div>
 
       <div className="flex justify-end gap-2">
-        <button
-          type="button"
-          className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-          onClick={openColumnModal}
-        >
-          <Settings className="mr-2 -ml-1 h-4 w-4" />
-          표시 항목 설정
-        </button>
         <button
           type="button"
           className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
