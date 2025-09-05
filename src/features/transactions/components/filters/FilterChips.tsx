@@ -17,95 +17,87 @@ export const FilterChips = ({
   payMethodLabel,
 }: FilterChipsProps) => {
   return (
-    <div className="mb-6 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+    <div className="mb-6 bg-blue-50 rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-medium text-gray-700">적용된 필터</h3>
-        <button
-          type="button"
-          onClick={resetFilters}
-          className="text-xs text-emerald-600 font-medium hover:text-emerald-700"
-        >
-          모두 초기화
-        </button>
+        <h4 className="text-sm font-medium text-blue-900">적용된 필터</h4>
+        <span className="text-xs text-blue-600">
+          {activeFiltersCount}개 적용됨
+        </span>
       </div>
       <div className="flex flex-wrap gap-2">
-        {filters.filterQuery && (
-          <div className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1.5 text-sm">
-            <span className="font-medium text-gray-800 mr-1">검색:</span>
-            <span className="text-gray-600">{filters.filterQuery}</span>
+        {searchTerm && (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            검색: {searchTerm}
             <button
-              type="button"
-              onClick={resetField}
-              className="ml-2 text-gray-400 hover:text-gray-600"
+              onClick={() => setSearchTerm("")}
+              className="ml-1 text-blue-600 hover:text-blue-800"
             >
               <X className="h-3 w-3" />
             </button>
-          </div>
+          </span>
         )}
-        {filters.filterCategory !== 0 && (
-          <div className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1.5 text-sm">
-            <span className="font-medium text-blue-700 mr-1">카테고리:</span>
-            <span className="text-blue-600">{categoryLabel}</span>
+        {selectedCategory !== "전체" && (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+            카테고리: {selectedCategory}
             <button
-              type="button"
-              onClick={resetField}
-              className="ml-2 text-blue-400 hover:text-blue-600"
+              onClick={() => setSelectedCategory("전체")}
+              className="ml-1 text-purple-600 hover:text-purple-800"
             >
               <X className="h-3 w-3" />
             </button>
-          </div>
+          </span>
         )}
-        {filters.filterPayMethod !== 0 && (
-          <div className="inline-flex items-center rounded-full bg-purple-50 px-3 py-1.5 text-sm">
-            <span className="font-medium text-purple-700 mr-1">결제수단:</span>
-            <span className="text-purple-600">{payMethodLabel}</span>
+        {selectedPaymentMethod !== "전체" && (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            결제수단: {selectedPaymentMethod}
             <button
-              type="button"
-              onClick={resetField}
-              className="ml-2 text-purple-400 hover:text-purple-600"
+              onClick={() => setSelectedPaymentMethod("전체")}
+              className="ml-1 text-green-600 hover:text-green-800"
             >
               <X className="h-3 w-3" />
             </button>
-          </div>
+          </span>
         )}
-        {filters.filterDifferentAmountOnly && (
-          <div className="inline-flex items-center rounded-full bg-amber-50 px-3 py-1.5 text-sm">
-            <span className="text-amber-700">결제/실제금액 상이</span>
+        {(selectedMonth || startDate || endDate) && (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+            기간:{" "}
+            {selectedMonth
+              ? monthOptions.find((m) => m.value === selectedMonth)?.label
+              : `${startDate} ~ ${endDate}`}
             <button
-              type="button"
-              onClick={resetField}
-              className="ml-2 text-amber-400 hover:text-amber-600"
+              onClick={() => {
+                setSelectedMonth("");
+                setStartDate("");
+                setEndDate("");
+                setQuickPeriod("");
+              }}
+              className="ml-1 text-orange-600 hover:text-orange-800"
             >
               <X className="h-3 w-3" />
             </button>
-          </div>
+          </span>
         )}
-        {filters.filterRecurringOnly && (
-          <div className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1.5 text-sm">
-            <span className="text-emerald-700">정기지출</span>
+        {showDifferentAmountOnly && (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+            결제금액≠실제지출
             <button
-              type="button"
-              onClick={resetField}
-              className="ml-2 text-emerald-400 hover:text-emerald-600"
+              onClick={() => setShowDifferentAmountOnly(false)}
+              className="ml-1 text-yellow-600 hover:text-yellow-800"
             >
               <X className="h-3 w-3" />
             </button>
-          </div>
+          </span>
         )}
-        {(filters.startDate || filters.endDate) && (
-          <div className="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1.5 text-sm">
-            <span className="font-medium text-indigo-700 mr-1">기간:</span>
-            <span className="text-indigo-600">
-              {filters.startDate || "처음"} ~ {filters.endDate || "현재"}
-            </span>
+        {showRecurringOnly && (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+            정기지출만
             <button
-              type="button"
-              onClick={resetField}
-              className="ml-2 text-indigo-400 hover:text-indigo-600"
+              onClick={() => setShowRecurringOnly(false)}
+              className="ml-1 text-indigo-600 hover:text-indigo-800"
             >
               <X className="h-3 w-3" />
             </button>
-          </div>
+          </span>
         )}
       </div>
     </div>

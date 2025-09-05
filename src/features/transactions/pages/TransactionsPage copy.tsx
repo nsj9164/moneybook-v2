@@ -23,7 +23,7 @@ import { TransactionSaved } from "@/types";
 const Transations = () => {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("");
+  const [selectedTab, setSelectedTab] = useState<FilterTab>("all");
 
   const { transactions, loading, error, refetch } = useFetchExpenses();
 
@@ -37,9 +37,9 @@ const Transations = () => {
   );
 
   const targetData =
-    selectedTab === "expenses"
+    selectedTab === "expense"
       ? expenses
-      : selectedTab === "incomes"
+      : selectedTab === "income"
       ? incomes
       : transactions;
 
@@ -88,11 +88,6 @@ const Transations = () => {
     }
   };
 
-  // open & close Filter
-  const toggleFilterPanel = () => {
-    setIsFilterPanelOpen((prev) => !prev);
-  };
-
   if (loading) return <Loading />;
   if (error)
     return (
@@ -105,13 +100,11 @@ const Transations = () => {
   return (
     <div className="bg-white">
       {/* 페이지 헤더 */}
-      <ListHeader
-        chkListCnt={expenses.length}
-        toggleFilterPanel={toggleFilterPanel}
-      />
+      <ListHeader activeTab={selectedTab} />
 
-      <TransactionTabs selectedTab={selectedTab} toggleTab={toggleTab} />
-
+      <div className="p-4 sm:p-6 lg:p-8">
+        <TransactionTabs activeTab={selectedTab} toggleTab={toggleTab} />
+      </div>
       {/* 필터 패널 */}
       {isFilterPanelOpen && (
         <motion.div
@@ -125,7 +118,6 @@ const Transations = () => {
             filters={filters}
             handleFiltersChange={handleFiltersChange}
             resetFilters={resetFilters}
-            toggleFilterPanel={toggleFilterPanel}
             categories={categories}
             payMethods={payMethods}
           />

@@ -72,7 +72,7 @@ export const useTransactionFilters = (transactions: TransactionSaved[]) => {
     if (type === "checkbox") {
       next = (target as HTMLInputElement).checked;
     } else if (numericFields.includes(name as FilterKey)) {
-      next = Number(value); // "0" -> 0
+      next = Number(value);
     } else {
       next = value;
     }
