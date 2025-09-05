@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { TransactionItem } from "./TransactionItem";
 import { AlertCircle, ArrowRight, BarChart3, TrendingUp } from "lucide-react";
 import { DashboardSectionCard } from "../../layout/DashboardSectionCard";
-import { ExpenseSaved } from "@/types";
+import { TransactionSaved } from "@/types";
 
 interface TransactionSectionProps {
-  recentExpenses: ExpenseSaved[];
+  recentExpenses: TransactionSaved[];
 }
 
 export const TransactionSection = ({
@@ -18,7 +18,7 @@ export const TransactionSection = ({
         title="최근 거래"
         initialX={20}
         delay={0.6}
-        linkTo="/expenses"
+        linkTo="/transactions"
         linkText="전체 보기"
         className="lg:col-span-2"
       >

@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { ExpenseSaved } from "@/types";
+import { TransactionSaved } from "@/types";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
 import { useEffect, useState } from "react";
@@ -17,7 +17,7 @@ export const expenseKeys = [
 ];
 
 export const useFetchExpensesByIds = (ids: number[]) => {
-  const [data, setData] = useState<ExpenseSaved[]>([]);
+  const [data, setData] = useState<TransactionSaved[]>([]);
   const { userId } = useAuth();
 
   const joinColumns = ["categories(name)", "payment_methods(name)"];

@@ -58,7 +58,7 @@ export const DashboardOnboarding = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200 hover:shadow-lg transition-all cursor-pointer group"
           >
-            <Link to="/expenses/edit" className="block">
+            <Link to="/transactions/edit" className="block">
               <div className="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-lg mb-4 group-hover:scale-110 transition-transform">
                 <Plus className="h-6 w-6 text-white" />
               </div>

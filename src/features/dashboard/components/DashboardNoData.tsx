@@ -34,7 +34,7 @@ export const DashboardNoData = ({
         {/* 액션 버튼들 */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <Link
-            to="/expenses/edit"
+            to="/transactions/edit"
             className="inline-flex items-center bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition-colors"
           >
             <Plus className="mr-2 h-5 w-5" />

@@ -1,6 +1,6 @@
 import {
   RecurringDisplay,
-  ExpenseSaved,
+  TransactionSaved,
   CategorySaved,
   PayMethodSaved,
 } from "@/types";
@@ -12,8 +12,8 @@ const { persistAtom } = recoilPersist({
   storage: localStorage,
 });
 
-export const expensesState = atom<ExpenseSaved[]>({
-  key: "expensesState",
+export const transactionsState = atom<TransactionSaved[]>({
+  key: "transactionsState",
   default: [],
   effects_UNSTABLE: [persistAtom],
 });

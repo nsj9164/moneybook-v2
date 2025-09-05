@@ -153,7 +153,7 @@ export const StatisticsOnboarding = () => {
         {/* 액션 버튼 */}
         <div className="flex justify-center mb-12">
           <button
-            onClick={() => navigate("/expenses/edit")}
+            onClick={() => navigate("/transactions/edit")}
             className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-lg hover:shadow-xl"
           >
             <Plus className="w-5 h-5 mr-2" />첫 번째 지출 추가하기

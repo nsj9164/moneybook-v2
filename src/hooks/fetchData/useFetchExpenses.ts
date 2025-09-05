@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { expensesState } from "@/recoil/atoms";
+import { transactionsState } from "@/recoil/atoms";
 import { formatKeyCase } from "@/utils/caseConverter";
 import { supabase } from "@/utils/supabase";
 import { useCallback, useEffect, useState } from "react";
@@ -18,7 +18,7 @@ export const expenseKeys = [
 ];
 
 export const useFetchExpenses = () => {
-  const [expenses, setExpenses] = useRecoilState(expensesState);
+  const [transactions, setTransactions] = useRecoilState(transactionsState);
   const { userId } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,17 +44,16 @@ export const useFetchExpenses = () => {
     }
 
     if (data && data.length > 0) {
-      console.log("??????????????", data);
       const mappedData = formatKeyCase(data, "camel");
-      setExpenses(mappedData ?? []);
+      setTransactions(mappedData ?? []);
     }
 
     setLoading(false);
-  }, [userId, selectColumns, setExpenses]);
+  }, [userId, selectColumns, setTransactions]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  return { expenses, loading, error, refetch: fetchData };
+  return { transactions, loading, error, refetch: fetchData };
 };

@@ -20,7 +20,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
 
   const menuItems = [
     { path: "/", name: "대시보드", icon: Home },
-    { path: "/expenses", name: "지출 관리", icon: CreditCard },
+    { path: "/transactions", name: "내역 관리", icon: CreditCard },
     { path: "/statistics", name: "통계", icon: BarChart3 },
     { path: "/budget", name: "예산 계획", icon: PieChart },
     { path: "/settings", name: "설정", icon: Settings },

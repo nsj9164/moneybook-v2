@@ -42,7 +42,7 @@ export const StatisticsNoData = ({
             </p>
             <div className="flex flex-wrap gap-3">
               <button
-                onClick={() => navigate("/expenses/edit")}
+                onClick={() => navigate("/transactions/edit")}
                 className="inline-flex items-center px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />

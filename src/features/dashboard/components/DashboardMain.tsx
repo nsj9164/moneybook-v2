@@ -1,6 +1,6 @@
 import { AnalysisSection } from "./analysis/AnalysisSection";
 import { TransactionSection } from "./transactions/TransactionSection";
-import { ExpenseSaved } from "@/types";
+import { TransactionSaved } from "@/types";
 import { ChartSummary } from "../types/DashboardSummary";
 import { OverviewSummary } from "@/types/OverviewSummary";
 import { OverviewSummarySection } from "@/components/summaryCard/OverviewSummarySection";
@@ -8,7 +8,7 @@ import { OverviewSummarySection } from "@/components/summaryCard/OverviewSummary
 interface DashboardMainProps {
   summaryData: OverviewSummary;
   chartData: ChartSummary;
-  recentExpenses: ExpenseSaved[];
+  recentExpenses: TransactionSaved[];
   selectedMonth: number;
 }
 
