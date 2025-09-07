@@ -1,4 +1,4 @@
-export const FilterAddPanel = () => {
+export const FilterAdvancedPanel = () => {
   return (
     <div className="mb-6 bg-gray-50 rounded-lg overflow-hidden">
       <button

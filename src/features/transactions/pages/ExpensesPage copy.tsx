@@ -6,7 +6,7 @@ import { useExpenseFilters } from "../hooks/useExpenseFilters";
 import { allColumns } from "../types/filters";
 import { Button } from "@/components/ui/Button";
 import { ListHeader } from "../components/list/ListHeader";
-import { FilterPanel } from "../components/filters/FilterPanel";
+import { FilterPanel } from "../components/filters";
 import { FilterSummary } from "../components/filters/FilterSummary";
 import { FilterChips } from "../components/filters/FilterChips";
 import { ListNoData } from "../components/list/ListNoData";

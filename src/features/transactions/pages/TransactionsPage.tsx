@@ -218,7 +218,7 @@ const Expenses = () => {
   const [allData] = useState([...sampleExpenses, ...generateMoreData(11, 50)]);
 
   // 기간 필터 상태
-  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYearMonth, setSelectedYearMonth] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [quickPeriod, setQuickPeriod] = useState("");
@@ -254,24 +254,45 @@ const Expenses = () => {
     "자동이체",
   ];
 
-  // 월 옵션 생성 (최근 12개월)
-  const generateMonthOptions = () => {
-    const options = [{ value: "", label: "전체 기간" }];
+  // 연도/월 옵션 생성 (최근 24개월)
+  const generateYearMonthOptions = () => {
+    const options = [{ value: "", label: "전체 기간", isYear: false }];
     const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
 
-    for (let i = 0; i < 12; i++) {
-      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const value = `${year}-${month.toString().padStart(2, "0")}`;
-      const label = `${year}년 ${month}월`;
-      options.push({ value, label });
+    // 연도별로 그룹화된 옵션 생성
+    const yearGroups: {
+      [key: number]: { value: string; label: string; isYear: boolean }[];
+    } = {};
+
+    // 최근 3년간의 데이터 생성
+    for (let yearOffset = 0; yearOffset < 3; yearOffset++) {
+      const year = currentYear - yearOffset;
+      yearGroups[year] = [];
+
+      // 연도 전체 옵션
+      yearGroups[year].push({
+        value: `${year}`,
+        label: `${year}년 전체`,
+        isYear: true,
+      });
+
+      // 해당 연도의 월별 옵션
+      const maxMonth = year === currentYear ? currentMonth + 1 : 12;
+      for (let month = 1; month <= maxMonth; month++) {
+        yearGroups[year].push({
+          value: `${year}-${month.toString().padStart(2, "0")}`,
+          label: `${month}월`,
+          isYear: false,
+        });
+      }
     }
 
-    return options;
+    return { baseOptions: options, yearGroups };
   };
 
-  const monthOptions = generateMonthOptions();
+  const { baseOptions, yearGroups } = generateYearMonthOptions();
 
   // 빠른 기간 선택 옵션
   const quickPeriodOptions = [
@@ -287,7 +308,7 @@ const Expenses = () => {
   const handleQuickPeriod = (period: string) => {
     const now = new Date();
     setQuickPeriod(period);
-    setSelectedMonth("");
+    setSelectedYearMonth("");
 
     switch (period) {
       case "thisMonth":
@@ -336,28 +357,50 @@ const Expenses = () => {
     }
   };
 
-  // 월별 선택 핸들러
-  const handleMonthSelect = (month: string) => {
-    setSelectedMonth(month);
+  // 연도/월 선택 핸들러
+  const handleYearMonthSelect = (value: string) => {
+    setSelectedYearMonth(value);
     setQuickPeriod("");
 
-    if (month) {
-      const [year, monthNum] = month.split("-");
-      const monthStart = new Date(
-        Number.parseInt(year),
-        Number.parseInt(monthNum) - 1,
-        1
-      );
-      const monthEnd = new Date(
-        Number.parseInt(year),
-        Number.parseInt(monthNum),
-        0
-      );
-      setStartDate(monthStart.toISOString().split("T")[0]);
-      setEndDate(monthEnd.toISOString().split("T")[0]);
+    if (value) {
+      if (value.includes("-")) {
+        // 특정 월 선택 (예: "2024-03")
+        const [year, month] = value.split("-");
+        const monthStart = new Date(
+          Number.parseInt(year),
+          Number.parseInt(month) - 1,
+          1
+        );
+        const monthEnd = new Date(
+          Number.parseInt(year),
+          Number.parseInt(month),
+          0
+        );
+        setStartDate(monthStart.toISOString().split("T")[0]);
+        setEndDate(monthEnd.toISOString().split("T")[0]);
+      } else {
+        // 연도 전체 선택 (예: "2024")
+        const year = Number.parseInt(value);
+        const yearStart = new Date(year, 0, 1);
+        const yearEnd = new Date(year, 11, 31);
+        setStartDate(yearStart.toISOString().split("T")[0]);
+        setEndDate(yearEnd.toISOString().split("T")[0]);
+      }
     } else {
       setStartDate("");
       setEndDate("");
+    }
+  };
+
+  // 선택된 연도/월의 표시 라벨 생성
+  const getSelectedYearMonthLabel = () => {
+    if (!selectedYearMonth) return "";
+
+    if (selectedYearMonth.includes("-")) {
+      const [year, month] = selectedYearMonth.split("-");
+      return `${year}년 ${Number.parseInt(month)}월`;
+    } else {
+      return `${selectedYearMonth}년`;
     }
   };
 
@@ -422,7 +465,7 @@ const Expenses = () => {
     setSearchTerm("");
     setSelectedCategory("전체");
     setSelectedPaymentMethod("전체");
-    setSelectedMonth("");
+    setSelectedYearMonth("");
     setStartDate("");
     setEndDate("");
     setQuickPeriod("");
@@ -436,7 +479,7 @@ const Expenses = () => {
     searchTerm,
     selectedCategory !== "전체" ? selectedCategory : "",
     selectedPaymentMethod !== "전체" ? selectedPaymentMethod : "",
-    selectedMonth || startDate || endDate ? "date" : "",
+    selectedYearMonth || startDate || endDate ? "date" : "",
     showDifferentAmountOnly ? "differentAmount" : "",
     showRecurringOnly ? "recurring" : "",
   ].filter(Boolean).length;
@@ -538,26 +581,37 @@ const Expenses = () => {
             </div>
           </div>
 
-          {/* 월별 선택 및 사용자 정의 기간 */}
+          {/* 연도/월 선택 및 사용자 정의 기간 */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label
-                htmlFor="month-select"
+                htmlFor="year-month-select"
                 className="block text-xs font-medium text-gray-700 mb-1"
               >
-                월별 선택
+                연도/월 선택
               </label>
               <select
-                id="month-select"
-                value={selectedMonth}
-                onChange={(e) => handleMonthSelect(e.target.value)}
+                id="year-month-select"
+                value={selectedYearMonth}
+                onChange={(e) => handleYearMonthSelect(e.target.value)}
                 className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
               >
-                {monthOptions.map((option) => (
+                {baseOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
+                {Object.entries(yearGroups)
+                  .sort(([a], [b]) => Number.parseInt(b) - Number.parseInt(a))
+                  .map(([year, options]) => (
+                    <optgroup key={year} label={`${year}년`}>
+                      {options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
               </select>
             </div>
 
@@ -574,7 +628,7 @@ const Expenses = () => {
                 value={startDate}
                 onChange={(e) => {
                   setStartDate(e.target.value);
-                  setSelectedMonth("");
+                  setSelectedYearMonth("");
                   setQuickPeriod("");
                 }}
                 className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
@@ -594,7 +648,7 @@ const Expenses = () => {
                 value={endDate}
                 onChange={(e) => {
                   setEndDate(e.target.value);
-                  setSelectedMonth("");
+                  setSelectedYearMonth("");
                   setQuickPeriod("");
                 }}
                 className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
@@ -646,15 +700,15 @@ const Expenses = () => {
                   </button>
                 </span>
               )}
-              {(selectedMonth || startDate || endDate) && (
+              {(selectedYearMonth || startDate || endDate) && (
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                   기간:{" "}
-                  {selectedMonth
-                    ? monthOptions.find((m) => m.value === selectedMonth)?.label
+                  {selectedYearMonth
+                    ? getSelectedYearMonthLabel()
                     : `${startDate} ~ ${endDate}`}
                   <button
                     onClick={() => {
-                      setSelectedMonth("");
+                      setSelectedYearMonth("");
                       setStartDate("");
                       setEndDate("");
                       setQuickPeriod("");

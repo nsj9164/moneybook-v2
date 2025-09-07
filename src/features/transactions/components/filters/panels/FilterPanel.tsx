@@ -1,8 +1,8 @@
-import { TransactionFiltersState } from "../../types/filters";
+import { TransactionFiltersState } from "../../../types/filters";
 import { CategorySaved, PayMethodSaved } from "@/types";
 import { Filter } from "lucide-react";
-import { FilterInputText } from "./inputs/FilterInputText";
-import { FilterSelect } from "./inputs/FilterSelect";
+import { FilterInputText } from "../inputs/FilterInputText";
+import { FilterSelect } from "../inputs/FilterSelect";
 
 interface FilterPanelProps {
   filters: TransactionFiltersState;

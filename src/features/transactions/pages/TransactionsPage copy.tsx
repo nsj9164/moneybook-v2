@@ -5,7 +5,7 @@ import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
 import { useTransactionFilters } from "../hooks/useExpenseFilters";
 import { Button } from "@/components/ui/Button";
 import { ListHeader } from "../components/list/ListHeader";
-import { FilterPanel } from "../components/filters/FilterPanel";
+import { FilterPanel } from "../components/filters";
 import { FilterSummary } from "../components/filters/FilterSummary";
 import { FilterChips } from "../components/filters/FilterChips";
 import { ListNoData } from "../components/list/ListNoData";
@@ -22,7 +22,7 @@ import { TransactionSaved } from "@/types";
 
 const Transations = () => {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
+  const [isAdvancedFiltersOpen, setIsAdvancedFiltersOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<FilterTab>("all");
 
   const { transactions, loading, error, refetch } = useFetchExpenses();

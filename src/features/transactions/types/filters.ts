@@ -22,3 +22,14 @@ export const allColumns = [
 ];
 
 export type FilterTab = "all" | "expense" | "income";
+
+export interface QuickPeriodRange {
+  selectedMonth: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface DateOptions {
+  value: string;
+  label: string;
+}
