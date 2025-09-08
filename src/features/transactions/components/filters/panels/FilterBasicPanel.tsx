@@ -14,7 +14,7 @@ interface FilterPanelProps {
   payMethods: PayMethodSaved[];
 }
 
-export const FilterPanel = ({
+export const FilterBasicPanel = ({
   filters,
   handleFiltersChange,
   resetFilters,

@@ -1,12 +1,8 @@
 import { TransactionFiltersState } from "../../types/filters";
 import { CategorySaved, PayMethodSaved } from "@/types";
-import { Filter } from "lucide-react";
-import { FilterInputText } from "./inputs/FilterInputText";
-import { FilterSelect } from "./inputs/FilterSelect";
 import { FilterDatePanel } from "./panels/FilterDatePanel";
 import { FilterAdvancedPanel } from "./panels/FilterAdvancedPanel";
-import { FilterChips } from "./FilterChips";
-import { FilterSummary } from "./FilterSummary";
+import { FilterBasicPanel } from "./panels/FilterBasicPanel";
 
 interface FilterPanelProps {
   filters: TransactionFiltersState;
@@ -25,14 +21,22 @@ export const FilterPanel = ({
   categories,
   payMethods,
 }: FilterPanelProps) => {
-  const { filterQuery, filterCategory, filterPayMethod } = filters;
+  const { startDate, endDate } = filters;
   return (
     <>
-      <FilterDatePanel />
-      <FilterPanel />
+      <FilterDatePanel
+        startDate={startDate}
+        endDate={endDate}
+        handleFiltersChange={handleFiltersChange}
+      />
+      <FilterBasicPanel
+        filters={filters}
+        handleFiltersChange={handleFiltersChange}
+        resetFilters={resetFilters}
+        categories={categories}
+        payMethods={payMethods}
+      />
       <FilterAdvancedPanel />
-      <FilterChips />
-      <FilterSummary />
     </>
   );
 };

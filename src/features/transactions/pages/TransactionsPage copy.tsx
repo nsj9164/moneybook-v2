@@ -5,7 +5,7 @@ import { useFetchCategories } from "@/hooks/fetchData/useFetchCategories";
 import { useTransactionFilters } from "../hooks/useExpenseFilters";
 import { Button } from "@/components/ui/Button";
 import { ListHeader } from "../components/list/ListHeader";
-import { FilterPanel } from "../components/filters";
+import { FilterPanel } from "../components/filters/FilterPanel";
 import { FilterSummary } from "../components/filters/FilterSummary";
 import { FilterChips } from "../components/filters/FilterChips";
 import { ListNoData } from "../components/list/ListNoData";
@@ -106,23 +106,21 @@ const Transations = () => {
         <TransactionTabs activeTab={selectedTab} toggleTab={toggleTab} />
       </div>
       {/* 필터 패널 */}
-      {isFilterPanelOpen && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-6 rounded-lg border border-gray-200 bg-white shadow-sm"
-        >
-          <FilterPanel
-            filters={filters}
-            handleFiltersChange={handleFiltersChange}
-            resetFilters={resetFilters}
-            categories={categories}
-            payMethods={payMethods}
-          />
-        </motion.div>
-      )}
+      <motion.div
+        initial={{ opacity: 0, height: 0 }}
+        animate={{ opacity: 1, height: "auto" }}
+        exit={{ opacity: 0, height: 0 }}
+        transition={{ duration: 0.3 }}
+        className="mb-6 rounded-lg border border-gray-200 bg-white shadow-sm"
+      >
+        <FilterPanel
+          filters={filters}
+          handleFiltersChange={handleFiltersChange}
+          resetFilters={resetFilters}
+          categories={categories}
+          payMethods={payMethods}
+        />
+      </motion.div>
 
       {/* 적용된 필터 표시 영역 */}
       {isActiveFilters && (

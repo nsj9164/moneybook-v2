@@ -15,9 +15,7 @@ export const DateSelector = ({
     <div className="absolute top-full right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-10 min-w-[280px]">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            년도
-          </label>
+          <h4 className="text-sm font-medium text-gray-900 mb-2">연도 선택</h4>
           <select
             value={selectedDate.year}
             onChange={(e) => handleChangeYear(Number(e.target.value))}
@@ -31,9 +29,7 @@ export const DateSelector = ({
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            월
-          </label>
+          <h4 className="text-sm font-medium text-gray-900 mb-2">월 선택</h4>
           <div className="grid grid-cols-3 gap-2">
             {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
               <button

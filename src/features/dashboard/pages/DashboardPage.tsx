@@ -52,6 +52,8 @@ const Dashboard = () => {
     userId!
   );
 
+  console.log("#######", chartData, summaryData, targetDate, userId);
+
   const recentExpenses = useFetchRecentExpenses(targetDate, userId!);
   const hasDataThisMonth = summaryData && summaryData.expenseData.expense > 0;
 

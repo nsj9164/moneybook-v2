@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Search,
   Filter,
   Plus,
-  Edit,
-  Trash2,
   ChevronDown,
   Calendar,
   X,
   ChevronUp,
+  Edit,
+  Trash2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -218,7 +218,9 @@ const Expenses = () => {
   const [allData] = useState([...sampleExpenses, ...generateMoreData(11, 50)]);
 
   // 기간 필터 상태
-  const [selectedYearMonth, setSelectedYearMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("2024");
+  const [selectedMonth, setSelectedMonth] = useState("3");
+  const [showYearMonthSelector, setShowYearMonthSelector] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [quickPeriod, setQuickPeriod] = useState("");
@@ -229,6 +231,9 @@ const Expenses = () => {
 
   // 추가 필터 접기/펼치기 상태
   const [isAdvancedFiltersOpen, setIsAdvancedFiltersOpen] = useState(false);
+
+  // 드롭다운 외부 클릭 감지를 위한 ref
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const categories = [
     "전체",
@@ -254,45 +259,17 @@ const Expenses = () => {
     "자동이체",
   ];
 
-  // 연도/월 옵션 생성 (최근 24개월)
-  const generateYearMonthOptions = () => {
-    const options = [{ value: "", label: "전체 기간", isYear: false }];
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
-
-    // 연도별로 그룹화된 옵션 생성
-    const yearGroups: {
-      [key: number]: { value: string; label: string; isYear: boolean }[];
-    } = {};
-
-    // 최근 3년간의 데이터 생성
-    for (let yearOffset = 0; yearOffset < 3; yearOffset++) {
-      const year = currentYear - yearOffset;
-      yearGroups[year] = [];
-
-      // 연도 전체 옵션
-      yearGroups[year].push({
-        value: `${year}`,
-        label: `${year}년 전체`,
-        isYear: true,
-      });
-
-      // 해당 연도의 월별 옵션
-      const maxMonth = year === currentYear ? currentMonth + 1 : 12;
-      for (let month = 1; month <= maxMonth; month++) {
-        yearGroups[year].push({
-          value: `${year}-${month.toString().padStart(2, "0")}`,
-          label: `${month}월`,
-          isYear: false,
-        });
-      }
+  // 연도 옵션 생성 (최근 3년)
+  const generateYearOptions = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let i = 0; i < 3; i++) {
+      years.push(currentYear - i);
     }
-
-    return { baseOptions: options, yearGroups };
+    return years;
   };
 
-  const { baseOptions, yearGroups } = generateYearMonthOptions();
+  const yearOptions = generateYearOptions();
 
   // 빠른 기간 선택 옵션
   const quickPeriodOptions = [
@@ -304,11 +281,29 @@ const Expenses = () => {
     { value: "thisYear", label: "올해" },
   ];
 
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowYearMonthSelector(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   // 빠른 기간 선택 핸들러
   const handleQuickPeriod = (period: string) => {
     const now = new Date();
     setQuickPeriod(period);
-    setSelectedYearMonth("");
+    setSelectedYear("");
+    setSelectedMonth("");
 
     switch (period) {
       case "thisMonth":
@@ -358,34 +353,31 @@ const Expenses = () => {
   };
 
   // 연도/월 선택 핸들러
-  const handleYearMonthSelect = (value: string) => {
-    setSelectedYearMonth(value);
+  const handleYearMonthSelect = (year: string, month: string) => {
+    setSelectedYear(year);
+    setSelectedMonth(month);
     setQuickPeriod("");
+    setShowYearMonthSelector(false);
 
-    if (value) {
-      if (value.includes("-")) {
-        // 특정 월 선택 (예: "2024-03")
-        const [year, month] = value.split("-");
-        const monthStart = new Date(
-          Number.parseInt(year),
-          Number.parseInt(month) - 1,
-          1
-        );
-        const monthEnd = new Date(
-          Number.parseInt(year),
-          Number.parseInt(month),
-          0
-        );
-        setStartDate(monthStart.toISOString().split("T")[0]);
-        setEndDate(monthEnd.toISOString().split("T")[0]);
-      } else {
-        // 연도 전체 선택 (예: "2024")
-        const year = Number.parseInt(value);
-        const yearStart = new Date(year, 0, 1);
-        const yearEnd = new Date(year, 11, 31);
-        setStartDate(yearStart.toISOString().split("T")[0]);
-        setEndDate(yearEnd.toISOString().split("T")[0]);
-      }
+    if (year && month) {
+      const monthStart = new Date(
+        Number.parseInt(year),
+        Number.parseInt(month) - 1,
+        1
+      );
+      const monthEnd = new Date(
+        Number.parseInt(year),
+        Number.parseInt(month),
+        0
+      );
+      setStartDate(monthStart.toISOString().split("T")[0]);
+      setEndDate(monthEnd.toISOString().split("T")[0]);
+    } else if (year && !month) {
+      // 연도만 선택된 경우
+      const yearStart = new Date(Number.parseInt(year), 0, 1);
+      const yearEnd = new Date(Number.parseInt(year), 11, 31);
+      setStartDate(yearStart.toISOString().split("T")[0]);
+      setEndDate(yearEnd.toISOString().split("T")[0]);
     } else {
       setStartDate("");
       setEndDate("");
@@ -394,14 +386,12 @@ const Expenses = () => {
 
   // 선택된 연도/월의 표시 라벨 생성
   const getSelectedYearMonthLabel = () => {
-    if (!selectedYearMonth) return "";
-
-    if (selectedYearMonth.includes("-")) {
-      const [year, month] = selectedYearMonth.split("-");
-      return `${year}년 ${Number.parseInt(month)}월`;
-    } else {
-      return `${selectedYearMonth}년`;
+    if (selectedYear && selectedMonth) {
+      return `${selectedYear}년 ${selectedMonth}월`;
+    } else if (selectedYear) {
+      return `${selectedYear}년`;
     }
+    return "전체 기간";
   };
 
   // 필터링된 데이터
@@ -465,7 +455,8 @@ const Expenses = () => {
     setSearchTerm("");
     setSelectedCategory("전체");
     setSelectedPaymentMethod("전체");
-    setSelectedYearMonth("");
+    setSelectedYear("");
+    setSelectedMonth("");
     setStartDate("");
     setEndDate("");
     setQuickPeriod("");
@@ -479,7 +470,7 @@ const Expenses = () => {
     searchTerm,
     selectedCategory !== "전체" ? selectedCategory : "",
     selectedPaymentMethod !== "전체" ? selectedPaymentMethod : "",
-    selectedYearMonth || startDate || endDate ? "date" : "",
+    selectedYear || selectedMonth || startDate || endDate ? "date" : "",
     showDifferentAmountOnly ? "differentAmount" : "",
     showRecurringOnly ? "recurring" : "",
   ].filter(Boolean).length;
@@ -582,39 +573,122 @@ const Expenses = () => {
           </div>
 
           {/* 연도/월 선택 및 사용자 정의 기간 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label
-                htmlFor="year-month-select"
-                className="block text-xs font-medium text-gray-700 mb-1"
-              >
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+            <div className="relative" ref={dropdownRef}>
+              <label className="block text-xs font-medium text-gray-700 mb-1">
                 연도/월 선택
               </label>
-              <select
-                id="year-month-select"
-                value={selectedYearMonth}
-                onChange={(e) => handleYearMonthSelect(e.target.value)}
-                className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+              <button
+                className="flex items-center justify-between w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                onClick={() => setShowYearMonthSelector(!showYearMonthSelector)}
               >
-                {baseOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-                {Object.entries(yearGroups)
-                  .sort(([a], [b]) => Number.parseInt(b) - Number.parseInt(a))
-                  .map(([year, options]) => (
-                    <optgroup key={year} label={`${year}년`}>
-                      {options.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-              </select>
-            </div>
+                <div className="flex items-center">
+                  <Calendar className="h-4 w-4 text-gray-500 mr-2" />
+                  {getSelectedYearMonthLabel()}
+                </div>
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              </button>
 
+              {showYearMonthSelector && (
+                <div className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 p-3 z-10 w-80">
+                  <div className="space-y-3">
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900 mb-2">
+                        연도 선택
+                      </h4>
+                      <select
+                        value={selectedYear}
+                        onChange={(e) =>
+                          handleYearMonthSelect(e.target.value, selectedMonth)
+                        }
+                        className="block w-full min-w-[160px] rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+                      >
+                        <option value="">전체</option>
+                        {yearOptions.map((year) => (
+                          <option key={year} value={year.toString()}>
+                            {year}년
+                          </option>
+                        ))}
+                      </select>
+                      <div className="grid grid-cols-3 gap-2">
+                        {/* <button
+                          className={`px-3 py-2 text-sm rounded-md transition-colors ${
+                            !selectedYear
+                              ? "bg-emerald-100 text-emerald-700 font-medium"
+                              : "hover:bg-gray-100"
+                          }`}
+                          onClick={() => handleYearMonthSelect("", "")}
+                        >
+                          전체
+                        </button>
+                        {yearOptions.map((year) => (
+                          <button
+                            key={year}
+                            className={`px-3 py-2 text-sm rounded-md transition-colors ${
+                              selectedYear === year.toString()
+                                ? "bg-emerald-100 text-emerald-700 font-medium"
+                                : "hover:bg-gray-100"
+                            }`}
+                            onClick={() =>
+                              handleYearMonthSelect(
+                                year.toString(),
+                                selectedMonth
+                              )
+                            }
+                          >
+                            {year}년
+                          </button>
+                        ))} */}
+                      </div>
+                    </div>
+
+                    {selectedYear && (
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-900 mb-2">
+                          월 선택
+                        </h4>
+                        <div className="grid grid-cols-4 gap-2">
+                          <button
+                            className={`px-3 py-2 text-sm rounded-md transition-colors ${
+                              !selectedMonth
+                                ? "bg-emerald-100 text-emerald-700 font-medium"
+                                : "hover:bg-gray-100"
+                            }`}
+                            onClick={() =>
+                              handleYearMonthSelect(selectedYear, "")
+                            }
+                          >
+                            전체
+                          </button>
+                          {Array.from({ length: 12 }, (_, i) => i + 1).map(
+                            (month) => (
+                              <button
+                                key={month}
+                                className={`px-3 py-2 text-sm rounded-md transition-colors ${
+                                  selectedMonth === month.toString()
+                                    ? "bg-emerald-100 text-emerald-700 font-medium"
+                                    : "hover:bg-gray-100"
+                                }`}
+                                onClick={() =>
+                                  handleYearMonthSelect(
+                                    selectedYear,
+                                    month.toString()
+                                  )
+                                }
+                              >
+                                {month}월
+                              </button>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label
                 htmlFor="start-date"
@@ -628,7 +702,8 @@ const Expenses = () => {
                 value={startDate}
                 onChange={(e) => {
                   setStartDate(e.target.value);
-                  setSelectedYearMonth("");
+                  setSelectedYear("");
+                  setSelectedMonth("");
                   setQuickPeriod("");
                 }}
                 className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
@@ -648,7 +723,8 @@ const Expenses = () => {
                 value={endDate}
                 onChange={(e) => {
                   setEndDate(e.target.value);
-                  setSelectedYearMonth("");
+                  setSelectedYear("");
+                  setSelectedMonth("");
                   setQuickPeriod("");
                 }}
                 className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
@@ -700,15 +776,18 @@ const Expenses = () => {
                   </button>
                 </span>
               )}
-              {(selectedYearMonth || startDate || endDate) && (
+              {(selectedYear || selectedMonth || startDate || endDate) && (
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                   기간:{" "}
-                  {selectedYearMonth
-                    ? getSelectedYearMonthLabel()
+                  {selectedYear && selectedMonth
+                    ? `${selectedYear}년 ${selectedMonth}월`
+                    : selectedYear
+                    ? `${selectedYear}년`
                     : `${startDate} ~ ${endDate}`}
                   <button
                     onClick={() => {
-                      setSelectedYearMonth("");
+                      setSelectedYear("");
+                      setSelectedMonth("");
                       setStartDate("");
                       setEndDate("");
                       setQuickPeriod("");
