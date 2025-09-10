@@ -7,6 +7,7 @@ import {
 import { DateSelector } from "@/components/monthSelector/DateSelector";
 import { filterDateOptions } from "@/features/transactions/constants/filterDateOptions";
 import { FilterSelectDate } from "../inputs/FilterSelectDate";
+import { useState } from "react";
 
 interface FilterDatePanelProps {
   startDate: string;
@@ -23,12 +24,14 @@ export const FilterDatePanel = ({
   handleFiltersChange,
   monthlyDateFilters,
 }: FilterDatePanelProps) => {
+  const [quickPeriod, setQuickPeriod] = useState("");
   const { selectedDate, years, handleChangeYear, handleChangeMonth } =
     monthlyDateFilters;
 
   const handleQuickPeriod = (period: string) => {
     const { startDate, endDate } = getQuickPeriodRange(period);
 
+    setQuickPeriod(period);
     handleFiltersChange({
       target: { name: "startDate", value: startDate },
     } as React.ChangeEvent<HTMLInputElement>);
