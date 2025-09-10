@@ -19,6 +19,7 @@ import { ErrorBox } from "@/components/common/error/ErrorBox";
 import { TransactionTabs } from "@/components/common/tabs/TransactionTabs";
 import { FilterTab } from "../types/filters";
 import { TransactionSaved } from "@/types";
+import { useDateFilter } from "@/hooks/useDateFilter";
 
 const Transations = () => {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
@@ -66,6 +67,15 @@ const Transations = () => {
   const categoryLabel = categoryMap.get(filters.filterCategory) ?? "전체";
   const payMethodLabel = payMethodMap.get(filters.filterPayMethod) ?? "전체";
 
+  const { selectedDate, years, handleChangeYear, handleChangeMonth } =
+    useDateFilter();
+  const monthlyDateFilters = {
+    selectedDate,
+    years,
+    handleChangeYear,
+    handleChangeMonth,
+  };
+
   const toggleTab = (tab: FilterTab) => {
     setSelectedTab(tab);
   };
@@ -86,6 +96,10 @@ const Transations = () => {
     } else {
       setSelectedItems(filteredData.map((data: TransactionSaved) => data.id));
     }
+  };
+
+  const handleAdvancedFilters = () => {
+    setIsAdvancedFiltersOpen((prev) => !prev);
   };
 
   if (loading) return <Loading />;
@@ -119,6 +133,9 @@ const Transations = () => {
           resetFilters={resetFilters}
           categories={categories}
           payMethods={payMethods}
+          isAdvancedFiltersOpen={isAdvancedFiltersOpen}
+          handleAdvancedFilters={handleAdvancedFilters}
+          monthlyDateFilters={monthlyDateFilters}
         />
       </motion.div>
 

@@ -1,16 +1,16 @@
-interface FilterDateRangeProps {
+interface FilterSelectDateProps {
   label: string;
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const FilterDateRange = ({
+export const FilterSelectDate = ({
   label,
   name,
   value,
   onChange,
-}: FilterDateRangeProps) => {
+}: FilterSelectDateProps) => {
   return (
     <div>
       <label
@@ -22,7 +22,7 @@ export const FilterDateRange = ({
       <input
         type="date"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
         className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
       />
     </div>

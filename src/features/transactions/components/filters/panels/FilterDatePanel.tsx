@@ -1,8 +1,12 @@
 import { Calendar } from "lucide-react";
 import { getQuickPeriodRange } from "@/features/transactions/utils/getDateRange";
-import { DateOptions } from "@/features/transactions/types/filters";
+import {
+  DateOptions,
+  MonthlyDateProps,
+} from "@/features/transactions/types/filters";
 import { DateSelector } from "@/components/monthSelector/DateSelector";
 import { filterDateOptions } from "@/features/transactions/constants/filterDateOptions";
+import { FilterSelectDate } from "../inputs/FilterSelectDate";
 
 interface FilterDatePanelProps {
   startDate: string;
@@ -10,18 +14,29 @@ interface FilterDatePanelProps {
   handleFiltersChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
+  monthlyDateFilters: MonthlyDateProps;
 }
 
 export const FilterDatePanel = ({
   startDate,
   endDate,
   handleFiltersChange,
+  monthlyDateFilters,
 }: FilterDatePanelProps) => {
+  const { selectedDate, years, handleChangeYear, handleChangeMonth } =
+    monthlyDateFilters;
+
   const handleQuickPeriod = (period: string) => {
-    const { selectedMonth, startDate, endDate } = getQuickPeriodRange(period);
-    setStartDate(startDate);
-    setEndDate(endDate);
+    const { startDate, endDate } = getQuickPeriodRange(period);
+
+    handleFiltersChange({
+      target: { name: "startDate", value: startDate },
+    } as React.ChangeEvent<HTMLInputElement>);
+    handleFiltersChange({
+      target: { name: "endDate", value: endDate },
+    } as React.ChangeEvent<HTMLInputElement>);
   };
+
   return (
     <div className="mb-6 bg-gray-50 rounded-lg p-4">
       <div className="flex items-center justify-between mb-4">
@@ -52,11 +67,26 @@ export const FilterDatePanel = ({
 
       {/* 월별 선택 및 사용자 정의 기간 */}
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-        <DateSelector />
+        <DateSelector
+          selectedDate={selectedDate}
+          years={years}
+          handleChangeYear={handleChangeYear}
+          handleChangeMonth={handleChangeMonth}
+        />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <FilterDateRange label="시작일" name="startDate" value={startDate} />
-        <FilterDateRange label="종료일" name="endDate" value={endDate} />
+        <FilterSelectDate
+          label="시작일"
+          name="startDate"
+          value={startDate}
+          onChange={handleFiltersChange}
+        />
+        <FilterSelectDate
+          label="종료일"
+          name="endDate"
+          value={endDate}
+          onChange={handleFiltersChange}
+        />
       </div>
     </div>
   );

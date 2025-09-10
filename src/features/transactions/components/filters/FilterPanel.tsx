@@ -1,4 +1,4 @@
-import { TransactionFiltersState } from "../../types/filters";
+import { MonthlyDateProps, TransactionFiltersState } from "../../types/filters";
 import { CategorySaved, PayMethodSaved } from "@/types";
 import { FilterDatePanel } from "./panels/FilterDatePanel";
 import { FilterAdvancedPanel } from "./panels/FilterAdvancedPanel";
@@ -12,6 +12,9 @@ interface FilterPanelProps {
   resetFilters: () => void;
   categories: CategorySaved[];
   payMethods: PayMethodSaved[];
+  isAdvancedFiltersOpen: boolean;
+  handleAdvancedFilters: () => void;
+  monthlyDateFilters: MonthlyDateProps;
 }
 
 export const FilterPanel = ({
@@ -20,14 +23,19 @@ export const FilterPanel = ({
   resetFilters,
   categories,
   payMethods,
+  isAdvancedFiltersOpen,
+  handleAdvancedFilters,
+  monthlyDateFilters,
 }: FilterPanelProps) => {
-  const { startDate, endDate } = filters;
+  const { startDate, endDate, filterDifferentAmountOnly, filterRecurringOnly } =
+    filters;
   return (
     <>
       <FilterDatePanel
         startDate={startDate}
         endDate={endDate}
         handleFiltersChange={handleFiltersChange}
+        monthlyDateFilters={monthlyDateFilters}
       />
       <FilterBasicPanel
         filters={filters}
@@ -36,7 +44,13 @@ export const FilterPanel = ({
         categories={categories}
         payMethods={payMethods}
       />
-      <FilterAdvancedPanel />
+      <FilterAdvancedPanel
+        filterDifferentAmountOnly={filterDifferentAmountOnly}
+        filterRecurringOnly={filterRecurringOnly}
+        isAdvancedFiltersOpen={isAdvancedFiltersOpen}
+        handleAdvancedFilters={handleAdvancedFilters}
+        handleFiltersChange={handleFiltersChange}
+      />
     </>
   );
 };

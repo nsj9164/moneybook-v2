@@ -1,3 +1,6 @@
+import { YearMonth } from "@/types/common";
+import { DateFilterState } from "@/types/useDateFilter";
+
 export interface TransactionFiltersState {
   filterQuery: string;
   filterCategory: number;
@@ -24,7 +27,6 @@ export const allColumns = [
 export type FilterTab = "all" | "expense" | "income";
 
 export interface QuickPeriodRange {
-  selectedMonth: string;
   startDate: string;
   endDate: string;
 }
@@ -33,3 +35,8 @@ export interface DateOptions {
   value: string;
   label: string;
 }
+
+export type MonthlyDateProps = Pick<
+  DateFilterState,
+  "selectedDate" | "years" | "handleChangeYear" | "handleChangeMonth"
+>;
